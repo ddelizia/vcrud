@@ -1,0 +1,27 @@
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
+            version="1.0">
+
+    <persistence-unit name="vcrudPU"  transaction-type="RESOURCE_LOCAL">
+
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+
+        <class>org.ddelizia.vcrud.core.model.Property</class>
+        <class>org.ddelizia.vcrud.core.model.Type</class>
+        <class>org.ddelizia.vcrud.core.model.User</class>
+        <class>org.ddelizia.vcrud.core.model.Role</class>
+        <class>org.ddelizia.vcrud.core.model.User</class>
+        <class>org.ddelizia.vcrud.core.model.Role</class>
+        <class>org.ddelizia.vcrud.core.model.Permission</class>
+
+        <exclude-unlisted-classes/>
+
+        <properties>
+            <!-- <property name="hibernate.hbm2ddl.auto" value="create" /> -->
+            <property name="hibernate.ejb.naming_strategy" value="org.hibernate.cfg.ImprovedNamingStrategy"/>
+            <property name="hibernate.cache.provider_class" value="org.hibernate.cache.HashtableCacheProvider" />
+            <property name="hibernate.ejb.interceptor" value="org.ddelizia.vcrud.core.interceptor.impl.InterceptorExecutorImpl"/>
+        </properties>
+    </persistence-unit>
+</persistence>
