@@ -11,3 +11,5 @@ Used technologies are:
  - JPA (Hibernate Impl)
 
 For more information have a look at the wiki https://github.com/ddelizia/vcrud/wiki
+
+[![Build Status](https://drone.io/github.com/ddelizia/vcrud/status.png)](https://drone.io/github.com/ddelizia/vcrud/latest)
