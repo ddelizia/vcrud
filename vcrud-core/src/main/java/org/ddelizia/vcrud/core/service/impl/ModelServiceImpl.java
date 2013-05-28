@@ -4,9 +4,9 @@ import org.ddelizia.vcrud.core.service.ModelService;
 import org.hibernate.SessionFactory;
 import org.hibernate.ejb.HibernateEntityManager;
 import org.hibernate.metadata.ClassMetadata;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +24,7 @@ public class ModelServiceImpl implements ModelService{
     //private static final Logger logger = LoggerFactory.getLogger(ModelServiceImpl.class);
 
     @PersistenceContext
-    private EntityManager em;
+    private EntityManager entityManager;
 
     private static final String GENERIC_PARAM= "genericParam";
     private static final String PREFIX_PARAM= "prefixParam";
@@ -35,7 +35,7 @@ public class ModelServiceImpl implements ModelService{
                 "FROM " + clazz.getName() + " x " +
                 "WHERE x."+field+"=:"+GENERIC_PARAM;
 
-        Query query = em.createQuery(queryString).setParameter(GENERIC_PARAM, o);
+        Query query = entityManager.createQuery(queryString).setParameter(GENERIC_PARAM, o);
 
         T t = null;
         try {
@@ -53,7 +53,7 @@ public class ModelServiceImpl implements ModelService{
                 "FROM " + clazz.getName() + " x " +
                 "WHERE x."+field+"=:"+GENERIC_PARAM;
 
-        Query query = em.createQuery(queryString)
+        Query query = entityManager.createQuery(queryString)
                 .setParameter(GENERIC_PARAM, o);
 
         List<T> t = null;
@@ -82,7 +82,7 @@ public class ModelServiceImpl implements ModelService{
             i++;
         }
 
-        Query query = em.createQuery(queryString);
+        Query query = entityManager.createQuery(queryString);
         for (String field : map.keySet()) {
             query.setParameter(PREFIX_PARAM+field, map.get(field));
         }
@@ -115,7 +115,7 @@ public class ModelServiceImpl implements ModelService{
             i++;
         }
 
-        Query query = em.createQuery(queryString);
+        Query query = entityManager.createQuery(queryString);
         for (String field : map.keySet()) {
             query.setParameter(PREFIX_PARAM+field, map.get(field));
         }
@@ -133,7 +133,7 @@ public class ModelServiceImpl implements ModelService{
     public <T extends Object> List<T> findAll(Class<T> clazz) {
         String queryString = "SELECT x " +
                 "FROM " + clazz.getName() + " x";
-        Query query = em.createQuery(queryString);
+        Query query = entityManager.createQuery(queryString);
 
         List<T> t = null;
         try {
@@ -151,28 +151,35 @@ public class ModelServiceImpl implements ModelService{
             remove(list.get(i));
         }
         return list.size();
-        //return em.createQuery("DELETE FROM "+ clazz.getName()).executeUpdate();
+        //return entityManager.createQuery("DELETE FROM "+ clazz.getName()).executeUpdate();
     }
 
     @Override
     public void remove(Object o) {
-        em.remove(o);
+        entityManager.remove(o);
     }
 
     public void persist (Object o){
-        em.persist(o);
+        entityManager.persist(o);
     }
 
     @Override
     @Transactional
     public void rapidPersist(Object o) {
-        em.persist(o);
+        entityManager.persist(o);
     }
 
     @Override
     public Map<String, ClassMetadata> getAllClassMetadata() {
-        SessionFactory sessionFactory = ((HibernateEntityManager) em).getSession().getSessionFactory();
+        SessionFactory sessionFactory = ((HibernateEntityManager) entityManager).getSession().getSessionFactory();
         return sessionFactory.getAllClassMetadata();
     }
 
+    public EntityManager getEntityManager() {
+        return entityManager;
+    }
+
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 }

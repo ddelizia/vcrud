@@ -1,10 +1,14 @@
 package org.ddelizia.vcrud.gui7;
 
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.*;
-import com.vaadin.ui.Button.ClickEvent;
-import org.apache.commons.logging.Log;
-import org.ddelizia.vcrud.gui7.window.LoginWindow;
+import org.ddelizia.vcrud.core.service.ModelService;
+import org.ddelizia.vcrud.gui7.config.SpringContextHelper;
+import org.ddelizia.vcrud.gui7.frames.Footer;
+import org.ddelizia.vcrud.gui7.frames.Header;
+import org.ddelizia.vcrud.gui7.frames.Menu;
+import org.ddelizia.vcrud.gui7.frames.Application;
 
 import java.util.logging.Logger;
 
@@ -16,55 +20,53 @@ public class VcrudUI extends UI
 {
     private final static Logger LOGGER = Logger.getLogger(VcrudUI.class.getName());
 
+    private Menu menu;
+    private Application application;
+    private Header header;
+    private Footer footer;
+
     @Override
     protected void init(VaadinRequest request) {
+
+        SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
+
+        org.ddelizia.vcrud.core.service.ModelService modelService=helper.getBean(ModelService.class);
+
         request.getLocale();
         LOGGER.info("Current Locale" + request.getLocale().getISO3Country());
 
-        addWindow(new LoginWindow());
-        final VerticalLayout layout = new VerticalLayout();
-        layout.setMargin(true);
-        setContent(layout);
+        //Panel panel = new Panel("Test");
+        //panel.setSizeFull();
 
-        Button button = new Button("Click Me");
-        button.addClickListener(new Button.ClickListener() {
-            public void buttonClick(ClickEvent event) {
-                layout.addComponent(new Label("Thank you for clicking"));
-            }
-        });
-        layout.addComponent(button);
+        AbsoluteLayout mainLayout=new AbsoluteLayout();
+        //mainLayout.setMargin(true);
+        mainLayout.setSizeFull();
+        //mainLayout.setHeight("auto");
+        //mainLayout.setWidth(100,Unit.PERCENTAGE);
+        //mainLayout.setSizeUndefined();
 
-        Table table = new Table("This is my Table");
+        init();
 
-/* Define the names and data types of columns.
- * The "default value" parameter is meaningless here. */
-        table.addContainerProperty("First Name", String.class,  null);
-        table.addContainerProperty("Last Name",  String.class,  null);
-        table.addContainerProperty("Year",       Table.class, null);
+        HorizontalSplitPanel center = new HorizontalSplitPanel(menu,application);
+        center.setSplitPosition(200, Unit.PIXELS);
 
-/* Add a few items in the table. */
-        table.addItem(new Object[] {
-                "Nicolaus","Copernicus",buildInnerTable()}, new Integer(1));
-        table.addItem(new Object[] {
-                "Tycho",   "Brahe",     buildInnerTable()}, new Integer(2));
-        table.setWidth("100%");
-        layout.addComponent(table);
+
+        mainLayout.addComponent(header,"left: 0px; top: 0px;");
+        mainLayout.addComponent(center,"left: 0px; top: "+Header.HEIGHT+"px; bottom: "+Footer.HEIGHT+";");
+        mainLayout.addComponent(footer,"left: 0px; bottom: "+Footer.HEIGHT+";" +
+                "");
+        //mainLayout.addComponent(footer);
+
+        //panel.setContent(mainLayout);
+
+        setContent(mainLayout);
     }
 
-    private Table buildInnerTable(){
-        final VerticalLayout layout = new VerticalLayout();
-
-        Table table = new Table("This is my Table");
-
-/* Define the names and data types of columns.
- * The "default value" parameter is meaningless here. */
-        table.addContainerProperty("First Name", String.class,  null);
-        table.addContainerProperty("Last Name",  String.class,  null);
-        table.addItem(new Object[]{
-                "Nicolaus", "Copernicus"}, new Integer(3));
-
-        layout.addComponent(table);
-        return table;
+    private void init(){
+        menu = new Menu();
+        header = new Header();
+        footer = new Footer();
+        application = new Application();
     }
 
 }
