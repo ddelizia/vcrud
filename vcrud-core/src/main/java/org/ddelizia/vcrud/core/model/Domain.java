@@ -1,5 +1,6 @@
 package org.ddelizia.vcrud.core.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -15,4 +16,7 @@ import javax.persistence.InheritanceType;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Domain extends VcrudModel{
+
+    @Column(name = "code", unique = true)
+    private String code;
 }
