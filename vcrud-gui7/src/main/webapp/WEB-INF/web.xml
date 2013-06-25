@@ -14,7 +14,7 @@
             <param-name>UI</param-name>
             <param-value>org.ddelizia.vcrud.gui7.VcrudUI</param-value>
         </init-param>
-                <init-param>
+        <init-param>
             <description>Application widgetset</description>
             <param-name>widgetset</param-name>
             <param-value>org.ddelizia.vcrud.AppWidgetSet</param-value>
@@ -29,6 +29,6 @@
     </listener>
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>classpath:/META-INF/applicationContext-*.xml</param-value>
+        <param-value>classpath*:/META-INF/applicationContext-*.xml</param-value>
     </context-param>
 </web-app>

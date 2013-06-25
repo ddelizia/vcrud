@@ -1,6 +1,9 @@
 package org.ddelizia.vcrud.core.model;
 
+import org.ddelizia.vcrud.core.annotation.VcrudItem;
+
 import javax.persistence.*;
+import java.util.Collection;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,6 +15,7 @@ import javax.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@VcrudItem(group = "User Management", parent = VcrudItem.ROOT, label = "User")
 public class User extends VcrudModel {
 
     @Column(name = "username", nullable = false, unique = true)
@@ -23,6 +27,20 @@ public class User extends VcrudModel {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_ref")
     private Role role;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(
+            name="user2usergroup",
+            joinColumns={@JoinColumn(name="user_id", referencedColumnName="id")},
+            inverseJoinColumns={@JoinColumn(name="usergroup_id", referencedColumnName="id")})
+    Collection<UserGroup> userGroups;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+            name="user2permissionrule",
+            joinColumns={@JoinColumn(name="user_id", referencedColumnName="id")},
+            inverseJoinColumns={@JoinColumn(name="permissionrule_id", referencedColumnName="id")})
+    Collection<PermissionRule> permissionRules;
 
     public String getUsername() {
         return username;

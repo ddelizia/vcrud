@@ -4,3 +4,9 @@
 *.jar
 *.war
 *.ear
+.idea
+vcrud-gui7\target
+vcrud-core\target
+/vcrud-core/target
+/vcrud-gui7/target
+/vcrud-gui7/src/main/webapp/VAADIN

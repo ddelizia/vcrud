@@ -3,6 +3,7 @@ package org.ddelizia.vcrud.core.model;
 import org.ddelizia.vcrud.core.model.enumeration.PermissionEnum;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,15 +17,18 @@ import javax.persistence.*;
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Permission extends VcrudModel {
 
+    @Column(name = "code", unique = true)
+    private String code;
+
+    @Column(name = "description")
+    private String description;
+
     @Enumerated(EnumType.STRING)
-    @Column(name = "code", nullable = false, unique = true)
-    private PermissionEnum code;
+    @Column(name = "permission", nullable = false, unique = true)
+    private PermissionEnum permission;
 
-    public PermissionEnum getCode() {
-        return code;
-    }
+    @OneToMany(mappedBy = "permission", fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, orphanRemoval = true)
+    private Collection<PermissionRule> permissionRules;
 
-    public void setCode(PermissionEnum code) {
-        this.code = code;
-    }
+
 }

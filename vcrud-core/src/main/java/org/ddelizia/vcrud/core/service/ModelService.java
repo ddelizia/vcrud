@@ -1,6 +1,6 @@
 package org.ddelizia.vcrud.core.service;
 
-import org.hibernate.metadata.ClassMetadata;
+import org.ddelizia.vcrud.core.model.VcrudModel;
 
 import java.util.List;
 import java.util.Map;
@@ -14,15 +14,25 @@ import java.util.Map;
  */
 public interface ModelService {
 
-    public <T extends Object> T findByField(String field, Object o, Class <T> clazz);
+    public <T extends VcrudModel> T getModel(String field, Object o, Class<T> clazz);
 
-    public <T extends Object> List<T> findListByField(String field, Object o, Class <T> clazz);
+    public <T extends VcrudModel> List<T> getModels(String field, Object o, Class<T> clazz);
 
-    public <T extends Object> T findByFields(Map<String, Object> map, Class <T> clazz);
+    public <T extends VcrudModel> T getModel(Map<String, Object> map, Class<T> clazz);
 
-    public <T extends Object> List<T> findListByFields(Map<String, Object> map, Class<T> clazz);
+    public <T extends VcrudModel> List<T> getModels(Map<String, Object> map, Class<T> clazz);
 
-    public <T extends Object> List<T> findAll(Class<T> clazz);
+    public <T extends VcrudModel> T getModelLike(String field, Object o, Class<T> clazz);
+
+    public <T extends VcrudModel> List<T> getModelsLike(String field, Object o, Class<T> clazz);
+
+    public <T extends VcrudModel> T getModelLike(Map<String, Object> map, Class<T> clazz);
+
+    public <T extends VcrudModel> List<T> getModelsLike(Map<String, Object> map, Class<T> clazz);
+
+    public <T extends VcrudModel> List<T> getModels(Class<T> clazz);
+
+    public <T extends VcrudModel> List<T> executeQuery(Map<String,Object> params, String query, Class<T> clazz);
 
     public int removeAll (Class clazz);
 
@@ -32,5 +42,9 @@ public interface ModelService {
 
     public void rapidPersist (Object o);
 
-    public Map<String,ClassMetadata> getAllClassMetadata();
+    public Map<String,Class> getAllModelClasses();
+
+    public List<Class<? extends VcrudModel>> getAllVcrudItems();
+
+    public boolean isVcrudEntity(Class clazz);
 }

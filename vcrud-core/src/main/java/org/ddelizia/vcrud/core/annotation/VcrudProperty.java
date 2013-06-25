@@ -9,7 +9,13 @@ import java.lang.annotation.Target;
 @Target(value={ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface VcrudProperty {
+
+    public String group() default "";
 	
 	public boolean showOnCollection() default false;
+
+    public boolean showOnCombo() default false;
+
+    public boolean showOnResultTable() default false;
 
 }

@@ -23,6 +23,10 @@ public abstract class VcrudModel {
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastModification;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "domain_ref")
+    private Domain domain;
+
     public Long getId() {
         return id;
     }

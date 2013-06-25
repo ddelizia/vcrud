@@ -1,7 +1,6 @@
 package org.ddelizia.vcrud.core.model;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -26,7 +25,6 @@ public class Type extends VcrudModel {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "type", cascade = {CascadeType.ALL}, orphanRemoval = true)
     private Set<Property> property;
-
 
     public String getClazz() {
         return clazz;

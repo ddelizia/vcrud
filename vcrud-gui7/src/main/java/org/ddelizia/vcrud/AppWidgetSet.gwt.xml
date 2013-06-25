@@ -43,5 +43,7 @@
     <!-- <set-configuration-property name="devModeRedirectEnabled" value="true" /> -->
 
 
-    <inherits name="org.ddelizia.vcrud.AppWidgetSet" />
+    
+
+    <inherits name="org.vaadin.aceeditor.AceEditorWidgetSet" />
 </module>

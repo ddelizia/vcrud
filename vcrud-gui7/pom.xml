@@ -9,7 +9,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>vcrud-gui7</artifactId>
     <packaging>war</packaging>
-    <name>Vcrud Web Application</name>
+    <name>Vcrud GUI</name>
 
     <repositories>
         <repository>
@@ -78,6 +78,11 @@
             <groupId>com.vaadin.addon</groupId>
             <artifactId>jpacontainer</artifactId>
             <version>3.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.vaadin.addons</groupId>
+            <artifactId>pagedtable</artifactId>
+            <version>0.6.5</version>
         </dependency>
 
 
@@ -160,6 +165,11 @@
             <groupId>cglib</groupId>
             <artifactId>cglib</artifactId>
             <version>2.2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.vaadin.addons</groupId>
+            <artifactId>aceeditor</artifactId>
+            <version>0.8.1</version>
         </dependency>
 
     </dependencies>

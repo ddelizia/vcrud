@@ -9,4 +9,12 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface VcrudItem {
 
+    public static final String ROOT="/";
+
+    public String group();
+
+    public String parent();
+
+    public String label();
+
 }

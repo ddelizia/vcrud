@@ -1,10 +1,8 @@
 package org.ddelizia.vcrud.gui7.config;
 
+import com.vaadin.server.VaadinServlet;
 import org.springframework.context.ApplicationContext;
-import org.springframework.ui.context.support.UiApplicationContextUtils;
 import org.springframework.web.context.support.WebApplicationContextUtils;
-
-import javax.servlet.ServletContext;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,20 +13,21 @@ import javax.servlet.ServletContext;
  */
 public class SpringContextHelper {
 
-    private ApplicationContext context;
-    public SpringContextHelper(ServletContext servletContext) {
-        /*ServletContext servletContext =
-                ((WebApplicationContext) application.getContext())
-                .getHttpSession().getServletContext();*/
-        context = WebApplicationContextUtils.
-                getRequiredWebApplicationContext(servletContext);
+    private static  ApplicationContext context;
+
+    protected SpringContextHelper(){
+
     }
 
-    public Object getBean(final String beanRef) {
-        return context.getBean(beanRef);
+    public static ApplicationContext getApplicationContext() {
+        if (context==null){
+            context = WebApplicationContextUtils.getRequiredWebApplicationContext(VaadinServlet.getCurrent().getServletContext());
+        }
+        return context;
     }
 
-    public <T> T getBean(final Class<T> clazz) {
-        return context.getBean(clazz);
+    public static <T extends Object> T getBean(Class<T> clazz){
+        return getApplicationContext().getBean(clazz);
     }
+
 }
