@@ -1,6 +1,6 @@
-package org.ddelizia.vcrud.core.model;
+package org.ddelizia.vcrud.model;
 
-import org.ddelizia.vcrud.core.annotation.VcrudItem;
+import org.ddelizia.vcrud.model.annotation.VcrudItem;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -29,18 +29,12 @@ public class User extends VcrudModel {
     private Role role;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(
-            name="user2usergroup",
-            joinColumns={@JoinColumn(name="user_id", referencedColumnName="id")},
-            inverseJoinColumns={@JoinColumn(name="usergroup_id", referencedColumnName="id")})
-    Collection<UserGroup> userGroups;
+    @JoinTable(name="user2usergroup")
+    private Collection<UserGroup> userGroups;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(
-            name="user2permissionrule",
-            joinColumns={@JoinColumn(name="user_id", referencedColumnName="id")},
-            inverseJoinColumns={@JoinColumn(name="permissionrule_id", referencedColumnName="id")})
-    Collection<PermissionRule> permissionRules;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name="user2permissionrule")
+    private Collection<PermissionRule> permissionRules;
 
     public String getUsername() {
         return username;
@@ -64,5 +58,21 @@ public class User extends VcrudModel {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public Collection<UserGroup> getUserGroups() {
+        return userGroups;
+    }
+
+    public void setUserGroups(Collection<UserGroup> userGroups) {
+        this.userGroups = userGroups;
+    }
+
+    public Collection<PermissionRule> getPermissionRules() {
+        return permissionRules;
+    }
+
+    public void setPermissionRules(Collection<PermissionRule> permissionRules) {
+        this.permissionRules = permissionRules;
     }
 }

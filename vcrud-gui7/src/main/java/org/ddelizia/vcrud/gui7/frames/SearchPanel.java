@@ -2,9 +2,9 @@ package org.ddelizia.vcrud.gui7.frames;
 
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
-import org.ddelizia.vcrud.core.annotation.utils.VcrudAnnotationUtils;
-import org.ddelizia.vcrud.core.model.VcrudModel;
+import org.ddelizia.vcrud.core.utils.VcrudAnnotationUtils;
 import org.ddelizia.vcrud.gui7.component.SearchField;
+import org.ddelizia.vcrud.model.VcrudModel;
 
 import java.lang.reflect.Field;
 import java.util.List;

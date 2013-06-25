@@ -1,9 +1,9 @@
 package org.ddelizia.vcrud.core.service.impl;
 
-import org.ddelizia.vcrud.core.model.Property;
-import org.ddelizia.vcrud.core.model.Type;
 import org.ddelizia.vcrud.core.service.ModelService;
 import org.ddelizia.vcrud.core.service.SystemService;
+import org.ddelizia.vcrud.model.Property;
+import org.ddelizia.vcrud.model.Type;
 import org.hibernate.SessionFactory;
 import org.hibernate.ejb.HibernateEntityManager;
 import org.hibernate.metadata.ClassMetadata;

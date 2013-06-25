@@ -5,10 +5,10 @@ import com.vaadin.data.util.HierarchicalContainer;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.Tree;
-import org.ddelizia.vcrud.core.annotation.VcrudItem;
-import org.ddelizia.vcrud.core.model.VcrudModel;
 import org.ddelizia.vcrud.core.service.ModelService;
 import org.ddelizia.vcrud.gui7.config.SpringContextHelper;
+import org.ddelizia.vcrud.model.VcrudModel;
+import org.ddelizia.vcrud.model.annotation.VcrudItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;

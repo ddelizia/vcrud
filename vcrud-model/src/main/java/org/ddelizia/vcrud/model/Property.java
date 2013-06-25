@@ -1,7 +1,6 @@
-package org.ddelizia.vcrud.core.model;
+package org.ddelizia.vcrud.model;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 /**
  * Created with IntelliJ IDEA.

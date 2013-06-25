@@ -1,6 +1,6 @@
 package org.ddelizia.vcrud.core.service;
 
-import org.ddelizia.vcrud.core.model.VcrudModel;
+import org.ddelizia.vcrud.model.VcrudModel;
 
 import java.util.List;
 import java.util.Map;

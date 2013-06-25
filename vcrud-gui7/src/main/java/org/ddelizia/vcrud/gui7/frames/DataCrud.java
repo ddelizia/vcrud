@@ -2,7 +2,7 @@ package org.ddelizia.vcrud.gui7.frames;
 
 import com.vaadin.ui.Accordion;
 import com.vaadin.ui.VerticalLayout;
-import org.ddelizia.vcrud.core.model.VcrudModel;
+import org.ddelizia.vcrud.model.VcrudModel;
 
 /**
  * Created with IntelliJ IDEA.

@@ -19,6 +19,7 @@
     <modules>
         <module>vcrud-gui7</module>
         <module>vcrud-core</module>
+        <module>vcrud-model</module>
     </modules>
 
     <dependencies>

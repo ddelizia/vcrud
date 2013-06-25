@@ -1,4 +1,4 @@
-package org.ddelizia.vcrud.core.model;
+package org.ddelizia.vcrud.model;
 
 import javax.persistence.*;
 import java.util.Collection;

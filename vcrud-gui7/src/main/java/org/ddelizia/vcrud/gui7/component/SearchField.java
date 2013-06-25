@@ -4,8 +4,8 @@ import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.JPAContainerFactory;
 import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.ui.*;
-import org.ddelizia.vcrud.core.annotation.utils.VcrudAnnotationUtils;
 import org.ddelizia.vcrud.core.service.ModelService;
+import org.ddelizia.vcrud.core.utils.VcrudAnnotationUtils;
 import org.ddelizia.vcrud.gui7.frames.SearchPanel;
 
 import java.lang.reflect.Field;

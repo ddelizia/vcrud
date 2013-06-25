@@ -1,4 +1,4 @@
-package org.ddelizia.vcrud.core.model;
+package org.ddelizia.vcrud.model;
 
 import org.ddelizia.vcrud.core.model.enumeration.PermissionEnum;
 
@@ -30,5 +30,35 @@ public class Permission extends VcrudModel {
     @OneToMany(mappedBy = "permission", fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, orphanRemoval = true)
     private Collection<PermissionRule> permissionRules;
 
+    public String getCode() {
+        return code;
+    }
 
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public PermissionEnum getPermission() {
+        return permission;
+    }
+
+    public void setPermission(PermissionEnum permission) {
+        this.permission = permission;
+    }
+
+    public Collection<PermissionRule> getPermissionRules() {
+        return permissionRules;
+    }
+
+    public void setPermissionRules(Collection<PermissionRule> permissionRules) {
+        this.permissionRules = permissionRules;
+    }
 }

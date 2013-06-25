@@ -1,4 +1,4 @@
-package org.ddelizia.vcrud.core.model;
+package org.ddelizia.vcrud.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,4 +19,12 @@ public class Domain extends VcrudModel{
 
     @Column(name = "code", unique = true)
     private String code;
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 }

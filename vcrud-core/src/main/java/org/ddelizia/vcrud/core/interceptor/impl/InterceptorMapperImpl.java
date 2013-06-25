@@ -2,7 +2,7 @@ package org.ddelizia.vcrud.core.interceptor.impl;
 
 import org.ddelizia.vcrud.core.interceptor.InterceptorExecutor;
 import org.ddelizia.vcrud.core.interceptor.InterceptorMapper;
-import org.ddelizia.vcrud.core.model.VcrudModel;
+import org.ddelizia.vcrud.model.VcrudModel;
 
 import java.util.HashMap;
 import java.util.Map;

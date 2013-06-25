@@ -1,10 +1,5 @@
 package org.ddelizia.vcrud.core.interceptor;
 
-import org.ddelizia.vcrud.core.model.VcrudModel;
-
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Created with IntelliJ IDEA.
  * User: danilo.delizia

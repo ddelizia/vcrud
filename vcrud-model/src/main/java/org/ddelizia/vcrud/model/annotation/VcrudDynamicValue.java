@@ -1,4 +1,4 @@
-package org.ddelizia.vcrud.core.annotation;
+package org.ddelizia.vcrud.model.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -1,4 +1,4 @@
-package org.ddelizia.vcrud.core.model;
+package org.ddelizia.vcrud.model;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -41,6 +41,14 @@ public abstract class VcrudModel {
 
     public void setLastModification(Date lastModification) {
         this.lastModification = lastModification;
+    }
+
+    public Domain getDomain() {
+        return domain;
+    }
+
+    public void setDomain(Domain domain) {
+        this.domain = domain;
     }
 
     @PrePersist

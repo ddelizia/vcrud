@@ -1,7 +1,6 @@
-package org.ddelizia.vcrud.core.annotation.utils;
+package org.ddelizia.vcrud.core.utils;
 
-import org.ddelizia.vcrud.core.annotation.VcrudProperty;
-import org.ddelizia.vcrud.core.utils.ReflectionUtils;
+import org.ddelizia.vcrud.model.annotation.VcrudProperty;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
