@@ -1,6 +1,5 @@
-package org.ddelizia.vcrud.core.interceptor;
+package org.ddelizia.vcrud.model.interceprtor;
 
-import java.util.Comparator;
 import java.util.Map;
 import java.util.TreeMap;
 

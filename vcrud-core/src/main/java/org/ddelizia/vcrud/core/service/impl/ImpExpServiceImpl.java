@@ -28,7 +28,7 @@ public class ImpExpServiceImpl implements ImpExpService {
     private final static String UPDATE_TEXT="UPDATE";
     private final static String UPDATE_INSERT_TEXT="UPDATE_INSERT";
 
-    private void importData(Reader reader) throws IOException {
+    public void importData(Reader reader) throws IOException {
         CSVReader csvReader = new CSVReader(reader);
         String [] nextLine;
         String [] currentHeader;

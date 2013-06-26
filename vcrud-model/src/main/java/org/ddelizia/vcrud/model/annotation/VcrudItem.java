@@ -11,9 +11,9 @@ public @interface VcrudItem {
 
     public static final String ROOT="/";
 
-    public String group();
+    public String group() default ROOT;
 
-    public String parent();
+    public String parent() default ROOT;
 
     public String label();
 

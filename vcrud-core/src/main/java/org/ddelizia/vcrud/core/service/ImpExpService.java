@@ -1,5 +1,8 @@
 package org.ddelizia.vcrud.core.service;
 
+import java.io.IOException;
+import java.io.Reader;
+
 /**
  * Created with IntelliJ IDEA.
  * User: danilo.delizia
@@ -8,5 +11,7 @@ package org.ddelizia.vcrud.core.service;
  * To change this template use File | Settings | File Templates.
  */
 public interface ImpExpService {
+
+    public void importData(Reader reader) throws IOException;
 
 }

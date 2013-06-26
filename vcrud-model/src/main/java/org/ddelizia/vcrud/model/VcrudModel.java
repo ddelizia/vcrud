@@ -19,6 +19,10 @@ public abstract class VcrudModel {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(name = "creation")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date creation;
+
     @Column(name = "lastModification")
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastModification;
@@ -33,6 +37,14 @@ public abstract class VcrudModel {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Date getCreation() {
+        return creation;
+    }
+
+    public void setCreation(Date creation) {
+        this.creation = creation;
     }
 
     public Date getLastModification() {
@@ -53,6 +65,7 @@ public abstract class VcrudModel {
 
     @PrePersist
     private void privatePrePersist(){
+        setCreation(currentDate());
         setLastModification(currentDate());
         prePersist();
     }
@@ -93,5 +106,8 @@ public abstract class VcrudModel {
         return new Date();
     }
 
+    private boolean vcrudEqual(VcrudModel vcrudModel){
+        return vcrudModel.getId().equals(this.getId());
+    }
 
 }

@@ -10,7 +10,6 @@ import org.ddelizia.vcrud.gui7.config.SpringContextHelper;
 import org.ddelizia.vcrud.model.VcrudModel;
 import org.ddelizia.vcrud.model.annotation.VcrudItem;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,66 +25,78 @@ public class Menu extends Panel {
 
     private Tree menuTree;
     private HierarchicalContainer hierarchicalContainer;
-    private Map<String,List<TreeObject>> treeObjects;
+    private Map<String,TreeObject> treeObjects;
     private ModelService modelService;
 
     public Menu() {
         super("Menu");
 
         modelService = SpringContextHelper.getBean(ModelService.class);
+        init();
     }
 
     private void init(){
         menuTree=new Tree();
+        menuTree.setSizeFull();
         hierarchicalContainer = new HierarchicalContainer();
-        treeObjects = new HashMap<String, List<TreeObject>>();
-
-        //addTreeObject(ROOT_GROUP, null);
+        treeObjects = new HashMap<String,TreeObject>();
 
         List<Class<? extends VcrudModel>> allVcrudItems = modelService.getAllVcrudItems();
 
         for (Class<? extends VcrudModel> clazz: allVcrudItems){
             VcrudItem vcrudItem = clazz.getAnnotation(VcrudItem.class);
             TreeObject element = new TreeObject(vcrudItem.group(), vcrudItem.parent(), vcrudItem.label(), clazz);
-            addTreeObject(vcrudItem.parent(), element);
+            treeObjects.put(clazz.getName(), element);
         }
+
+        buildHierarchicalContainer();
 
         ItemClickEvent.ItemClickListener treeclick = new ItemClickEvent.ItemClickListener(){
 
             @Override
             public void itemClick(final ItemClickEvent event) {
-
+                if (event.getItemId() instanceof TreeObject){
+                    //here goes event handler
+                }
             }
         };
 
         menuTree.addItemClickListener(treeclick);
+        menuTree.setContainerDataSource(hierarchicalContainer);
+        this.setContent(menuTree);
     }
 
-    private void addTreeObject(String group, TreeObject treeObject){
-        List<TreeObject> list = treeObjects.get(group);
-        if (list==null){
-            list = new ArrayList<TreeObject>();
-        }
-        if(treeObject!=null){
-            list.add(treeObject);
-        }
-
-    }
 
     private void buildHierarchicalContainer(){
+        hierarchicalContainer.addItem(VcrudItem.ROOT);
         for (String element:treeObjects.keySet()){
-            hierarchicalContainer.addItem(element);
+            TreeObject treeObject = treeObjects.get(element);
 
-            hierarchicalContainer.addItem(VcrudItem.ROOT);
-            for (TreeObject treeObject:treeObjects.get(element)){
-                Item item =  hierarchicalContainer.getItem(treeObject.getGroup());
-                if (item==null){
-                    hierarchicalContainer.addItem(treeObject.getGroup());
-
-                }
-                hierarchicalContainer.addItem(treeObject);
-                hierarchicalContainer.setParent(treeObject,treeObject.getGroup());
+            Item group =  hierarchicalContainer.getItem(treeObject.getGroup());
+            if (group==null){
+                hierarchicalContainer.addItem(treeObject.getGroup());
             }
+            Item parent =  hierarchicalContainer.getItem(treeObject.getParent());
+            if (parent==null){
+                hierarchicalContainer.addItem(treeObject.getParent());
+            }
+            hierarchicalContainer.addItem(treeObject);
+
+        }
+        for (String element:treeObjects.keySet()){
+            TreeObject treeObject = treeObjects.get(element);
+            if (treeObject.getParent()==null || treeObject.getParent().equals(treeObject.getGroup())){
+                if (!treeObject.getGroup().equals(VcrudItem.ROOT)){
+                    hierarchicalContainer.setParent(treeObject.getGroup(), VcrudItem.ROOT);
+                    hierarchicalContainer.setParent(treeObject, treeObject.getGroup());
+                }else{
+                    hierarchicalContainer.setParent(treeObject,VcrudItem.ROOT);
+                }
+            }else{
+                hierarchicalContainer.setParent(treeObject.getGroup(), treeObject.getParent());
+                hierarchicalContainer.setParent(treeObject, treeObject.getGroup());
+            }
+
         }
 
     }

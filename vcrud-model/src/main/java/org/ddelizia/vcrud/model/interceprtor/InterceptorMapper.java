@@ -1,4 +1,4 @@
-package org.ddelizia.vcrud.core.interceptor;
+package org.ddelizia.vcrud.model.interceprtor;
 
 /**
  * Created with IntelliJ IDEA.

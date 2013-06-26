@@ -27,8 +27,8 @@ public class DataCrud extends Accordion{
 
         VerticalLayout verticalLayout1 = new VerticalLayout();
         verticalLayout1.setSizeFull();
-        verticalLayout1.addComponent(searchPanel);
-        verticalLayout1.addComponent(resultsTable);
+        //verticalLayout1.addComponent(searchPanel);
+        //verticalLayout1.addComponent(resultsTable);
         addTab(verticalLayout1,"Caption");
 
     }

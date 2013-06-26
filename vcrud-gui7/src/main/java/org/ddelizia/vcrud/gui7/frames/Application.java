@@ -19,7 +19,7 @@ public class Application extends HorizontalSplitPanel {
         menu = new Menu();
         dataCrud = new DataCrud();
         setFirstComponent(menu);
-        setSecondComponent(dataCrud);
+        //setSecondComponent(dataCrud);
         setSplitPosition(200, Unit.PIXELS);
         setWidth(100,Unit.PERCENTAGE);
     }
