@@ -5,14 +5,14 @@ import com.vaadin.ui.AbsoluteLayout;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
-import org.ddelizia.vcrud.gui7.frames.Application;
 import org.ddelizia.vcrud.gui7.frames.Footer;
 import org.ddelizia.vcrud.gui7.frames.Header;
+import org.ddelizia.vcrud.gui7.frames.scaffolding.ScaffoldingApp;
 
 import java.util.logging.Logger;
 
 /**
- * The Application's "main" class
+ * The ScaffoldingApp's "main" class
  */
 @SuppressWarnings("serial")
 public class VcrudUI extends UI
@@ -50,7 +50,7 @@ public class VcrudUI extends UI
         header = new Header();
         footer = new Footer();
         center = new VerticalLayout();
-        center.addComponent(new Application());
+        center.addComponent(new ScaffoldingApp());
         center.setSizeFull();
     }
 

@@ -1,7 +1,9 @@
-package org.ddelizia.vcrud.gui7.frames;
+package org.ddelizia.vcrud.gui7.frames.scaffolding;
 
 import com.vaadin.ui.Accordion;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
+import org.ddelizia.vcrud.model.User;
 import org.ddelizia.vcrud.model.VcrudModel;
 
 /**
@@ -24,13 +26,23 @@ public class DataCrud extends Accordion{
     public DataCrud(){
         super();
         setSizeFull();
+        setHeight(100, Unit.PERCENTAGE);
 
         VerticalLayout verticalLayout1 = new VerticalLayout();
         verticalLayout1.setSizeFull();
+        searchPanel = new SearchPanel(User.class);
         //verticalLayout1.addComponent(searchPanel);
+        verticalLayout1.addComponent(new Label("hola1"));
+        verticalLayout1.setMargin(true);
         //verticalLayout1.addComponent(resultsTable);
-        addTab(verticalLayout1,"Caption");
+        addTab(verticalLayout1,"Search");
 
+        VerticalLayout verticalLayout2 = new VerticalLayout();
+        verticalLayout2.setSizeFull();
+        verticalLayout2.setMargin(true);
+        verticalLayout2.addComponent(new Label("hola"));
+
+        addTab(verticalLayout2, "Result");
     }
 
     public ResultsTable getResultsTable() {

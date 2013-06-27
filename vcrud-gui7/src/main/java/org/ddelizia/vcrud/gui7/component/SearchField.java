@@ -6,7 +6,8 @@ import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.ui.*;
 import org.ddelizia.vcrud.core.service.ModelService;
 import org.ddelizia.vcrud.core.utils.VcrudAnnotationUtils;
-import org.ddelizia.vcrud.gui7.frames.SearchPanel;
+import org.ddelizia.vcrud.gui7.config.SpringContextHelper;
+import org.ddelizia.vcrud.gui7.frames.scaffolding.SearchPanel;
 
 import java.lang.reflect.Field;
 
@@ -30,6 +31,7 @@ public class SearchField extends HorizontalLayout{
 
     public SearchField(Field field){
         this.field=field;
+        modelService = SpringContextHelper.getBean(ModelService.class);
         addComponent(getLabel());
         addComponent(getSearchType());
         addComponent(getSearchValue());

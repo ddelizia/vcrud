@@ -1,4 +1,4 @@
-package org.ddelizia.vcrud.gui7.frames;
+package org.ddelizia.vcrud.gui7.frames.scaffolding;
 
 import com.vaadin.ui.HorizontalSplitPanel;
 
@@ -9,17 +9,17 @@ import com.vaadin.ui.HorizontalSplitPanel;
  * Time: 15:06
  * To change this template use File | Settings | File Templates.
  */
-public class Application extends HorizontalSplitPanel {
+public class ScaffoldingApp extends HorizontalSplitPanel {
 
     private Menu menu;
     private DataCrud dataCrud;
 
-    public Application() {
+    public ScaffoldingApp() {
         super();
         menu = new Menu();
         dataCrud = new DataCrud();
         setFirstComponent(menu);
-        //setSecondComponent(dataCrud);
+        setSecondComponent(dataCrud);
         setSplitPosition(200, Unit.PIXELS);
         setWidth(100,Unit.PERCENTAGE);
     }

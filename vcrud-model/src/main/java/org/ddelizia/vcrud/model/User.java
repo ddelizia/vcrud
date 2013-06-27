@@ -1,6 +1,7 @@
 package org.ddelizia.vcrud.model;
 
 import org.ddelizia.vcrud.model.annotation.VcrudItem;
+import org.ddelizia.vcrud.model.annotation.VcrudProperty;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -29,6 +30,7 @@ public class User extends VcrudModel {
     private Role role;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @VcrudProperty(group = "test", showOnSearch = true)
     @JoinTable(name="user2usergroup")
     private Collection<UserGroup> userGroups;
 

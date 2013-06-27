@@ -1,4 +1,4 @@
-package org.ddelizia.vcrud.gui7.frames;
+package org.ddelizia.vcrud.gui7.frames.scaffolding;
 
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
@@ -7,6 +7,7 @@ import org.ddelizia.vcrud.gui7.component.SearchField;
 import org.ddelizia.vcrud.model.VcrudModel;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,18 +20,20 @@ import java.util.List;
 public class SearchPanel extends Panel{
 
     private VerticalLayout fieldsLayout;
-    private List<SearchField> searchFields;
+    private List<SearchField> searchFields = new ArrayList<SearchField>();
 
     private Class<? extends VcrudModel> clazz;
 
     public SearchPanel(Class<? extends VcrudModel> clazz){
-
+        setClazz(clazz);
+        fieldsLayout = new VerticalLayout();
+        buildFields();
     }
 
     public void buildFields(){
         fieldsLayout.removeAllComponents();
         if (clazz!=null){
-            Field fields[] = VcrudAnnotationUtils.retriveVcrudPropertyWithShowOnResultTable(clazz,true);
+            Field fields[] = VcrudAnnotationUtils.retriveVcrudPropertyWithShowOnSearch(clazz, true);
             for (Field fiels: fields){
                 SearchField searchField = new SearchField(fiels);
                 searchFields.add(searchField);

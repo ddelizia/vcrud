@@ -1,4 +1,4 @@
-package org.ddelizia.vcrud.gui7.frames;
+package org.ddelizia.vcrud.gui7.frames.scaffolding;
 
 import com.jensjansson.pagedtable.PagedTable;
 import com.vaadin.data.Item;

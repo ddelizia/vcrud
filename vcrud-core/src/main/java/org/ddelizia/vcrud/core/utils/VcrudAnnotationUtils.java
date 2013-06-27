@@ -38,4 +38,16 @@ public class VcrudAnnotationUtils {
         return returnValue.toArray(new Field[0]);
     }
 
+    public static Field[] retriveVcrudPropertyWithShowOnSearch(Class clazz, boolean result){
+        ArrayList<Field> returnValue = new ArrayList<Field>();
+        Field [] annotatedFields = ReflectionUtils.getAnnotatedDeclaredFields(clazz, VcrudProperty.class, false);
+        for (Field annotatedField: annotatedFields){
+            VcrudProperty vcrudProperty = annotatedField.getAnnotation(VcrudProperty.class);
+            if (vcrudProperty.showOnSearch()==result){
+                returnValue.add(annotatedField);
+            }
+        }
+        return returnValue.toArray(new Field[0]);
+    }
+
 }

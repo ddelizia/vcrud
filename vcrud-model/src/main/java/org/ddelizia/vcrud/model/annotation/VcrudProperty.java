@@ -18,4 +18,6 @@ public @interface VcrudProperty {
 
     public boolean showOnResultTable() default false;
 
+    public boolean showOnSearch() default false;
+
 }

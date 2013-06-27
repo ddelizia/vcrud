@@ -1,4 +1,4 @@
-package org.ddelizia.vcrud.gui7.frames;
+package org.ddelizia.vcrud.gui7.frames.scaffolding;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.util.HierarchicalContainer;
@@ -81,6 +81,7 @@ public class Menu extends Panel {
                 hierarchicalContainer.addItem(treeObject.getParent());
             }
             hierarchicalContainer.addItem(treeObject);
+
 
         }
         for (String element:treeObjects.keySet()){
@@ -168,6 +169,14 @@ public class Menu extends Panel {
             result = 31 * result + label.hashCode();
             result = 31 * result + clazz.hashCode();
             return result;
+        }
+
+        @Override
+        public String toString() {
+
+            return "TreeObject{" +
+                    "label='" + label + '\'' +
+                    '}';
         }
     }
 
