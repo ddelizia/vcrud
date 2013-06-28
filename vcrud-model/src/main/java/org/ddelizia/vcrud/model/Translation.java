@@ -1,9 +1,6 @@
 package org.ddelizia.vcrud.model;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
+import javax.persistence.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,7 +9,8 @@ import javax.persistence.Embedded;
  * Time: 10:13
  * To change this template use File | Settings | File Templates.
  */
-public class Translation {
+@Entity
+public class Translation extends VcrudModel{
 
     @Column(name = "key", unique = true)
     private String key;

@@ -13,6 +13,7 @@
         <class>org.ddelizia.vcrud.model.PermissionRule</class>
         <class>org.ddelizia.vcrud.model.Property</class>
         <class>org.ddelizia.vcrud.model.Role</class>
+        <class>org.ddelizia.vcrud.model.Translation</class>
         <class>org.ddelizia.vcrud.model.Type</class>
         <class>org.ddelizia.vcrud.model.User</class>
         <class>org.ddelizia.vcrud.model.UserGroup</class>
