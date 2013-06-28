@@ -20,6 +20,7 @@ import java.util.Collection;
 public class User extends VcrudModel {
 
     @Column(name = "username", nullable = false, unique = true)
+    @VcrudProperty(group = "test2", showOnSearch = true)
     private String username;
 
     @Column(name = "password")

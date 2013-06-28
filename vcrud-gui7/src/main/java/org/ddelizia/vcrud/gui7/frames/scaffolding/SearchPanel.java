@@ -1,5 +1,6 @@
 package org.ddelizia.vcrud.gui7.frames.scaffolding;
 
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 import org.ddelizia.vcrud.core.utils.VcrudAnnotationUtils;
@@ -24,9 +25,18 @@ public class SearchPanel extends Panel{
 
     private Class<? extends VcrudModel> clazz;
 
+    private Button filter;
+
     public SearchPanel(Class<? extends VcrudModel> clazz){
+        super("Search Box");
         setClazz(clazz);
         fieldsLayout = new VerticalLayout();
+        fieldsLayout.setSizeUndefined();
+        fieldsLayout.setMargin(true);
+        fieldsLayout.setSpacing(true);
+        this.setWidth(100, Unit.PERCENTAGE);
+        this.setHeight(33, Unit.PERCENTAGE);
+        this.setContent(fieldsLayout);
         buildFields();
     }
 
@@ -34,12 +44,14 @@ public class SearchPanel extends Panel{
         fieldsLayout.removeAllComponents();
         if (clazz!=null){
             Field fields[] = VcrudAnnotationUtils.retriveVcrudPropertyWithShowOnSearch(clazz, true);
-            for (Field fiels: fields){
-                SearchField searchField = new SearchField(fiels);
+            for (Field field: fields){
+                SearchField searchField = new SearchField(field);
                 searchFields.add(searchField);
                 fieldsLayout.addComponent(searchField);
             }
         }
+        filter = new Button("Filter");
+        fieldsLayout.addComponent(filter);
     }
 
     public VerticalLayout getFieldsLayout() {

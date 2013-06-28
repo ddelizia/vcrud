@@ -22,6 +22,7 @@ public class ScaffoldingApp extends HorizontalSplitPanel {
         setSecondComponent(dataCrud);
         setSplitPosition(200, Unit.PIXELS);
         setWidth(100,Unit.PERCENTAGE);
+        setHeight(100,Unit.PERCENTAGE);
     }
 
     public Menu getMenu() {

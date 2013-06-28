@@ -1,6 +1,6 @@
 package org.ddelizia.vcrud.model;
 
-import org.ddelizia.vcrud.core.model.enumeration.PermissionEnum;
+import org.ddelizia.vcrud.model.enumeration.PermissionEnum;
 
 import javax.persistence.*;
 import java.util.Collection;

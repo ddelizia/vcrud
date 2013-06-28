@@ -1,7 +1,7 @@
 package org.ddelizia.vcrud.gui7.frames.scaffolding;
 
-import com.vaadin.ui.Accordion;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
 import org.ddelizia.vcrud.model.User;
 import org.ddelizia.vcrud.model.VcrudModel;
@@ -13,7 +13,7 @@ import org.ddelizia.vcrud.model.VcrudModel;
  * Time: 12:43
  * To change this template use File | Settings | File Templates.
  */
-public class DataCrud extends Accordion{
+public class DataCrud extends TabSheet{
 
     private ResultsTable resultsTable;
 
@@ -25,22 +25,25 @@ public class DataCrud extends Accordion{
 
     public DataCrud(){
         super();
-        setSizeFull();
+        setWidth(100,Unit.PERCENTAGE);
         setHeight(100, Unit.PERCENTAGE);
 
         VerticalLayout verticalLayout1 = new VerticalLayout();
-        verticalLayout1.setSizeFull();
+        verticalLayout1.setSizeUndefined();
+        verticalLayout1.setWidth(100, Unit.PERCENTAGE);
         searchPanel = new SearchPanel(User.class);
-        //verticalLayout1.addComponent(searchPanel);
-        verticalLayout1.addComponent(new Label("hola1"));
+        resultsTable = new ResultsTable();
         verticalLayout1.setMargin(true);
-        //verticalLayout1.addComponent(resultsTable);
-        addTab(verticalLayout1,"Search");
+        verticalLayout1.addComponent(searchPanel);
+        verticalLayout1.addComponent(resultsTable);
+        addTab(verticalLayout1, "Search");
 
         VerticalLayout verticalLayout2 = new VerticalLayout();
         verticalLayout2.setSizeFull();
         verticalLayout2.setMargin(true);
-        verticalLayout2.addComponent(new Label("hola"));
+        for(int i=0; i<100; i++){
+            verticalLayout2.addComponent(new Label("test"+i));
+        }
 
         addTab(verticalLayout2, "Result");
     }

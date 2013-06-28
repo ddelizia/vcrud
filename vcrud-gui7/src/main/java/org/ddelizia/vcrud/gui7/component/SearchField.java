@@ -10,6 +10,7 @@ import org.ddelizia.vcrud.gui7.config.SpringContextHelper;
 import org.ddelizia.vcrud.gui7.frames.scaffolding.SearchPanel;
 
 import java.lang.reflect.Field;
+import java.util.Collection;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,6 +20,11 @@ import java.lang.reflect.Field;
  * To change this template use File | Settings | File Templates.
  */
 public class SearchField extends HorizontalLayout{
+
+    private static final int SIZE_LABEL = 100;
+    private static final int SIZE_SEARCHTYPE = 100;
+    private static final int SIZE_SEARCHVALUE = 100;
+
 
     private ModelService modelService;
 
@@ -32,6 +38,7 @@ public class SearchField extends HorizontalLayout{
     public SearchField(Field field){
         this.field=field;
         modelService = SpringContextHelper.getBean(ModelService.class);
+        setSpacing(true);
         addComponent(getLabel());
         addComponent(getSearchType());
         addComponent(getSearchValue());
@@ -40,6 +47,8 @@ public class SearchField extends HorizontalLayout{
     public Label getLabel() {
         if (label==null){
             label = new Label();
+            label.setWidth(SIZE_LABEL,Unit.PIXELS);
+            label.setValue(field.getName());
         }
         return label;
     }
@@ -50,9 +59,20 @@ public class SearchField extends HorizontalLayout{
 
     public ComboBox getSearchType() {
         if (searchType==null){
+            searchType=new ComboBox();
+            searchType.setWidth(SIZE_SEARCHTYPE,Unit.PIXELS);
             buildSearchType();
         }
         return searchType;
+    }
+
+    private void buildSearchType(){
+        searchType = new ComboBox();
+        if (modelService.isVcrudEntity(field.getType())){
+
+        }else {
+            searchType.addItem("Test");
+        }
     }
 
     public void setSearchType(ComboBox searchType) {
@@ -66,13 +86,10 @@ public class SearchField extends HorizontalLayout{
         return searchValue;
     }
 
-    public void setSearchValue(Component searchValue) {
-        this.searchValue = searchValue;
-    }
-
     private void buildSearchValue(){
         if (modelService.isVcrudEntity(field.getType())){
             ComboBox comboBox = new ComboBox();
+            comboBox.setWidth(SIZE_SEARCHVALUE,Unit.PIXELS);
             JPAContainer jpaContainer = JPAContainerFactory.makeReadOnly(field.getType(), "book-examples");
             comboBox.setContainerDataSource(jpaContainer);
 
@@ -84,18 +101,18 @@ public class SearchField extends HorizontalLayout{
             comboBox.setFilteringMode(FilteringMode.CONTAINS);
 
             searchValue = comboBox;
+        }else if(field.getType().isAssignableFrom(Collection.class)){
+            TextField textField = new TextField();
+            textField.setWidth(SIZE_SEARCHVALUE,Unit.PIXELS);
+            searchValue = textField;
         }else {
             TextField textField = new TextField();
+            textField.setWidth(300,Unit.PIXELS);
             searchValue = textField;
         }
     }
 
-    private void buildSearchType(){
-        searchType = new ComboBox();
-        if (modelService.isVcrudEntity(field.getType())){
-
-        }else {
-
-        }
+    public void setSearchValue(Component searchValue) {
+        this.searchValue = searchValue;
     }
 }

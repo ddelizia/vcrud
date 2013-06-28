@@ -8,6 +8,7 @@
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
 
         <class>org.ddelizia.vcrud.model.Domain</class>
+        <class>org.ddelizia.vcrud.model.MultilanguageString</class>
         <class>org.ddelizia.vcrud.model.Permission</class>
         <class>org.ddelizia.vcrud.model.PermissionRule</class>
         <class>org.ddelizia.vcrud.model.Property</class>

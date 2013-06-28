@@ -30,6 +30,7 @@ public class Menu extends Panel {
 
     public Menu() {
         super("Menu");
+        setSizeFull();
 
         modelService = SpringContextHelper.getBean(ModelService.class);
         init();

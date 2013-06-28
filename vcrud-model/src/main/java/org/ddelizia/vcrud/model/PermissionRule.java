@@ -27,6 +27,30 @@ public class PermissionRule extends VcrudModel{
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "permissionRules", cascade = CascadeType.ALL)
     private Collection<UserGroup> userGroups;
 
+    @Embedded
+    @AttributeOverrides({@AttributeOverride(name="encodedMultiLanguageString",column=@Column(name="multilanguageString"))})
+    private MultilanguageString multilanguageString;
+
+    @Embedded
+    @AttributeOverrides({@AttributeOverride(name="encodedMultiLanguageString",column=@Column(name="multilanguageString2"))})
+    private MultilanguageString multilanguageString2;
+
+    public MultilanguageString getMultilanguageString2() {
+        return multilanguageString2;
+    }
+
+    public void setMultilanguageString2(MultilanguageString multilanguageString2) {
+        this.multilanguageString2 = multilanguageString2;
+    }
+
+    public MultilanguageString getMultilanguageString() {
+        return multilanguageString;
+    }
+
+    public void setMultilanguageString(MultilanguageString multilanguageString) {
+        this.multilanguageString = multilanguageString;
+    }
+
     public Permission getPermission() {
         return permission;
     }

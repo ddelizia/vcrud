@@ -1,4 +1,4 @@
-package org.ddelizia.vcrud.core.model.enumeration;
+package org.ddelizia.vcrud.model.enumeration;
 
 /**
  * Created with IntelliJ IDEA.

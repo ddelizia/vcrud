@@ -4,7 +4,6 @@
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/src/main/webapp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
@@ -47,6 +46,7 @@
     <orderEntry type="library" name="Maven: net.sf.opencsv:opencsv:2.3" level="project" />
     <orderEntry type="library" name="Maven: commons-beanutils:commons-beanutils:1.8.3" level="project" />
     <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.6" level="project" />
+    <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.2.4" level="project" />
     <orderEntry type="library" name="Maven: com.vaadin:vaadin-server:7.0.6" level="project" />
     <orderEntry type="library" name="Maven: com.vaadin:vaadin-shared:7.0.6" level="project" />
     <orderEntry type="library" name="Maven: com.vaadin:vaadin-shared-deps:1.0.2" level="project" />
