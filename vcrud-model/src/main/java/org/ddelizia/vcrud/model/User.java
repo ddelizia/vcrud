@@ -26,6 +26,12 @@ public class User extends VcrudModel {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "enabled")
+    private Boolean enabled=false;
+
+    @Column(name = "registerCode")
+    private String registerCode;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_ref")
     private Role role;
@@ -77,5 +83,21 @@ public class User extends VcrudModel {
 
     public void setPermissionRules(Collection<PermissionRule> permissionRules) {
         this.permissionRules = permissionRules;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public String getRegisterCode() {
+        return registerCode;
+    }
+
+    public void setRegisterCode(String registerCode) {
+        this.registerCode = registerCode;
     }
 }

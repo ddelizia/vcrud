@@ -14,6 +14,8 @@ import java.util.Map;
  */
 public interface ModelService {
 
+    public <T extends VcrudModel> T create(Class<T> clazz);
+
     public <T extends VcrudModel> T getModel(String field, Object o, Class<T> clazz);
 
     public <T extends VcrudModel> List<T> getModels(String field, Object o, Class<T> clazz);
@@ -34,13 +36,17 @@ public interface ModelService {
 
     public <T extends VcrudModel> List<T> executeQuery(Map<String,Object> params, String query, Class<T> clazz);
 
-    public int removeAll (Class clazz);
+    public <T extends VcrudModel> T max(Class<T> clazz, String field);
 
-    public void remove (Object o);
+    public int count(Class<? extends VcrudModel> clazz);
 
-    public void persist (Object o);
+    public int removeAll (Class<? extends VcrudModel> clazz);
 
-    public void rapidPersist (Object o);
+    public void remove (VcrudModel o);
+
+    public void persist (VcrudModel o);
+
+    public void rapidPersist (VcrudModel o);
 
     public Map<String,Class> getAllModelClasses();
 

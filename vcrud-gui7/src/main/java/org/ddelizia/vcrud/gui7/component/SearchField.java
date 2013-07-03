@@ -104,12 +104,16 @@ public class SearchField extends HorizontalLayout{
         }else if(field.getType().isAssignableFrom(Collection.class)){
             TextField textField = new TextField();
             textField.setWidth(SIZE_SEARCHVALUE,Unit.PIXELS);
+
             searchValue = textField;
         }else {
             TextField textField = new TextField();
-            textField.setWidth(300,Unit.PIXELS);
+            textField.setWidth(SIZE_SEARCHVALUE,Unit.PIXELS);
+
             searchValue = textField;
         }
+
+
     }
 
     public void setSearchValue(Component searchValue) {

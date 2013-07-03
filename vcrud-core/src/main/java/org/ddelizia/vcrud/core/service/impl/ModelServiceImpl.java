@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +35,19 @@ public class ModelServiceImpl implements ModelService{
 
     private static final String GENERIC_PARAM= "genericParam";
     private static final String PREFIX_PARAM= "prefixParam";
+
+    @Override
+    public <T extends VcrudModel> T create(Class<T> clazz) {
+        try {
+            T t = clazz.newInstance();
+            persist(t);
+        } catch (InstantiationException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        return null;
+    }
 
     @Override
     public <T extends VcrudModel> T getModel(String field, Object o, Class<T> clazz){
@@ -269,23 +285,44 @@ public class ModelServiceImpl implements ModelService{
     }
 
     @Override
-    public int removeAll(Class clazz) {
+    public <T extends VcrudModel> T max(Class<T> clazz, String field) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Object> cq = cb.createQuery();
+        Root r = cq.from(clazz);
+        cq.select(
+                cb.greatest(
+                        r.get(field)
+                )
+        );
+        return (T)entityManager.createQuery(cq).getSingleResult();
+    }
+
+    @Override
+    public int count(Class<? extends VcrudModel> clazz) {
+        CriteriaBuilder qb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> cq = qb.createQuery(Long.class);
+        cq.select(qb.count(cq.from(clazz)));
+        return entityManager.createQuery(cq).getSingleResult().intValue();
+    }
+
+    @Override
+    public int removeAll(Class<? extends VcrudModel> clazz) {
         return entityManager.createQuery("DELETE FROM "+ clazz.getName()).executeUpdate();
     }
 
     @Override
-    public void remove(Object o) {
+    public void remove(VcrudModel o) {
         entityManager.remove(o);
     }
 
     @Override
-    public void persist (Object o){
+    public void persist (VcrudModel o){
         entityManager.persist(o);
     }
 
     @Override
     @Transactional
-    public void rapidPersist(Object o) {
+    public void rapidPersist(VcrudModel o) {
         entityManager.persist(o);
     }
 
