@@ -32,6 +32,9 @@ public class User extends VcrudModel {
     @Column(name = "registerCode")
     private String registerCode;
 
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_ref")
     private Role role;
@@ -99,5 +102,13 @@ public class User extends VcrudModel {
 
     public void setRegisterCode(String registerCode) {
         this.registerCode = registerCode;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

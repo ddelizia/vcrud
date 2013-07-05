@@ -1,5 +1,6 @@
 package org.ddelizia.vcrud.core.service.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.ddelizia.vcrud.core.service.ModelService;
 import org.ddelizia.vcrud.core.service.UserService;
 import org.ddelizia.vcrud.model.Domain;
@@ -7,7 +8,10 @@ import org.ddelizia.vcrud.model.User;
 import org.ddelizia.vcrud.model.User_;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,5 +41,30 @@ public class UserServiceImpl implements UserService {
         }
 
         return modelService.getModel(map,User.class);
+    }
+
+    @Override
+    @Transactional
+    public User registerUser(String username, String email, String password, String password2, Domain domain) {
+        if (StringUtils.isNotEmpty(password) && StringUtils.equals(password,password2)){
+            User u= new User();
+            u.setUsername(username);
+            u.setPassword(password);
+            u.setDomain(domain);
+            u.setEmail(email);
+            modelService.persist(u);
+            return u;
+        }
+        return null;
+    }
+
+    @Override
+    public User getCurrentUser(HttpServletRequest request) {
+        return modelService.getModel(User_.username.getName(), request.getUserPrincipal().getName(),User.class);
+    }
+
+    @Override
+    public User getCurrentUser(Principal principal) {
+        return modelService.getModel(User_.username.getName(), principal.getName(),User.class);
     }
 }

@@ -34,11 +34,9 @@ public class VcrudUI extends UI
         request.getLocale();
         LOGGER.info("Current Locale" + request.getLocale().getISO3Country());
 
-
         mainLayout.setSizeFull();
 
         init();
-
 
         mainLayout.addComponent(header,"left: "+LEFT_MARGIN+"px; right: "+RIGHT_MARGIN+"px; top: 0px;");
         mainLayout.addComponent(center,"left: "+LEFT_MARGIN+"px; right: "+RIGHT_MARGIN+"px; top: "+Header.HEIGHT+"px; bottom: "+Footer.HEIGHT+";");

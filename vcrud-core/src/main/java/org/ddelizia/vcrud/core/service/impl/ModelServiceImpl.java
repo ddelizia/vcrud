@@ -298,6 +298,19 @@ public class ModelServiceImpl implements ModelService{
     }
 
     @Override
+    public <T extends VcrudModel> T min(Class<T> clazz, String field) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Object> cq = cb.createQuery();
+        Root r = cq.from(clazz);
+        cq.select(
+                cb.least(
+                        r.get(field)
+                )
+        );
+        return (T)entityManager.createQuery(cq).getSingleResult();
+    }
+
+    @Override
     public int count(Class<? extends VcrudModel> clazz) {
         CriteriaBuilder qb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> cq = qb.createQuery(Long.class);

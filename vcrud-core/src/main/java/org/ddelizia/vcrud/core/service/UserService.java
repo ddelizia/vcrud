@@ -4,6 +4,9 @@ package org.ddelizia.vcrud.core.service;
 import org.ddelizia.vcrud.model.Domain;
 import org.ddelizia.vcrud.model.User;
 
+import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
+
 /**
  * Created with IntelliJ IDEA.
  * User: danilo.delizia
@@ -13,6 +16,12 @@ import org.ddelizia.vcrud.model.User;
  */
 public interface UserService {
 
-     public User vcrudLogIn(String username, String password, Domain domain);
+    public User vcrudLogIn(String username, String password, Domain domain);
+
+    public User registerUser(String username, String email, String password, String password2, Domain domain);
+
+    public User getCurrentUser(HttpServletRequest request);
+
+    public User getCurrentUser(Principal principal);
 
 }

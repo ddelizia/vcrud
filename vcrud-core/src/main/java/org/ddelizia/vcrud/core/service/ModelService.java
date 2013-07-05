@@ -38,6 +38,8 @@ public interface ModelService {
 
     public <T extends VcrudModel> T max(Class<T> clazz, String field);
 
+    public <T extends VcrudModel> T min(Class<T> clazz, String field);
+
     public int count(Class<? extends VcrudModel> clazz);
 
     public int removeAll (Class<? extends VcrudModel> clazz);
