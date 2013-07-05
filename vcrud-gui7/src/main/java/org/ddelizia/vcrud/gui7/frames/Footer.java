@@ -1,5 +1,6 @@
 package org.ddelizia.vcrud.gui7.frames;
 
+import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 /**
