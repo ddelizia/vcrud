@@ -70,13 +70,20 @@ public class ModelServiceImpl implements ModelService{
     }
 
     @Override
-    public <T extends VcrudModel> List<T> getModels(String field, Object o, Class<T> clazz){
+    public <T extends VcrudModel> List<T> getModels(String field, Object o, Class<T> clazz, Integer from, Integer count){
         String queryString = "SELECT x " +
                 "FROM " + clazz.getName() + " x " +
                 "WHERE x."+field+"=:"+GENERIC_PARAM;
 
         Query query = entityManager.createQuery(queryString)
                 .setParameter(GENERIC_PARAM, o);
+
+        if(from!=null){
+            query.setFirstResult(from);
+        }
+        if(count!=null){
+            query.setMaxResults(count);
+        }
 
         List<T> t = null;
         try {
@@ -122,7 +129,7 @@ public class ModelServiceImpl implements ModelService{
     }
 
     @Override
-    public <T extends VcrudModel> List<T> getModels(Map<String, Object> map, Class<T> clazz){
+    public <T extends VcrudModel> List<T> getModels(Map<String, Object> map, Class<T> clazz, Integer from, Integer count){
 
         String queryString = "SELECT x " +
                 "FROM " + clazz.getName() + " x ";
@@ -142,6 +149,13 @@ public class ModelServiceImpl implements ModelService{
         Query query = entityManager.createQuery(queryString);
         for (String field : map.keySet()) {
             query.setParameter(PREFIX_PARAM+field, map.get(field));
+        }
+
+        if(from!=null){
+            query.setFirstResult(from);
+        }
+        if(count!=null){
+            query.setMaxResults(count);
         }
 
         List<T> u = null;
@@ -173,13 +187,20 @@ public class ModelServiceImpl implements ModelService{
     }
 
     @Override
-    public <T extends VcrudModel> List<T> getModelsLike(String field, Object o, Class<T> clazz) {
+    public <T extends VcrudModel> List<T> getModelsLike(String field, Object o, Class<T> clazz, Integer from, Integer count) {
         String queryString = "SELECT x " +
                 "FROM " + clazz.getName() + " x " +
                 "WHERE UPPER(x."+field+") LIKE :"+GENERIC_PARAM;
 
         Query query = entityManager.createQuery(queryString)
                 .setParameter(GENERIC_PARAM, "%"+o+"%");
+
+        if(from!=null){
+            query.setFirstResult(from);
+        }
+        if(count!=null){
+            query.setMaxResults(count);
+        }
 
         List<T> t = null;
         try {
@@ -224,7 +245,7 @@ public class ModelServiceImpl implements ModelService{
     }
 
     @Override
-    public <T extends VcrudModel> List<T> getModelsLike(Map<String, Object> map, Class<T> clazz) {
+    public <T extends VcrudModel> List<T> getModelsLike(Map<String, Object> map, Class<T> clazz, Integer from, Integer count) {
         String queryString = "SELECT x " +
                 "FROM " + clazz.getName() + " x ";
 
@@ -245,6 +266,13 @@ public class ModelServiceImpl implements ModelService{
             query.setParameter(PREFIX_PARAM+field, "%"+map.get(field)+"%");
         }
 
+        if(from!=null){
+            query.setFirstResult(from);
+        }
+        if(count!=null){
+            query.setMaxResults(count);
+        }
+
         List<T> u = null;
         try {
             u = (query.getResultList());
@@ -255,10 +283,17 @@ public class ModelServiceImpl implements ModelService{
     }
 
     @Override
-    public <T extends VcrudModel> List<T> getModels(Class<T> clazz) {
+    public <T extends VcrudModel> List<T> getModels(Class<T> clazz, Integer from, Integer count) {
         String queryString = "SELECT x " +
                 "FROM " + clazz.getName() + " x";
         Query query = entityManager.createQuery(queryString);
+
+        if(from!=null){
+            query.setFirstResult(from);
+        }
+        if(count!=null){
+            query.setMaxResults(count);
+        }
 
         List<T> t = null;
         try {
@@ -270,11 +305,19 @@ public class ModelServiceImpl implements ModelService{
     }
 
     @Override
-    public <T extends VcrudModel> List<T> executeQuery(Map<String, Object> params, String queryString, Class<T> clazz) {
+    public <T extends VcrudModel> List<T> executeQuery(Map<String, Object> params, String queryString, Class<T> clazz, Integer from, Integer count) {
         Query query = entityManager.createQuery(queryString);
         for (String field : params.keySet()) {
             query.setParameter(field, params.get(field));
         }
+
+        if(from!=null){
+            query.setFirstResult(from);
+        }
+        if(count!=null){
+            query.setMaxResults(count);
+        }
+
         List<T> t = null;
         try {
             t = (query.getResultList());

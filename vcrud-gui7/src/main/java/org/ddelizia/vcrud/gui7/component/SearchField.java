@@ -1,7 +1,5 @@
 package org.ddelizia.vcrud.gui7.component;
 
-import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.addon.jpacontainer.JPAContainerFactory;
 import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.ui.*;
 import org.ddelizia.vcrud.core.service.ModelService;
@@ -90,8 +88,7 @@ public class SearchField extends HorizontalLayout{
         if (modelService.isVcrudEntity(field.getType())){
             ComboBox comboBox = new ComboBox();
             comboBox.setWidth(SIZE_SEARCHVALUE,Unit.PIXELS);
-            JPAContainer jpaContainer = JPAContainerFactory.makeReadOnly(field.getType(), "book-examples");
-            comboBox.setContainerDataSource(jpaContainer);
+
 
             Field[] fieldstoShow = VcrudAnnotationUtils.retriveVcrudPropertyWithShowOnCombo(field.getType(),true);
 

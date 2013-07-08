@@ -2,6 +2,7 @@ package org.ddelizia.vcrud.core.service;
 
 import org.ddelizia.vcrud.model.VcrudModel;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Map;
 
@@ -14,27 +15,29 @@ import java.util.Map;
  */
 public interface ModelService {
 
+    public EntityManager getEntityManager();
+
     public <T extends VcrudModel> T create(Class<T> clazz);
 
     public <T extends VcrudModel> T getModel(String field, Object o, Class<T> clazz);
 
-    public <T extends VcrudModel> List<T> getModels(String field, Object o, Class<T> clazz);
+    public <T extends VcrudModel> List<T> getModels(String field, Object o, Class<T> clazz, Integer from, Integer count);
 
     public <T extends VcrudModel> T getModel(Map<String, Object> map, Class<T> clazz);
 
-    public <T extends VcrudModel> List<T> getModels(Map<String, Object> map, Class<T> clazz);
+    public <T extends VcrudModel> List<T> getModels(Map<String, Object> map, Class<T> clazz, Integer from, Integer count);
 
     public <T extends VcrudModel> T getModelLike(String field, Object o, Class<T> clazz);
 
-    public <T extends VcrudModel> List<T> getModelsLike(String field, Object o, Class<T> clazz);
+    public <T extends VcrudModel> List<T> getModelsLike(String field, Object o, Class<T> clazz, Integer from, Integer count);
 
     public <T extends VcrudModel> T getModelLike(Map<String, Object> map, Class<T> clazz);
 
-    public <T extends VcrudModel> List<T> getModelsLike(Map<String, Object> map, Class<T> clazz);
+    public <T extends VcrudModel> List<T> getModelsLike(Map<String, Object> map, Class<T> clazz, Integer from, Integer count);
 
-    public <T extends VcrudModel> List<T> getModels(Class<T> clazz);
+    public <T extends VcrudModel> List<T> getModels(Class<T> clazz, Integer from, Integer to);
 
-    public <T extends VcrudModel> List<T> executeQuery(Map<String,Object> params, String query, Class<T> clazz);
+    public <T extends VcrudModel> List<T> executeQuery(Map<String,Object> params, String query, Class<T> clazz, Integer from, Integer count);
 
     public <T extends VcrudModel> T max(Class<T> clazz, String field);
 
