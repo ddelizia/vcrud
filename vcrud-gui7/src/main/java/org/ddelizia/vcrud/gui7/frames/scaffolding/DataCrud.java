@@ -15,7 +15,7 @@ import org.ddelizia.vcrud.model.VcrudModel;
  */
 public class DataCrud extends TabSheet{
 
-    private ResultsTable resultsTable;
+    private ResultsTable<User> resultsTable;
 
     private SearchPanel searchPanel;
 
@@ -32,7 +32,7 @@ public class DataCrud extends TabSheet{
         verticalLayout1.setSizeUndefined();
         verticalLayout1.setWidth(100, Unit.PERCENTAGE);
         searchPanel = new SearchPanel(User.class);
-        resultsTable = new ResultsTable();
+        resultsTable = new ResultsTable<User>(User.class);
         verticalLayout1.setMargin(true);
         verticalLayout1.addComponent(searchPanel);
         verticalLayout1.addComponent(resultsTable);

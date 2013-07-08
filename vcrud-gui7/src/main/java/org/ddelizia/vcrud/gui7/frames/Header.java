@@ -51,7 +51,7 @@ public class Header extends VerticalLayout {
             }
         });
 
-        MenuBar.MenuItem query = script.addItem("Query",new MenuBar.Command() {
+        MenuBar.MenuItem query = script.addItem("EntityQuery",new MenuBar.Command() {
             @Override
             public void menuSelected(MenuBar.MenuItem menuItem) {
 
