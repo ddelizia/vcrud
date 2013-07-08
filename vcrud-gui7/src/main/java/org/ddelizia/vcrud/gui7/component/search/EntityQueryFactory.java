@@ -22,10 +22,9 @@ public class EntityQueryFactory<T extends VcrudModel> implements QueryFactory{
         this.tClass=tClass;
     }
 
-
     @Override
     public Query constructQuery(QueryDefinition queryDefinition) {
-        return new EntityQuery<T>(tClass);
+        this.definition=queryDefinition;
+        return new EntityQuery<T>(tClass,queryDefinition);
     }
-
 }
