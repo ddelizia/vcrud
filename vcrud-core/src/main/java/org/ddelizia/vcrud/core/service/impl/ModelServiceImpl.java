@@ -307,10 +307,11 @@ public class ModelServiceImpl implements ModelService{
     @Override
     public <T extends VcrudModel> List<T> executeQuery(Map<String, Object> params, String queryString, Class<T> clazz, Integer from, Integer count) {
         Query query = entityManager.createQuery(queryString);
-        for (String field : params.keySet()) {
-            query.setParameter(field, params.get(field));
+        if(params!=null){
+            for (String field : params.keySet()) {
+                query.setParameter(field, params.get(field));
+            }
         }
-
         if(from!=null){
             query.setFirstResult(from);
         }

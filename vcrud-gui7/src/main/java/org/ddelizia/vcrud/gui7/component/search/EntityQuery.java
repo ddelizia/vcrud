@@ -5,6 +5,7 @@ import com.vaadin.data.util.BeanItem;
 import org.ddelizia.vcrud.core.service.ModelService;
 import org.ddelizia.vcrud.gui7.config.SpringContextHelper;
 import org.ddelizia.vcrud.model.VcrudModel;
+import org.vaadin.addons.lazyquerycontainer.QueryDefinition;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +22,29 @@ public class EntityQuery<T extends VcrudModel> implements org.vaadin.addons.lazy
 
     private ModelService modelService;
     private Class<T> theClass;
+    private QueryDefinition queryDefinition;
+    private String query="";
 
-    public EntityQuery(Class<T> theClass) {
+    public EntityQuery(Class<T> theClass, QueryDefinition queryDefinition) {
         super();
         modelService = SpringContextHelper.getBean(ModelService.class);
+        this.queryDefinition=queryDefinition;
         this.theClass=theClass;
+
+        for(int i=0;i<queryDefinition.getSortPropertyIds().length;i++) {
+            if(i==0) {
+                query=" ORDER BY";
+            } else {
+                query+=",";
+            }
+            query+=" m."+queryDefinition.getSortPropertyIds()[i];
+            if(queryDefinition.getSortPropertyAscendingStates()[i]) {
+                query+=" ASC";
+            }
+            else {
+                query+=" DESC";
+            }
+        }
     }
 
     @Override
@@ -35,7 +54,11 @@ public class EntityQuery<T extends VcrudModel> implements org.vaadin.addons.lazy
 
     @Override
     public List<Item> loadItems(int i, int i2) {
-        List<T> list = modelService.getModels(this.theClass,i,i2);
+        List<T> list = modelService.executeQuery(null,
+                "SELECT m from "+theClass.getName()+" as m "+query,
+                theClass,
+                i,
+                i2);
         List<Item> items=new ArrayList<Item>();
         for(T t : list) {
             items.add(new BeanItem<T>(t));

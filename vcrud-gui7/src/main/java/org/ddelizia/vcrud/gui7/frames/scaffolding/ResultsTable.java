@@ -4,13 +4,13 @@ import com.jensjansson.pagedtable.PagedTable;
 import com.vaadin.data.Item;
 import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 import org.ddelizia.vcrud.core.service.ModelService;
 import org.ddelizia.vcrud.gui7.component.search.EntityQueryFactory;
 import org.ddelizia.vcrud.gui7.config.SpringContextHelper;
 import org.ddelizia.vcrud.model.VcrudModel;
-import org.vaadin.addons.lazyquerycontainer.EntityContainer;
-import org.vaadin.addons.lazyquerycontainer.LazyQueryContainer;
+import org.vaadin.addons.lazyquerycontainer.*;
 import org.vaadin.peter.contextmenu.ContextMenu;
 
 import javax.persistence.EntityManager;
@@ -47,16 +47,21 @@ public class ResultsTable<T extends VcrudModel> extends Panel{
 
         EntityQueryFactory <T> entityQueryFactory = new EntityQueryFactory<T>(theClass);
 
-        lazyQueryContainer =new LazyQueryContainer(null,entityQueryFactory);
 
-        //lazyQueryContainer.addContainerProperty("id", String.class, "", true, true);
-        //lazyQueryContainer.addContainerProperty("username", String.class, "", true, true);
+        LazyQueryDefinition lazyQueryDefinition = new LazyQueryDefinition(false,100,"id");
+        lazyQueryDefinition.setDefaultSortPropertyIds(new Object[] {"id"});
+        lazyQueryDefinition.setDefaultSortPropertyAscendingStates(new boolean[] {true});
+
+        lazyQueryContainer =new LazyQueryContainer(lazyQueryDefinition,entityQueryFactory) ;
+
+        lazyQueryContainer.addContainerProperty("id", String.class, "", true, true);
+        lazyQueryContainer.addContainerProperty("username", String.class, "", true, true);
 
         this.setWidth(100, Unit.PERCENTAGE);
         this.setHeight(67, Unit.PERCENTAGE);
         this.setContent(verticalLayout);
 
-        PagedTable table = new PagedTable("footable");
+        Table table = new Table("footable");
         table.setContainerDataSource(lazyQueryContainer);
         table.setPageLength(15);
         table.setSizeFull();
@@ -94,7 +99,7 @@ public class ResultsTable<T extends VcrudModel> extends Panel{
 
 
         verticalLayout.addComponent(table);
-        verticalLayout.addComponent(table.createControls());
+        //verticalLayout.addComponent(table.createControls());
 
     }
 
