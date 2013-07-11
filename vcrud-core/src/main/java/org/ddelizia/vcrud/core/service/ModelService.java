@@ -39,6 +39,8 @@ public interface ModelService {
 
     public <T extends VcrudModel> List<T> executeQuery(Map<String,Object> params, String query, Class<T> clazz, Integer from, Integer count);
 
+    public List executeQueryObject(Map<String,Object> params, String query, Class clazz, Integer from, Integer count);
+
     public <T extends VcrudModel> T max(Class<T> clazz, String field);
 
     public <T extends VcrudModel> T min(Class<T> clazz, String field);

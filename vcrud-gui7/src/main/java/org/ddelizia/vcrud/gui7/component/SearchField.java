@@ -2,6 +2,8 @@ package org.ddelizia.vcrud.gui7.component;
 
 import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.ui.*;
+import org.ddelizia.vcrud.core.filter.FilterType;
+import org.ddelizia.vcrud.core.filter.FilterTypeMapping;
 import org.ddelizia.vcrud.core.service.ModelService;
 import org.ddelizia.vcrud.core.utils.VcrudAnnotationUtils;
 import org.ddelizia.vcrud.gui7.config.SpringContextHelper;
@@ -19,6 +21,8 @@ import java.util.Collection;
  */
 public class SearchField extends HorizontalLayout{
 
+    private FilterTypeMapping filterTypeMapping;
+
     private static final int SIZE_LABEL = 100;
     private static final int SIZE_SEARCHTYPE = 100;
     private static final int SIZE_SEARCHVALUE = 100;
@@ -31,15 +35,20 @@ public class SearchField extends HorizontalLayout{
 
     private Label label;
     private ComboBox searchType;
-    private Component searchValue;
+    private Component[] searchValues;
+
 
     public SearchField(Field field){
         this.field=field;
         modelService = SpringContextHelper.getBean(ModelService.class);
+        filterTypeMapping = SpringContextHelper.getBean(FilterTypeMapping.class);
         setSpacing(true);
         addComponent(getLabel());
         addComponent(getSearchType());
-        addComponent(getSearchValue());
+        for (Component c:getSearchValues()){
+            addComponent(c);
+        }
+
     }
 
     public Label getLabel() {
@@ -66,10 +75,9 @@ public class SearchField extends HorizontalLayout{
 
     private void buildSearchType(){
         searchType = new ComboBox();
-        if (modelService.isVcrudEntity(field.getType())){
-
-        }else {
-            searchType.addItem("Test");
+        searchType.setItemCaptionPropertyId("code");
+        for (FilterType filterType: filterTypeMapping.retriveSearchType(field.getType())){
+            searchType.addItem(filterType);
         }
     }
 
@@ -77,18 +85,28 @@ public class SearchField extends HorizontalLayout{
         this.searchType = searchType;
     }
 
-    public Component getSearchValue() {
-        if (searchValue==null){
-            buildSearchValue();
+    public Component[] getSearchValues() {
+        if (searchValues ==null){
+            searchValues = new Component[FilterType.MAX_PARAMS];
+            for (int i=0; i<searchValues.length; i++){
+                searchValues[i]=buildSearchValue();
+                if (i>0){
+                    searchValues[i].setVisible(false);
+                }
+            }
         }
-        return searchValue;
+        return searchValues;
     }
 
-    private void buildSearchValue(){
+    public void setSearchValues(Component[] searchValues) {
+        this.searchValues = searchValues;
+    }
+
+    private Component buildSearchValue(){
+        Component component;
         if (modelService.isVcrudEntity(field.getType())){
             ComboBox comboBox = new ComboBox();
             comboBox.setWidth(SIZE_SEARCHVALUE,Unit.PIXELS);
-
 
             Field[] fieldstoShow = VcrudAnnotationUtils.retriveVcrudPropertyWithShowOnCombo(field.getType(),true);
 
@@ -97,23 +115,19 @@ public class SearchField extends HorizontalLayout{
             comboBox.setTextInputAllowed(true);
             comboBox.setFilteringMode(FilteringMode.CONTAINS);
 
-            searchValue = comboBox;
+            component = comboBox;
         }else if(field.getType().isAssignableFrom(Collection.class)){
             TextField textField = new TextField();
             textField.setWidth(SIZE_SEARCHVALUE,Unit.PIXELS);
 
-            searchValue = textField;
+            component = textField;
         }else {
             TextField textField = new TextField();
             textField.setWidth(SIZE_SEARCHVALUE,Unit.PIXELS);
 
-            searchValue = textField;
+            component = textField;
         }
 
-
-    }
-
-    public void setSearchValue(Component searchValue) {
-        this.searchValue = searchValue;
+        return component;
     }
 }

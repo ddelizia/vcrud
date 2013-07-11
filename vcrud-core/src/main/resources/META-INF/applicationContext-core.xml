@@ -15,6 +15,8 @@
     <context:component-scan base-package="org.ddelizia.vcrud.core.service"/>
     <context:component-scan base-package="org.ddelizia.vcrud.core.config"/>
 
+    <bean name="org.ddelizia.vcrud.core.filter.FilterTypeMapping" class="org.ddelizia.vcrud.core.filter.FilterTypeMapping"/>
+
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="${db.driverClassName}"/>
         <property name="url" value="${db.url}"/>

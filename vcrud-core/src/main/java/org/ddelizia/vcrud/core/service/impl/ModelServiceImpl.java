@@ -329,6 +329,30 @@ public class ModelServiceImpl implements ModelService{
     }
 
     @Override
+    public List executeQueryObject(Map<String, Object> params, String queryString, Class clazz, Integer from, Integer count) {
+        Query query = entityManager.createQuery(queryString);
+        if(params!=null){
+            for (String field : params.keySet()) {
+                query.setParameter(field, params.get(field));
+            }
+        }
+        if(from!=null){
+            query.setFirstResult(from);
+        }
+        if(count!=null){
+            query.setMaxResults(count);
+        }
+
+        List t = null;
+        try {
+            t = (query.getResultList());
+        } catch (NoResultException e) {
+            //logger.info("No models found");
+        }
+        return t;
+    }
+
+    @Override
     public <T extends VcrudModel> T max(Class<T> clazz, String field) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Object> cq = cb.createQuery();
