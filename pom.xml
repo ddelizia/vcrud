@@ -18,7 +18,6 @@
     </properties>
 
     <modules>
-        <module>vcrud-security</module>
         <module>vcrud-gui7</module>
         <module>vcrud-core</module>
         <module>vcrud-model</module>
