@@ -5,6 +5,8 @@ import com.vaadin.data.util.HierarchicalContainer;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.Tree;
+import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.Reindeer;
 import org.ddelizia.vcrud.core.service.ModelService;
 import org.ddelizia.vcrud.gui7.config.SpringContextHelper;
 import org.ddelizia.vcrud.model.VcrudModel;
@@ -21,7 +23,7 @@ import java.util.Map;
  * Time: 10:45
  * To change this template use File | Settings | File Templates.
  */
-public class Menu extends Panel {
+public class Menu extends VerticalLayout {
 
     private Tree menuTree;
     private HierarchicalContainer hierarchicalContainer;
@@ -29,11 +31,22 @@ public class Menu extends Panel {
     private ModelService modelService;
 
     public Menu() {
-        super("Menu");
-        setSizeFull();
-
+        super();
         modelService = SpringContextHelper.getBean(ModelService.class);
+        setMargin(true);
+        setHeight(100,Unit.PERCENTAGE);
+        setWidth(100, Unit.PERCENTAGE);
+
         init();
+
+        Panel panel =new Panel("Menu");
+        panel.setSizeFull();
+        panel.setContent(menuTree);
+        panel.setStyleName(Reindeer.PANEL_LIGHT);
+
+
+        addComponent(panel);
+        setExpandRatio(panel,new Float(1.00));
     }
 
     private void init(){
@@ -64,21 +77,20 @@ public class Menu extends Panel {
 
         menuTree.addItemClickListener(treeclick);
         menuTree.setContainerDataSource(hierarchicalContainer);
-        this.setContent(menuTree);
     }
 
 
     private void buildHierarchicalContainer(){
-        hierarchicalContainer.addItem(VcrudItem.ROOT);
+        //hierarchicalContainer.addItem(VcrudItem.ROOT);
         for (String element:treeObjects.keySet()){
             TreeObject treeObject = treeObjects.get(element);
 
             Item group =  hierarchicalContainer.getItem(treeObject.getGroup());
-            if (group==null){
+            if (group==null && !VcrudItem.ROOT.equals(treeObject.getGroup())){
                 hierarchicalContainer.addItem(treeObject.getGroup());
             }
             Item parent =  hierarchicalContainer.getItem(treeObject.getParent());
-            if (parent==null){
+            if (parent==null && !VcrudItem.ROOT.equals(treeObject.getParent())){
                 hierarchicalContainer.addItem(treeObject.getParent());
             }
             hierarchicalContainer.addItem(treeObject);
@@ -89,10 +101,10 @@ public class Menu extends Panel {
             TreeObject treeObject = treeObjects.get(element);
             if (treeObject.getParent()==null || treeObject.getParent().equals(treeObject.getGroup())){
                 if (!treeObject.getGroup().equals(VcrudItem.ROOT)){
-                    hierarchicalContainer.setParent(treeObject.getGroup(), VcrudItem.ROOT);
+                    //hierarchicalContainer.setParent(treeObject.getGroup(), VcrudItem.ROOT);
                     hierarchicalContainer.setParent(treeObject, treeObject.getGroup());
                 }else{
-                    hierarchicalContainer.setParent(treeObject,VcrudItem.ROOT);
+                    //hierarchicalContainer.setParent(treeObject,VcrudItem.ROOT);
                 }
             }else{
                 hierarchicalContainer.setParent(treeObject.getGroup(), treeObject.getParent());

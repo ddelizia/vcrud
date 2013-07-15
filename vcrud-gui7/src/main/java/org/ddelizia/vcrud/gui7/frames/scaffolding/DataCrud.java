@@ -1,8 +1,6 @@
 package org.ddelizia.vcrud.gui7.frames.scaffolding;
 
-import com.vaadin.ui.Label;
-import com.vaadin.ui.TabSheet;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
 import org.ddelizia.vcrud.model.User;
 import org.ddelizia.vcrud.model.VcrudModel;
 
@@ -13,7 +11,7 @@ import org.ddelizia.vcrud.model.VcrudModel;
  * Time: 12:43
  * To change this template use File | Settings | File Templates.
  */
-public class DataCrud extends TabSheet{
+public class DataCrud extends VerticalLayout{
 
     private ResultsTable<User> resultsTable;
 
@@ -28,24 +26,25 @@ public class DataCrud extends TabSheet{
         setWidth(100,Unit.PERCENTAGE);
         setHeight(100, Unit.PERCENTAGE);
 
-        VerticalLayout verticalLayout1 = new VerticalLayout();
-        verticalLayout1.setSizeUndefined();
-        verticalLayout1.setWidth(100, Unit.PERCENTAGE);
+        Window window = new Window("Text");
+        window.center();
+        window.setHeight(95,Unit.PERCENTAGE);
+        window.setWidth(95, Unit.PERCENTAGE);
+        window.setVisible(true);
+        final FormLayout content = new FormLayout();
+        window.setContent(content);
+        UI.getCurrent().addWindow(window);
+
+        this.setHeight(100, Unit.PERCENTAGE);
+        this.setWidth(100, Unit.PERCENTAGE);
         searchPanel = new SearchPanel(User.class);
         resultsTable = new ResultsTable<User>(User.class);
-        verticalLayout1.setMargin(true);
-        verticalLayout1.addComponent(searchPanel);
-        verticalLayout1.addComponent(resultsTable);
-        addTab(verticalLayout1, "Search");
+        this.setMargin(true);
+        this.addComponent(searchPanel);
+        this.setExpandRatio(searchPanel, new Float(0.33));
+        this.addComponent(resultsTable);
+        this.setExpandRatio(resultsTable, new Float(0.67));
 
-        VerticalLayout verticalLayout2 = new VerticalLayout();
-        verticalLayout2.setSizeFull();
-        verticalLayout2.setMargin(true);
-        for(int i=0; i<100; i++){
-            verticalLayout2.addComponent(new Label("test"+i));
-        }
-
-        addTab(verticalLayout2, "Result");
     }
 
     public ResultsTable getResultsTable() {

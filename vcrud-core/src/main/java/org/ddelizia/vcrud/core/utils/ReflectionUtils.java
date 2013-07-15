@@ -1,7 +1,9 @@
 package org.ddelizia.vcrud.core.utils;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -62,6 +64,22 @@ public class ReflectionUtils {
         }
 
         return fields.toArray(new Field[fields.size()]);
+    }
+
+    public static Object javaLangBuilder(Class clazz, String value){
+        try {
+            Constructor constructor = clazz.getDeclaredConstructor(String.class);
+            return constructor.newInstance(value);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (InstantiationException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        return null;
     }
 
 }
