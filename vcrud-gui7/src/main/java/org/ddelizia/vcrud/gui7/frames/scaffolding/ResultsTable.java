@@ -3,9 +3,8 @@ package org.ddelizia.vcrud.gui7.frames.scaffolding;
 import com.jensjansson.pagedtable.PagedTable;
 import com.vaadin.data.Item;
 import com.vaadin.data.util.IndexedContainer;
+import com.vaadin.ui.*;
 import com.vaadin.ui.Panel;
-import com.vaadin.ui.Table;
-import com.vaadin.ui.VerticalLayout;
 import org.ddelizia.vcrud.core.service.ModelService;
 import org.ddelizia.vcrud.gui7.component.search.EntityQueryFactory;
 import org.ddelizia.vcrud.gui7.config.SpringContextHelper;
@@ -14,6 +13,7 @@ import org.vaadin.addons.lazyquerycontainer.*;
 import org.vaadin.peter.contextmenu.ContextMenu;
 
 import javax.persistence.EntityManager;
+import java.awt.*;
 import java.lang.reflect.ParameterizedType;
 
 /**
@@ -23,9 +23,9 @@ import java.lang.reflect.ParameterizedType;
  * Time: 11:13
  * To change this template use File | Settings | File Templates.
  */
-public class ResultsTable<T extends VcrudModel> extends Panel{
+public class ResultsTable<T extends VcrudModel> extends VerticalLayout{
 
-    private VerticalLayout verticalLayout = new VerticalLayout();
+    //private VerticalLayout verticalLayout = new VerticalLayout();
     private ModelService modelService;
     private Class<? extends VcrudModel> theClass;
     
@@ -34,40 +34,30 @@ public class ResultsTable<T extends VcrudModel> extends Panel{
     private EntityContainer<T> entityContainer;
 
     public ResultsTable(Class <T> theClass) {
-        super("table");
-        verticalLayout.setSizeUndefined();
-        verticalLayout.setMargin(true);
-        verticalLayout.setSpacing(true);
 
         modelService = SpringContextHelper.getBean(ModelService.class);
         this.theClass=theClass;
         entityManager = modelService.getEntityManager();
 
-
-
         EntityQueryFactory <T> entityQueryFactory = new EntityQueryFactory<T>(theClass);
-
 
         LazyQueryDefinition lazyQueryDefinition = new LazyQueryDefinition(false,100,"id");
         lazyQueryDefinition.setDefaultSortPropertyIds(new Object[] {"id"});
         lazyQueryDefinition.setDefaultSortPropertyAscendingStates(new boolean[] {true});
 
         lazyQueryContainer =new LazyQueryContainer(lazyQueryDefinition,entityQueryFactory) ;
-
         lazyQueryContainer.addContainerProperty("id", String.class, "", true, true);
         lazyQueryContainer.addContainerProperty("username", String.class, "", true, true);
 
         this.setWidth(100, Unit.PERCENTAGE);
-        this.setHeight(67, Unit.PERCENTAGE);
-        this.setContent(verticalLayout);
+        this.setHeight(100, Unit.PERCENTAGE);
 
-        Table table = new Table("footable");
+        Table table = new Table();
         table.setContainerDataSource(lazyQueryContainer);
-        table.setPageLength(15);
-        table.setSizeFull();
+        table.setWidth(100, Unit.PERCENTAGE);
+        table.setHeight(100, Unit.PERCENTAGE);
         table.setSelectable(true);
         table.setEditable(false);
-        table.setWidth(100, Unit.PERCENTAGE);
 
         ContextMenu.ContextMenuOpenedListener.TableListener tableOpenListener = new ContextMenu.ContextMenuOpenedListener.TableListener() {
 
@@ -98,7 +88,7 @@ public class ResultsTable<T extends VcrudModel> extends Panel{
         contextMenu.addContextMenuTableListener(tableOpenListener);
 
 
-        verticalLayout.addComponent(table);
+        addComponent(table);
         //verticalLayout.addComponent(table.createControls());
 
     }

@@ -2,12 +2,16 @@ package org.ddelizia.vcrud.gui7.component;
 
 import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.ui.*;
+import org.ddelizia.vcrud.core.filter.FilterObject;
 import org.ddelizia.vcrud.core.filter.FilterType;
 import org.ddelizia.vcrud.core.filter.FilterTypeMapping;
 import org.ddelizia.vcrud.core.service.ModelService;
+import org.ddelizia.vcrud.core.utils.ReflectionUtils;
 import org.ddelizia.vcrud.core.utils.VcrudAnnotationUtils;
 import org.ddelizia.vcrud.gui7.config.SpringContextHelper;
 import org.ddelizia.vcrud.gui7.frames.scaffolding.SearchPanel;
+import org.ddelizia.vcrud.model.VcrudModel;
+import org.ddelizia.vcrud.model.VcrudModel_;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
@@ -26,7 +30,6 @@ public class SearchField extends HorizontalLayout{
     private static final int SIZE_LABEL = 100;
     private static final int SIZE_SEARCHTYPE = 100;
     private static final int SIZE_SEARCHVALUE = 100;
-
 
     private ModelService modelService;
 
@@ -75,9 +78,10 @@ public class SearchField extends HorizontalLayout{
 
     private void buildSearchType(){
         searchType = new ComboBox();
-        searchType.setItemCaptionPropertyId("code");
+
         for (FilterType filterType: filterTypeMapping.retriveSearchType(field.getType())){
             searchType.addItem(filterType);
+            searchType.setItemCaption(filterType,filterType.getCode());
         }
     }
 
@@ -129,5 +133,47 @@ public class SearchField extends HorizontalLayout{
         }
 
         return component;
+    }
+
+    public FilterObject getFilterObject(){
+        FilterObject filterObject=null;
+        if (searchType.getValue()!=null){
+            filterObject=new FilterObject();
+            filterObject.setaClass(field.getType());
+            filterObject.setSearchType((FilterType)searchType.getValue());
+            filterObject.setField(field.getName());
+            filterObject.setInput(new Object[filterObject.getSearchType().getNumberOfInputs()]);
+            for (int i=0; i<filterObject.getSearchType().getNumberOfInputs(); i++){
+                if(field.getType().getPackage().getName().contains("java.lang")){
+                    TextField textField = (TextField)searchValues[i];
+                    ReflectionUtils.javaLangBuilder(field.getType(),textField.getValue()) ;
+                }else {
+                    if(searchValues[i] instanceof ComboBox){
+                        ComboBox comboBox =  (ComboBox)searchValues[i];
+                        filterObject.getInput()[i] = comboBox.getValue();
+                    }else{
+                        TextField textField = (TextField)searchValues[i];
+                        filterObject.getInput()[i] = modelService.getModel(VcrudModel_.id.getName(), new Long(textField.getValue()), field.getType().asSubclass(VcrudModel.class) );
+                    }
+                }
+            }
+        }
+        return filterObject;
+    }
+
+    public Field getField() {
+        return field;
+    }
+
+    public void setField(Field field) {
+        this.field = field;
+    }
+
+    public SearchPanel getSearchPanel() {
+        return searchPanel;
+    }
+
+    public void setSearchPanel(SearchPanel searchPanel) {
+        this.searchPanel = searchPanel;
     }
 }

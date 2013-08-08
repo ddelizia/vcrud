@@ -1,5 +1,6 @@
 package org.ddelizia.vcrud.gui7.frames;
 
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
@@ -16,6 +17,11 @@ public class Footer extends VerticalLayout {
 
     public Footer() {
         super();
+        setStyleName("vcrud-footer");
         setHeight(HEIGHT,Unit.PIXELS);
+        Label footerText = new Label("This is the text that goes as footer text");
+        footerText.setStyleName("vcrud-footer_text");
+        addComponent(footerText);
+        setComponentAlignment(footerText, Alignment.MIDDLE_LEFT);
     }
 }

@@ -1,5 +1,6 @@
 package org.ddelizia.vcrud.gui7;
 
+import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.AbsoluteLayout;
 import com.vaadin.ui.Layout;
@@ -15,12 +16,13 @@ import java.util.logging.Logger;
  * The ScaffoldingApp's "main" class
  */
 @SuppressWarnings("serial")
+@Theme("vcrud-theme")
 public class VcrudUI extends UI
 {
     private final static Logger LOGGER = Logger.getLogger(VcrudUI.class.getName());
 
-    private final static int LEFT_MARGIN=10;
-    private final static int RIGHT_MARGIN=10;
+    private final static int LEFT_MARGIN=0;
+    private final static int RIGHT_MARGIN=0;
 
     private AbsoluteLayout mainLayout=new AbsoluteLayout();
 
@@ -38,9 +40,9 @@ public class VcrudUI extends UI
 
         init();
 
-        mainLayout.addComponent(header,"left: "+LEFT_MARGIN+"px; right: "+RIGHT_MARGIN+"px; top: 0px;");
+        mainLayout.addComponent(header,"left: "+LEFT_MARGIN+"px; right: "+RIGHT_MARGIN+"px; top: 0px; ");
         mainLayout.addComponent(center,"left: "+LEFT_MARGIN+"px; right: "+RIGHT_MARGIN+"px; top: "+Header.HEIGHT+"px; bottom: "+Footer.HEIGHT+";");
-        mainLayout.addComponent(footer,"left: "+LEFT_MARGIN+"px; right: "+RIGHT_MARGIN+"px; bottom: "+Footer.HEIGHT+";" + "");
+        mainLayout.addComponent(footer,"left: "+LEFT_MARGIN+"px; right: "+RIGHT_MARGIN+"px; bottom: 0px; height:"+Footer.HEIGHT+";");
         setContent(mainLayout);
     }
 
