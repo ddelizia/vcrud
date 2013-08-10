@@ -3,9 +3,8 @@ package org.ddelizia.vcrud.model.cms;
 import org.ddelizia.vcrud.model.VcrudModel;
 import org.ddelizia.vcrud.model.annotation.VcrudItem;
 
-import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
+import javax.persistence.*;
+import java.util.Collection;
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,8 +20,21 @@ import javax.persistence.InheritanceType;
 @VcrudItem(group = "CMS", label = "Page", parent = "CMS")
 public class Page extends VcrudModel{
 
+    @Column(name = "code", unique = true)
     private String code;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "template_ref")
     private Template template;
 
+    @OneToMany(fetch = FetchType.LAZY)
+    private Collection<WidgetSlot> widgetSlots;
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 }

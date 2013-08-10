@@ -3,9 +3,7 @@ package org.ddelizia.vcrud.model.cms;
 import org.ddelizia.vcrud.model.VcrudModel;
 import org.ddelizia.vcrud.model.annotation.VcrudItem;
 
-import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
+import javax.persistence.*;
 import java.util.Collection;
 
 /**
@@ -21,7 +19,9 @@ import java.util.Collection;
 @VcrudItem(group = "CMS", label = "Template", parent = "CMS")
 public class Template extends VcrudModel{
 
+    @Column(name = "code", unique = true)
     private String code;
 
+    @OneToMany(fetch = FetchType.LAZY)
     private Collection<WidgetSlot> widgetSlots;
 }

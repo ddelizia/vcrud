@@ -3,7 +3,7 @@ package org.ddelizia.vcrud.core.service.language.impl;
 import org.ddelizia.vcrud.core.service.model.ModelService;
 import org.ddelizia.vcrud.core.service.language.TranslationService;
 import org.ddelizia.vcrud.model.language.Translation;
-import org.ddelizia.vcrud.model.Translation_;
+import org.ddelizia.vcrud.model.language.Translation_;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Locale;

@@ -1,5 +1,6 @@
 package org.ddelizia.vcrud.model.media;
 
+import org.ddelizia.vcrud.model.VcrudModel;
 import org.ddelizia.vcrud.model.annotation.VcrudItem;
 
 import javax.persistence.*;
@@ -14,8 +15,16 @@ import javax.persistence.*;
 
 
 @MappedSuperclass
-public abstract class Preset {
+public abstract class Preset extends VcrudModel{
 
     @Column(name = "code", unique = true)
     private String code;
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 }

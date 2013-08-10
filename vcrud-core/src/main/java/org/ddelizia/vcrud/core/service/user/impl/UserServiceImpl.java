@@ -5,7 +5,7 @@ import org.ddelizia.vcrud.core.service.model.ModelService;
 import org.ddelizia.vcrud.core.service.user.UserService;
 import org.ddelizia.vcrud.model.usermanagement.Domain;
 import org.ddelizia.vcrud.model.usermanagement.User;
-import org.ddelizia.vcrud.model.User_;
+import org.ddelizia.vcrud.model.usermanagement.User_;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;

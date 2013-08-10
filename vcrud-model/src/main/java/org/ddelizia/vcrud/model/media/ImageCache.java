@@ -1,5 +1,6 @@
 package org.ddelizia.vcrud.model.media;
 
+import org.ddelizia.vcrud.model.VcrudModel;
 import org.ddelizia.vcrud.model.annotation.VcrudItem;
 
 import javax.persistence.*;
@@ -14,9 +15,10 @@ import javax.persistence.*;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @VcrudItem(parent = "Media", label = "ImageCache", group = "Media")
-public class ImageCache {
+public class ImageCache extends VcrudModel{
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "imagePreset_ref")
     private ImagePreset imagePreset;
 
     @OneToOne

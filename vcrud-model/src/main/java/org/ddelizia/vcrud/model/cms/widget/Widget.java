@@ -1,7 +1,8 @@
-package org.ddelizia.vcrud.model.cms;
+package org.ddelizia.vcrud.model.cms.widget;
 
 import org.ddelizia.vcrud.model.VcrudModel;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.MappedSuperclass;
 
@@ -13,9 +14,17 @@ import javax.persistence.MappedSuperclass;
  * To change this template use File | Settings | File Templates.
  */
 
-@MappedSuperclass
-public abstract class Widget extends VcrudModel{
+@Entity
+public class Widget extends VcrudModel{
 
+    @Column(name = "code", unique = true)
     private String code;
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 }

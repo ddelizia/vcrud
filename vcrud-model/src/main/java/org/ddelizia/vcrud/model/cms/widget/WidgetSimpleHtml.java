@@ -1,8 +1,8 @@
 package org.ddelizia.vcrud.model.cms.widget;
 
 import org.ddelizia.vcrud.model.annotation.VcrudItem;
-import org.ddelizia.vcrud.model.cms.Widget;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -20,6 +20,14 @@ import javax.persistence.InheritanceType;
 @VcrudItem(group = "Widgets", label = "WidgetSimpleHtml", parent = "CMS")
 public class WidgetSimpleHtml extends Widget{
 
+    @Column(name = "htmlText")
     private String htmlText;
 
+    public String getHtmlText() {
+        return htmlText;
+    }
+
+    public void setHtmlText(String htmlText) {
+        this.htmlText = htmlText;
+    }
 }

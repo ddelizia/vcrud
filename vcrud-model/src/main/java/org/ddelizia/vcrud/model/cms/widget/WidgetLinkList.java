@@ -1,11 +1,8 @@
 package org.ddelizia.vcrud.model.cms.widget;
 
 import org.ddelizia.vcrud.model.annotation.VcrudItem;
-import org.ddelizia.vcrud.model.cms.Widget;
 
-import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
+import javax.persistence.*;
 import java.util.List;
 
 /**
@@ -21,7 +18,25 @@ import java.util.List;
 @VcrudItem(group = "Widgets", label = "WidgetLinkList", parent = "CMS")
 public class WidgetLinkList extends Widget{
 
+    @OneToMany(fetch = FetchType.EAGER)
     private List<WidgetLink> links;
 
+    @Column(name = "cssClass")
     private String cssClass;
+
+    public List<WidgetLink> getLinks() {
+        return links;
+    }
+
+    public void setLinks(List<WidgetLink> links) {
+        this.links = links;
+    }
+
+    public String getCssClass() {
+        return cssClass;
+    }
+
+    public void setCssClass(String cssClass) {
+        this.cssClass = cssClass;
+    }
 }
