@@ -1,5 +1,7 @@
 package org.ddelizia.vcrud.model;
 
+import org.ddelizia.vcrud.model.usermanagement.Domain;
+
 import javax.persistence.*;
 import java.util.Date;
 

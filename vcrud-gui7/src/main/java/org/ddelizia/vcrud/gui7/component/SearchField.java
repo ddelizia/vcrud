@@ -5,7 +5,7 @@ import com.vaadin.ui.*;
 import org.ddelizia.vcrud.core.filter.FilterObject;
 import org.ddelizia.vcrud.core.filter.FilterType;
 import org.ddelizia.vcrud.core.filter.FilterTypeMapping;
-import org.ddelizia.vcrud.core.service.ModelService;
+import org.ddelizia.vcrud.core.service.model.ModelService;
 import org.ddelizia.vcrud.core.utils.ReflectionUtils;
 import org.ddelizia.vcrud.core.utils.VcrudAnnotationUtils;
 import org.ddelizia.vcrud.gui7.config.SpringContextHelper;

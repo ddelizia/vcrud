@@ -33,7 +33,6 @@ public class Header extends VerticalLayout {
 
         VerticalLayout topLeftLayout = new VerticalLayout();
         topLeftLayout.setSizeFull();
-        //topLeftLayout.setMargin(true);
         topLeftLayout.addComponent(title);
         topLeftLayout.setComponentAlignment(title,Alignment.BOTTOM_LEFT);
         topLeftLayout.addComponent(subTitle);

@@ -1,7 +1,7 @@
 package org.ddelizia.vcrud.gui7.frames.scaffolding;
 
 import com.vaadin.ui.*;
-import org.ddelizia.vcrud.model.User;
+import org.ddelizia.vcrud.model.usermanagement.User;
 import org.ddelizia.vcrud.model.VcrudModel;
 
 /**

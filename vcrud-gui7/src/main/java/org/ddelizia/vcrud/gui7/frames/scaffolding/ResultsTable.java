@@ -1,11 +1,7 @@
 package org.ddelizia.vcrud.gui7.frames.scaffolding;
 
-import com.jensjansson.pagedtable.PagedTable;
-import com.vaadin.data.Item;
-import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.ui.*;
-import com.vaadin.ui.Panel;
-import org.ddelizia.vcrud.core.service.ModelService;
+import org.ddelizia.vcrud.core.service.model.ModelService;
 import org.ddelizia.vcrud.gui7.component.search.EntityQueryFactory;
 import org.ddelizia.vcrud.gui7.config.SpringContextHelper;
 import org.ddelizia.vcrud.model.VcrudModel;
@@ -13,8 +9,6 @@ import org.vaadin.addons.lazyquerycontainer.*;
 import org.vaadin.peter.contextmenu.ContextMenu;
 
 import javax.persistence.EntityManager;
-import java.awt.*;
-import java.lang.reflect.ParameterizedType;
 
 /**
  * Created with IntelliJ IDEA.

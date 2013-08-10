@@ -2,7 +2,7 @@ package org.ddelizia.vcrud.gui7.component.search;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItem;
-import org.ddelizia.vcrud.core.service.ModelService;
+import org.ddelizia.vcrud.core.service.model.ModelService;
 import org.ddelizia.vcrud.gui7.config.SpringContextHelper;
 import org.ddelizia.vcrud.model.VcrudModel;
 import org.vaadin.addons.lazyquerycontainer.QueryDefinition;
