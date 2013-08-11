@@ -6,6 +6,7 @@ import org.ddelizia.vcrud.model.usermanagement.User;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,6 +23,16 @@ public interface UserService {
 
     public User getCurrentUser(HttpServletRequest request);
 
+    public User getCurrentSessionUser();
+
     public User getCurrentUser(Principal principal);
+
+    public User getUserByUsernameOrEmail(String usernameOrEmail);
+
+    public boolean updateUser(User user);
+
+    public boolean updateUser(User user, String key, Object value);
+
+    public boolean updateUser(User user, Map <String,Object> keyValue);
 
 }

@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration("org.ddelizia.vcrud.core.config.ApplicationContextProvider")
 public class ApplicationContextProvider implements ApplicationContextAware {
+
     private static ApplicationContext context;
 
     public ApplicationContext getApplicationContext() {

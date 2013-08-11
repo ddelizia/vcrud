@@ -6,6 +6,7 @@ import org.ddelizia.vcrud.model.annotation.VcrudProperty;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Date;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,6 +15,7 @@ import java.util.Collection;
  * Time: 16:16
  * To change this template use File | Settings | File Templates.
  */
+
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -29,6 +31,17 @@ public class User extends VcrudModel {
 
     @Column(name = "enabled")
     private Boolean enabled=false;
+
+    @Column(name = "accountNonLocked")
+    private Boolean accountNonLocked=false;
+
+    @Column(name = "expriteDateAccount")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date expriteDateAccount;
+
+    @Column(name = "expriteDateCredentials")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date expriteDateCredentials;
 
     @Column(name = "registerCode")
     private String registerCode;
@@ -111,5 +124,29 @@ public class User extends VcrudModel {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Boolean getAccountNonLocked() {
+        return accountNonLocked;
+    }
+
+    public void setAccountNonLocked(Boolean accountNonLocked) {
+        this.accountNonLocked = accountNonLocked;
+    }
+
+    public Date getExpriteDateAccount() {
+        return expriteDateAccount;
+    }
+
+    public void setExpriteDateAccount(Date expriteDateAccount) {
+        this.expriteDateAccount = expriteDateAccount;
+    }
+
+    public Date getExpriteDateCredentials() {
+        return expriteDateCredentials;
+    }
+
+    public void setExpriteDateCredentials(Date expriteDateCredentials) {
+        this.expriteDateCredentials = expriteDateCredentials;
     }
 }
