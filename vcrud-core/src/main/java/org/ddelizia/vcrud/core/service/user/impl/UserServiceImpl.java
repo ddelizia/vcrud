@@ -4,7 +4,6 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 import org.ddelizia.vcrud.core.service.model.ModelService;
 import org.ddelizia.vcrud.core.service.user.UserService;
-import org.ddelizia.vcrud.model.VcrudModel;
 import org.ddelizia.vcrud.model.usermanagement.Domain;
 import org.ddelizia.vcrud.model.usermanagement.Role;
 import org.ddelizia.vcrud.model.usermanagement.User;

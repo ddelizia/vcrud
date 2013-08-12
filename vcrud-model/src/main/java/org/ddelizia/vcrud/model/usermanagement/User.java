@@ -3,6 +3,7 @@ package org.ddelizia.vcrud.model.usermanagement;
 import org.ddelizia.vcrud.model.VcrudModel;
 import org.ddelizia.vcrud.model.annotation.VcrudItem;
 import org.ddelizia.vcrud.model.annotation.VcrudProperty;
+import org.ddelizia.vcrud.model.social.SocialUser;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -61,6 +62,17 @@ public class User extends VcrudModel {
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name="user2permissionrule")
     private Collection<PermissionRule> permissionRules;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Collection<SocialUser> socialUsers;
+
+    public Collection<SocialUser> getSocialUsers() {
+        return socialUsers;
+    }
+
+    public void setSocialUsers(Collection<SocialUser> socialUsers) {
+        this.socialUsers = socialUsers;
+    }
 
     public String getUsername() {
         return username;
