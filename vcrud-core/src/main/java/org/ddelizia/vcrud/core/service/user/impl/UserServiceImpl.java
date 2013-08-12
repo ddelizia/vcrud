@@ -9,7 +9,6 @@ import org.ddelizia.vcrud.model.usermanagement.Role;
 import org.ddelizia.vcrud.model.usermanagement.User;
 import org.ddelizia.vcrud.model.usermanagement.User_;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.security.core.Authentication;
@@ -19,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,13 +33,11 @@ import java.util.*;
  * Time: 15:31
  * To change this template use File | Settings | File Templates.
  */
+@Service("org.ddelizia.vcrud.core.service.user.UserService")
 public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Autowired
     private ModelService modelService;
-
-    @Value("#{domain.enabled}")
-    private Boolean domainEnabled;
 
     @Override
     public User vcrudLogIn(String username, String password, Domain domain) {
@@ -47,9 +45,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         map.put(User_.username.getName(),username);
         map.put(User_.password.getName(),password);
 
-        if(domainEnabled!=null && domainEnabled.equals(true)){
-            map.put(User_.domain.getName(),domain);
-        }
+        //if(domainEnabled!=null && domainEnabled.equals(true)){
+            //map.put(User_.domain.getName(),domain);
+        //}
 
         return modelService.getModel(map,User.class);
     }
