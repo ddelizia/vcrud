@@ -1,0 +1,2 @@
+INSERT User,username,email,password
+,ddelizia,ddelizia,ddelizia

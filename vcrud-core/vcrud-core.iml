@@ -4,7 +4,9 @@
     <facet type="Spring" name="Spring">
       <configuration>
         <fileset id="fileset" name="Spring Application Context" removed="false">
-          <file>file://$MODULE_DIR$/src/main/resources/META-INF/applicationContext-core.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/META-INF/dbContext-core.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/META-INF/vcrudApplicationContext-core.xml</file>
+          <file>file://$MODULE_DIR$/../vcrud-model/src/main/resources/META-INF/vcrudApplicationContext-model.xml</file>
         </fileset>
       </configuration>
     </facet>
@@ -16,6 +18,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/resources" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
