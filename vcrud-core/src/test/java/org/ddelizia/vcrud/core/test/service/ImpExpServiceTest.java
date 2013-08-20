@@ -1,24 +1,15 @@
 package org.ddelizia.vcrud.core.test.service;
 
 import org.apache.log4j.Logger;
-import org.ddelizia.vcrud.core.service.model.ImpExpService;
-import org.ddelizia.vcrud.core.service.model.ModelService;
-import org.ddelizia.vcrud.core.service.model.SystemService;
-import org.ddelizia.vcrud.model.Type;
-import org.ddelizia.vcrud.model.Type_;
+import org.ddelizia.vcrud.core.test.AbstractJunit4Vcrud;
+import org.ddelizia.vcrud.model.usermanagement.Role;
+import org.ddelizia.vcrud.model.usermanagement.Role_;
 import org.ddelizia.vcrud.model.usermanagement.User;
 import org.ddelizia.vcrud.model.usermanagement.User_;
-import org.junit.Before;
+import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -28,44 +19,59 @@ import java.io.Reader;
  * To change this template use File | Settings | File Templates.
  */
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations={"classpath*:/META-INF/vcrudApplicationContext-*.xml", "classpath:/META-INF/testContext-core.xml"})
-public class ImpExpServiceTest {
+public class ImpExpServiceTest extends AbstractJunit4Vcrud {
 
-    @Autowired
-    private SystemService systemService;
-
-    @Autowired
-    private ImpExpService impExpService;
-
-    @Autowired
-    private ModelService modelService;
+    private boolean isSetUp = false;
 
     private static final Logger LOGGER = Logger.getLogger(ImpExpServiceTest.class);
 
-    @Before
-    public void buildSystem(){
-        systemService.rebuildTypeSystem();
+    @Test
+    public void testImportFileInsert() {
+        LOGGER.info("Testing Import INSERT " + ImpExpServiceTest.class);
+
+        List<User> users = getModelService().getModels(User_.password.getName(), "ddelizia", User.class, null, null);
+
+        Assert.assertEquals(users.size(), 2);
+        org.springframework.util.Assert.noNullElements(users.toArray());
     }
 
     @Test
-    public void testImportFile(){
-        LOGGER.info("Running " + ImpExpServiceTest.class);
+    public void testImportFileUpdateInsert() {
+        LOGGER.info("Testing Import UPDATE_INSERT " + ImpExpServiceTest.class);
 
-        InputStream in = this.getClass()
-                .getResourceAsStream("/files/impDataInsert.txt");
-        Reader reader = new InputStreamReader(in);
+        List<User> users = getModelService().getModels(User_.username.getName(), "ddelizia1", User.class, null, null);
 
-        try {
-            impExpService.importData(reader);
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+        Assert.assertEquals(users.size(), 1);
+        org.springframework.util.Assert.noNullElements(users.toArray());
+        User u = users.get(0);
+        Assert.assertEquals(u.getPassword(), "ddelizia2");
+    }
 
-        User u = modelService.getModel(User_.username.getName(), "ddelizia", User.class);
+    @Test
+    public void testImportFileUpdate() {
+        LOGGER.info("Testing Import UPDATE " + ImpExpServiceTest.class);
 
-        assert u.getUsername().equals("ddelizia");
-        assert u.getPassword().equals("ddelizia");
-        assert u.getEmail().equals("ddelizia");
+        List<User> users = getModelService().getModels(User_.username.getName(), "ddelizia2", User.class, null, null);
+
+        Assert.assertEquals(users.size(), 1);
+        org.springframework.util.Assert.noNullElements(users.toArray());
+        User u = users.get(0);
+        Assert.assertEquals(u.getPassword(), "ddelizia3");
+    }
+
+    @Test
+    public void testImportAttributeRetriving() {
+        LOGGER.info("Retrive attribute to store reference " + ImpExpServiceTest.class);
+
+        User user = getModelService().getModel(User_.username.getName(), "ddelizia1", User.class);
+        Role role = getModelService().getModel(Role_.code.getName(), "user", Role.class);
+
+        Assert.assertEquals(user.getRole().getCode(), role.getCode());
+        Assert.assertEquals(user.getRole().getDescription(), role.getDescription());
+    }
+
+    @Override
+    public void vcrudBefore() {
+
     }
 }

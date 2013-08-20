@@ -39,7 +39,7 @@ public class ImpExpServiceImpl implements ImpExpService {
 
     @Override
     public void importData(Reader reader) throws IOException {
-        CSVReader csvReader = new CSVReader(reader);
+        CSVReader csvReader = new CSVReader(reader,';');
         String [] nextLine;
         String [] currentHeader = new String[0];
         String [] currentData;
@@ -64,25 +64,21 @@ public class ImpExpServiceImpl implements ImpExpService {
                 Type type = modelService.getModel(Type_.simpleClazzName.getName(), className.trim(), Type.class);
 
                 try {
+                    boolean isUpdate = false;
                     Class theClass = Class.forName(type.getClazz());
                     Object object = null;
                     if (operation.equals(INSERT_TEXT)){
                         LOGGER.debug("Creating new instance of class: " + theClass.getName());
                         object = theClass.newInstance();
                     }else if(operation.equals(UPDATE_TEXT) || operation.equals(UPDATE_INSERT_TEXT)){
-                        Integer [] indexes = getIdsIndexs(currentData);
+                        Integer [] indexes = getIdsIndexs(currentHeader,type);
                         Map <String, Object> parametersObject = new HashMap<String, Object>();
                         for (int index: indexes){
-                            String propertyAttributes[] = currentData[index].split(",");
-                            HeaderObject headerObject = new HeaderObject(currentData[index]);
-                            Map<String, Object> parameters = new HashMap<String, Object>();
-                            parameters.put(Property_.type.getName(), type);
-                            parameters.put(Property_.columnName.getName(), headerObject.getName());
-                            Property property = modelService.getModel(parameters, Property.class);
-                            parametersObject.put(property.getColumnName(), headerObject.createPropertyObject(propertyAttributes, property));
+                            HeaderObject headerObject = new HeaderObject(currentHeader[index], type);
+                            parametersObject.put(headerObject.getName(), headerObject.createPropertyObject(currentData[index]));
                         }
                         object = modelService.getModel(parametersObject,theClass);
-                        LOGGER.info("Object in the db: " + object.toString());
+                        LOGGER.info("Object in the db: " + object);
                         if (object == null && operation.equals(UPDATE_INSERT_TEXT)){
                             LOGGER.info("Creating new instance of class: " + theClass.getName());
                             object = theClass.newInstance();
@@ -91,18 +87,11 @@ public class ImpExpServiceImpl implements ImpExpService {
 
                     if (object != null){
                         for (int i=1 ;i<currentData.length ; i++){
+                            HeaderObject headerObject = new HeaderObject(currentHeader[i], type);
 
-                            HeaderObject headerObject = new HeaderObject(currentHeader[i]);
-
-                            String propertyAttributes[] = currentData[i].split(",");
-
-                            Map<String, Object> parameters = new HashMap<String, Object>();
-                            parameters.put(Property_.type.getName(), type);
-                            parameters.put(Property_.columnName.getName(), headerObject.getName());
-                            Property property = modelService.getModel(parameters, Property.class);
-                            PropertyUtils.setProperty(object, property.getColumnName(), headerObject.createPropertyObject(propertyAttributes, property));
+                            PropertyUtils.setProperty(object, headerObject.getName(), headerObject.createPropertyObject(currentData[i]));
                         }
-                        modelService.rapidPersist((VcrudModel)object);
+                        modelService.rapidMerge((VcrudModel)object);
                     }
 
 
@@ -123,34 +112,74 @@ public class ImpExpServiceImpl implements ImpExpService {
         }
     }
 
+    private Integer[] getIdsIndexs (String []strings, Type type){
+        List<Integer> l = new LinkedList<Integer>();
+        for(int i=1; i<strings.length; i++){
+            HeaderObject headerObject = new HeaderObject(strings[i], type);
+            if (headerObject.evaluableAsId()){
+                l.add(i);
+            }
+        }
+        return l.toArray(new Integer[0]);
+    }
+
     private class HeaderObject{
         private String name;
-        private String [] attributes;
+        private String [] attributes = new String[0];
         private String rawValue;
+        private String [] labels = new String[0];
+        private Type type;
+        private Property property;
 
-        private HeaderObject(String rawValue){
+        private HeaderObject(String rawValue, Type type){
             this.rawValue=rawValue;
+            this.type=type;
             init();
         }
 
         private void init(){
-            int firstIndexOfParentesis = rawValue.indexOf("[");
+            int firstIndexOfAttributes = rawValue.indexOf("[");
+            int firstIndexOfLabels = rawValue.indexOf("{");
 
             String headerValue;
             String headerAttributes[]=new String[0];
 
-            if (firstIndexOfParentesis>0){
-                name = rawValue.substring(0, rawValue.indexOf("["));
-                int start=rawValue.indexOf("[")+1;
-                int end=rawValue.indexOf("]");
-                attributes = rawValue.substring(start, end).split(",");
+            if (firstIndexOfAttributes>0 ||
+                    firstIndexOfLabels>0
+            ){
+                if (firstIndexOfAttributes>0 && firstIndexOfLabels>0){
+                    name = rawValue.substring(0, Math.min(firstIndexOfAttributes,firstIndexOfLabels));
+                }else if (firstIndexOfAttributes>0){
+                    name = rawValue.substring(0, firstIndexOfAttributes);
+                }else if (firstIndexOfLabels>0){
+                    name = rawValue.substring(0, firstIndexOfLabels);
+                }
+
+                if (firstIndexOfAttributes>0){
+                    int startAttributes=rawValue.indexOf("[")+1;
+                    int endAttributes=rawValue.indexOf("]");
+                    attributes = rawValue.substring(startAttributes, endAttributes).split(",");
+                }
+                if (firstIndexOfLabels>0){
+                    int startLabel=rawValue.indexOf("{")+1;
+                    int endLabel=rawValue.indexOf("}");
+                    labels = rawValue.substring(startLabel, endLabel).split(",");
+                }
             }else {
                 name = rawValue;
             }
+            Map<String, Object> parameters = new HashMap<String, Object>();
+            parameters.put(Property_.type.getName(), type);
+            parameters.put(Property_.columnName.getName(), getName());
+            property = modelService.getModel(parameters, Property.class);
         }
 
         private boolean evaluableAsId(){
-            return Arrays.asList(attributes).contains(PROPERTY_ID_NAME);
+            return Arrays.asList(labels).contains(PROPERTY_ID_NAME);
+        }
+
+        private boolean containsLabel(String label){
+            return Arrays.asList(labels).contains(label);
         }
 
         private String getName() {
@@ -177,7 +206,7 @@ public class ImpExpServiceImpl implements ImpExpService {
             this.rawValue = rawValue;
         }
 
-        private Object createPropertyObject(String[] propertyAttributes, Property property) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        private Object createPropertyObject(String data) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
 
             Class propertyClass =  Class.forName(property.getClazz());
 
@@ -185,7 +214,7 @@ public class ImpExpServiceImpl implements ImpExpService {
             Object propertyObject=null;
             if (propertyClass.getName().startsWith("java.lang")){
                 Constructor constructor = propertyClass.getConstructor(String.class);
-                propertyObject = constructor.newInstance(propertyAttributes[0]);
+                propertyObject = constructor.newInstance(data);
             }else if(modelService.getModel(Property_.clazz.getName(),propertyClass.getName(), Type.class)!=null){
 
                 Type innerTypeData = modelService.getModel(Property_.clazz.getName(), propertyClass.getName(), Type.class);
@@ -193,15 +222,16 @@ public class ImpExpServiceImpl implements ImpExpService {
 
                 //Inizialize object
                 propertyObject = innerTypeClass.newInstance();
-
+                String [] dataAttrs = data.split(",");
                 Map <String,Object> attributeMap= new HashMap<String, Object>();
+
                 for (int k=0;k< getAttributes().length; k++){
                     Class propertyAttributeClass = PropertyUtils.getPropertyType(propertyObject, getAttributes()[k]);
                     Constructor propertyAttributeConstructor = propertyAttributeClass.getConstructor(String.class);
-                    Object propertyAttributeObject = propertyAttributeConstructor.newInstance(propertyAttributes[k]);
+                    Object propertyAttributeObject = propertyAttributeConstructor.newInstance(dataAttrs[k]);
                     attributeMap.put( getAttributes()[k],propertyAttributeObject);
-
                 }
+
                 propertyObject= modelService.getModel(attributeMap, innerTypeClass);
 
             }
@@ -231,17 +261,6 @@ public class ImpExpServiceImpl implements ImpExpService {
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-    }
-
-    private Integer[] getIdsIndexs (String []strings){
-        List<Integer> l = new LinkedList<Integer>();
-        for(int i=0; i<strings.length; i++){
-            HeaderObject headerObject = new HeaderObject(strings[i]);
-            if (headerObject.evaluableAsId()){
-                l.add(i);
-            }
-        }
-        return l.toArray(new Integer[0]);
     }
 
     @Override

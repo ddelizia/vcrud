@@ -55,6 +55,10 @@ public interface ModelService {
 
     public void rapidPersist (VcrudModel o);
 
+    public VcrudModel merge (VcrudModel o);
+
+    public VcrudModel rapidMerge (VcrudModel o);
+
     public Map<String,Class> getAllModelClasses();
 
     public List<Class<? extends VcrudModel>> getAllVcrudItems();

@@ -1,2 +1,16 @@
-INSERT User,username,email,password
-,ddelizia,ddelizia,ddelizia
+INSERT Role;code;description
+;admin;this is the admin user role
+;user;this is the normal user
+;shop;this is the shop user role
+;school;this is the school user role
+INSERT User;username;email;password
+;ddelizia;ddelizia;ddelizia
+;ddelizia4;ddelizia4;ddelizia
+UPDATE_INSERT User;username{vcrudIdField};email;password
+;ddelizia1;ddelizia1;ddelizia1
+;ddelizia1;ddelizia1;ddelizia2
+;ddelizia2;ddelizia2;ddelizia1
+UPDATE User;username{vcrudIdField};email;password
+;ddelizia2;ddelizia2;ddelizia3
+UPDATE User;username{vcrudIdField};role[code]
+;ddelizia1;user

@@ -16,8 +16,14 @@ import java.util.Date;
 @Entity
 public class SocialUser extends VcrudModel{
 
-    @Column(name = "accessToken", unique = true, nullable = false)
+    @Column(name = "accessToken", nullable = false)
     private String accessToken;
+
+    @Column(name = "providerId")
+    private String providerId;
+
+    @Column(name = "providerUserId")
+    private String providerUserId;
 
     @Column(name = "rank", nullable = false)
     private Integer rank;
@@ -51,6 +57,14 @@ public class SocialUser extends VcrudModel{
 
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
+    }
+
+    public String getProviderId() {
+        return providerId;
+    }
+
+    public void setProviderId(String providerId) {
+        this.providerId = providerId;
     }
 
     public Integer getRank() {
@@ -115,5 +129,13 @@ public class SocialUser extends VcrudModel{
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getProviderUserId() {
+        return providerUserId;
+    }
+
+    public void setProviderUserId(String providerUserId) {
+        this.providerUserId = providerUserId;
     }
 }

@@ -1,17 +1,18 @@
 package org.ddelizia.vcrud.core.test.service;
 
-import junit.framework.TestCase;
 import org.apache.log4j.Logger;
-import org.ddelizia.vcrud.core.service.model.ModelService;
-import org.ddelizia.vcrud.core.service.model.SystemService;
+import org.ddelizia.vcrud.core.test.AbstractJunit4Vcrud;
 import org.ddelizia.vcrud.model.Type;
-import org.ddelizia.vcrud.model.Type_;
-import org.ddelizia.vcrud.model.usermanagement.User;
+import org.hibernate.SessionFactory;
+import org.hibernate.ejb.HibernateEntityManager;
+import org.hibernate.metadata.ClassMetadata;
+import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,25 +22,38 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * To change this template use File | Settings | File Templates.
  */
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations={"classpath*:/META-INF/vcrudApplicationContext-*.xml", "classpath:/META-INF/testContext-core.xml"})
-public class SystemServiceTest{
-
-    @Autowired
-    private SystemService systemService;
-
-    @Autowired
-    private ModelService modelService;
+public class SystemServiceTest extends AbstractJunit4Vcrud{
 
     private static final Logger LOGGER = Logger.getLogger(SystemServiceTest.class);
+
+    @PersistenceContext
+    private EntityManager entityManager;
     
     @Test
     public void testImport(){
-        systemService.rebuildTypeSystem();
 
-        Type type = modelService.getModel(Type_.clazz.getName(), User.class.getName(), Type.class);
+        List<Type> types = getModelService().getModels(Type.class,null,null);
 
-        assert type!=null;
+        SessionFactory sessionFactory = ((HibernateEntityManager) entityManager).getSession().getSessionFactory();
+        Map<String,ClassMetadata> classMetadataMap= sessionFactory.getAllClassMetadata();
 
+        String sType ="Types: ";
+        for (Type type: types){
+            sType+="\n"+type.getClazz();
+        }
+        String sVcrudItems ="VcrudItems: ";
+        for (String s: classMetadataMap.keySet()){
+            sVcrudItems+="\n"+classMetadataMap.get(s).getMappedClass().getName();
+        }
+        LOGGER.info(sType);
+        LOGGER.info(sVcrudItems);
+        Assert.assertEquals(classMetadataMap.size(), types.size());
+
+        org.springframework.util.Assert.noNullElements(types.toArray());
+
+    }
+
+    @Override
+    public void vcrudBefore() {
     }
 }

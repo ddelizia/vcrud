@@ -1,5 +1,6 @@
 package org.ddelizia.vcrud.core.config;
 
+import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Configuration;
@@ -11,17 +12,17 @@ import org.springframework.context.annotation.Configuration;
  * Time: 12:28
  * To change this template use File | Settings | File Templates.
  */
-@Configuration("org.ddelizia.vcrud.core.config.ApplicationContextProvider")
+@Configuration("VcrudApplicationContextProvider")
 public class ApplicationContextProvider implements ApplicationContextAware {
 
-    private static ApplicationContext context;
+    private static ApplicationContext ctx = null;
 
-    public ApplicationContext getApplicationContext() {
-        return context;
+    public static ApplicationContext getApplicationContext() {
+        return ctx;
     }
 
     @Override
-    public void setApplicationContext(ApplicationContext ctx) {
-        context = ctx;
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.ctx = ctx;
     }
 }

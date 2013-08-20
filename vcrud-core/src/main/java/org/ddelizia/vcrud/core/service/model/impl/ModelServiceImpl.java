@@ -25,7 +25,7 @@ import java.util.Map;
  * Time: 11:23
  * To change this template use File | Settings | File Templates.
  */
-@Service("org.ddelizia.vcrud.core.service.model.ModelService")
+@Service("VcrudModelService")
 public class ModelServiceImpl implements ModelService{
 
     //private static final Logger logger = LoggerFactory.getLogger(ModelServiceImpl.class);
@@ -405,6 +405,17 @@ public class ModelServiceImpl implements ModelService{
     @Transactional
     public void rapidPersist(VcrudModel o) {
         entityManager.persist(o);
+    }
+
+    @Override
+    public VcrudModel merge(VcrudModel o) {
+        return entityManager.merge(o);
+    }
+
+    @Override
+    @Transactional
+    public VcrudModel rapidMerge(VcrudModel o) {
+        return entityManager.merge(o);
     }
 
     @Override

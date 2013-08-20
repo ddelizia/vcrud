@@ -3,10 +3,12 @@ package org.ddelizia.vcrud.core.dao.jpa;
 
 import org.ddelizia.vcrud.core.dao.Dao;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * Created with IntelliJ IDEA.
@@ -25,7 +27,7 @@ public abstract class DaoJpa<E> implements Dao<E> {
     //private static final Logger logger = LoggerFactory.getLogger(DaoJpa.class);
 
     @PersistenceContext
-    protected EntityManager em;
+    private EntityManager em;
 
     public DaoJpa() {
         ParameterizedType genericSuperclass = (ParameterizedType) getClass().getGenericSuperclass();
