@@ -4,11 +4,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.ddelizia.vcrud.model.utils.LocaleString;
 
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Transient;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,10 +25,18 @@ public class MultilanguageString {
     @Transient
     private Gson gson;
 
-    private String encodedMultiLanguageString;
+    private String encodedMultiLanguageString="[]";
 
-    public void addText (String locale, String text){
+    public MultilanguageString(){
 
+    }
+
+    public MultilanguageString(Locale locale, String txt){
+        addString(locale.getISO3Language(),txt);
+    }
+
+    public MultilanguageString(String locale, String txt){
+        addString(locale, txt);
     }
 
     /**
@@ -36,14 +45,15 @@ public class MultilanguageString {
      * @return
      */
     public String getString (String locale){
-        LocaleString[] localeStrings = convertFromGson();
+        ArrayList <LocaleString> list = new ArrayList<LocaleString>(Arrays.asList(convertFromGson()));
+        LocaleString localeString = new LocaleString(locale,"");
 
-        for(LocaleString localeString : localeStrings){
-            if (localeString.getLanguage().equals(locale)){
-                return localeString.getText();
-            }
-        }
-        return null;
+        return list.get(list.indexOf(localeString)).getText();
+
+    }
+
+    public List<LocaleString> getLocales(){
+        return new ArrayList<LocaleString>(Arrays.asList(convertFromGson()));
     }
 
     /**
@@ -52,16 +62,13 @@ public class MultilanguageString {
      * @return
      */
     public boolean removeString (String locale){
-        List <LocaleString> list = Arrays.asList(convertFromGson());
+        List <LocaleString> list = new ArrayList<LocaleString>(Arrays.asList(convertFromGson()));
+        LocaleString localeString = new LocaleString(locale,"");
 
-        for(int i=0; i<list.size(); i++){
-            if (list.get(i).getLanguage().equals(locale)){
-                list.remove(i);
-                convertToGson(list.toArray(new LocaleString[0]));
-                return true;
-            }
-        }
-        return false;
+        boolean returnValue = list.remove(localeString);
+
+        convertToGson(list.toArray(new LocaleString[0]));
+        return returnValue;
     }
 
     /**
@@ -69,16 +76,13 @@ public class MultilanguageString {
      * @param locale
      * @param text
      */
-    private void addString (String locale, String text){
-        List <LocaleString> list = Arrays.asList(convertFromGson());
-        for (LocaleString localeString: list){
-            if (localeString.getLanguage().equals(locale)){
-                localeString.setText(text);
-                convertToGson(list.toArray(new LocaleString[0]));
-                return;
-            }
-        }
-        list.add(new LocaleString(locale,text));
+    public void addString (String locale, String text){
+        List <LocaleString> list = new ArrayList<LocaleString>(Arrays.asList(convertFromGson()));
+        LocaleString localeString = new LocaleString(locale,text);
+
+        list.remove(localeString);
+        list.add(localeString);
+
         convertToGson(list.toArray(new LocaleString[0]));
     }
 

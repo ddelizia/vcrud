@@ -1,6 +1,7 @@
 package org.ddelizia.vcrud.model;
 
 import org.ddelizia.vcrud.model.usermanagement.Domain;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -18,8 +19,10 @@ public abstract class VcrudModel {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    //@GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name="system-uuid", strategy = "uuid")
+    private String id;
 
     @Column(name = "creation")
     @Temporal(TemporalType.TIMESTAMP)
@@ -33,11 +36,11 @@ public abstract class VcrudModel {
     @JoinColumn(name = "domain_ref")
     private Domain domain;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

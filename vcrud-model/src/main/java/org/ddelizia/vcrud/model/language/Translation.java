@@ -3,6 +3,7 @@ package org.ddelizia.vcrud.model.language;
 import org.ddelizia.vcrud.model.VcrudModel;
 
 import javax.persistence.*;
+import java.util.Locale;
 
 /**
  * Created with IntelliJ IDEA.
@@ -31,10 +32,21 @@ public class Translation extends VcrudModel {
     }
 
     public MultilanguageString getTranslation() {
+        if (translation == null){
+            translation = new MultilanguageString();
+        }
         return translation;
     }
 
     public void setTranslation(MultilanguageString translation) {
         this.translation = translation;
+    }
+
+    public void addTranslation(Locale locale, String txt){
+        getTranslation().addString(locale.getISO3Language(), txt);
+    }
+
+    public void addTranslation(String locale, String txt){
+        getTranslation().addString(locale, txt);
     }
 }

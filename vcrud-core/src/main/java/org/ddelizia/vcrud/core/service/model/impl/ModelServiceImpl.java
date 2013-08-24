@@ -38,15 +38,28 @@ public class ModelServiceImpl implements ModelService{
 
     @Override
     public <T extends VcrudModel> T create(Class<T> clazz) {
+        T t = null;
         try {
-            T t = clazz.newInstance();
-            persist(t);
+            /*
+            boolean freeIdFound = false;
+            String generatedCode = "";
+            while (freeIdFound == false){
+                generatedCode = UUID.randomUUID().toString().replace("-","");
+                VcrudModel vcrudModel = getModel(VcrudModel_.id.getName(),generatedCode,clazz);
+                if (vcrudModel==null){
+                    freeIdFound = true;
+                }
+            }
+            */
+            t = clazz.newInstance();
+            //t.setId(generatedCode);
+            //rapidMerge(t);
         } catch (InstantiationException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } catch (IllegalAccessException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-        return null;
+        return t;
     }
 
     @Override

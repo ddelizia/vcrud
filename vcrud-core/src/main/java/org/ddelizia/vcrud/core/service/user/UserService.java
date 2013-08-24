@@ -21,6 +21,8 @@ public interface UserService {
 
     public User registerUser(String username, String email, String password, String password2, Domain domain);
 
+    public User registerUser(String username, String email, String password, String password2, Domain domain, Class <? extends User> userClass);
+
     public User getCurrentUser(HttpServletRequest request);
 
     public User getCurrentSessionUser();
@@ -30,6 +32,10 @@ public interface UserService {
     public User getUserByUsernameOrEmail(String usernameOrEmail);
 
     public boolean updateUser(User user);
+
+    public boolean updateUser(String usernameOrEmail, String key, Object value);
+
+    public boolean updateUser(String usernameOrEmail, Map <String,Object> keyValue);
 
     public boolean updateUser(User user, String key, Object value);
 

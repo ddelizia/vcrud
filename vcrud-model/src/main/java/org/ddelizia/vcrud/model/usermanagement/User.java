@@ -4,6 +4,7 @@ import org.ddelizia.vcrud.model.VcrudModel;
 import org.ddelizia.vcrud.model.annotation.VcrudItem;
 import org.ddelizia.vcrud.model.annotation.VcrudProperty;
 import org.ddelizia.vcrud.model.social.SocialUser;
+import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -48,6 +49,7 @@ public class User extends VcrudModel {
     private String registerCode;
 
     @Column(name = "email", nullable = false, unique = true)
+    @Email
     private String email;
 
     @ManyToOne(fetch = FetchType.EAGER)

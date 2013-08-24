@@ -20,7 +20,7 @@ import java.util.Date;
  * To change this template use File | Settings | File Templates.
  */
 
-@Service("org.ddelizia.vcrud.core.service.media.MediaService")
+@Service("VcrudMediaService")
 public class MediaServiceImpl implements MediaService{
 
     @Value("${media.directory}")
@@ -39,7 +39,7 @@ public class MediaServiceImpl implements MediaService{
         return null;
     }
 
-    public String storeMedia(byte[] file,String filename){
+    public String storeMedia(byte[] file, String filename){
         String pathToFile = null;
 
         Date now = new Date();
@@ -49,10 +49,10 @@ public class MediaServiceImpl implements MediaService{
         if(!directory.endsWith("/")){
             directory += "/";
         }
-        directory+=mediaDirectory;
+        directory+=directoryName;
 
         try {
-            pathToFile =  generateDirectory(mediaDirectory)+"/"+filename;
+            pathToFile =  generateDirectory(directory)+"/"+filename;
             FileOutputStream fileOutputStream = new FileOutputStream (new File(pathToFile));
             fileOutputStream.write(file);
             fileOutputStream.close();

@@ -33,7 +33,7 @@ import java.util.*;
  * Time: 15:31
  * To change this template use File | Settings | File Templates.
  */
-@Service("org.ddelizia.vcrud.core.service.user.UserService")
+@Service("VcrudUserService")
 public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Autowired
@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public User vcrudLogIn(String username, String password, Domain domain) {
         Map<String,Object> map = new HashMap<String, Object>();
         map.put(User_.username.getName(),username);
-        map.put(User_.password.getName(),password);
+        map.put(User_.password.getName(),new Md5PasswordEncoder().encodePassword(password,null));
 
         //if(domainEnabled!=null && domainEnabled.equals(true)){
             //map.put(User_.domain.getName(),domain);
@@ -53,18 +53,29 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    @Transactional
     public User registerUser(String username, String email, String password, String password2, Domain domain) {
-        if (StringUtils.isNotEmpty(password) && StringUtils.equals(password,password2)){
-            User u= new User();
+        return registerUser(username, email, password, password2, domain, User.class);
+    }
 
-            PasswordEncoder passwordEncoder =  new Md5PasswordEncoder();
-            u.setUsername(username);
-            u.setPassword(passwordEncoder.encodePassword(password,null));
-            u.setDomain(domain);
-            u.setEmail(email);
-            modelService.persist(u);
-            return u;
+    @Override
+    @Transactional
+    public User registerUser(String username, String email, String password, String password2, Domain domain, Class<? extends User> userClass) {
+        if (StringUtils.isNotEmpty(password) && StringUtils.equals(password,password2)){
+            User u= null;
+            try {
+                u = userClass.newInstance();
+                PasswordEncoder passwordEncoder =  new Md5PasswordEncoder();
+                u.setUsername(username);
+                u.setPassword(passwordEncoder.encodePassword(password,null));
+                u.setDomain(domain);
+                u.setEmail(email);
+                modelService.persist(u);
+                return u;
+            } catch (InstantiationException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
         }
         return null;
     }
@@ -101,14 +112,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     @Transactional
     public boolean updateUser(User user) {
-        modelService.persist(user);
+        modelService.merge(user);
         return true;
     }
 
     @Override
-    public boolean updateUser(User vcrudModel, String key, Object value) {
+    @Transactional
+    public boolean updateUser(String usernameOrEmail, String key, Object value) {
         try {
-            PropertyUtils.setProperty(vcrudModel, key, value);
+            User user = getUserByUsernameOrEmail(usernameOrEmail);
+            PropertyUtils.setProperty(user, key, value);
+            modelService.merge(user);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
             return false;
@@ -123,11 +137,55 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    @Transactional
+    public boolean updateUser(String usernameOrEmail, Map<String, Object> keyValue) {
+        try {
+            User user = getUserByUsernameOrEmail(usernameOrEmail);
+            for (String key: keyValue.keySet()){
+                PropertyUtils.setProperty(user, key, keyValue.get(key));
+            }
+            modelService.merge(user);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            return false;
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+            return false;
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+
+    @Override
+    @Transactional
+    public boolean updateUser(User vcrudModel, String key, Object value) {
+        try {
+            PropertyUtils.setProperty(vcrudModel, key, value);
+            modelService.merge(vcrudModel);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            return false;
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+            return false;
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    @Transactional
     public boolean updateUser(User vcrudModel, Map<String, Object> keyValue) {
         try {
             for (String key: keyValue.keySet()){
                 PropertyUtils.setProperty(vcrudModel, key, keyValue.get(key));
             }
+            modelService.merge(vcrudModel);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
             return false;

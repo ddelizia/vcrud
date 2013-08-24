@@ -7,6 +7,6 @@ package org.ddelizia.vcrud.core.service.media;
  * Time: 16:20
  * To change this template use File | Settings | File Templates.
  */
-public interface ImageService {
+public interface ImageService extends MediaService{
 
 }
