@@ -59,9 +59,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional
-    public User registerUser(String username, String email, String password, String password2, Domain domain, Class<? extends User> userClass) {
+    public <T extends User> T registerUser(String username, String email, String password, String password2, Domain domain, Class <T> userClass) {
         if (StringUtils.isNotEmpty(password) && StringUtils.equals(password,password2)){
-            User u= null;
+            T u= null;
             try {
                 u = userClass.newInstance();
                 PasswordEncoder passwordEncoder =  new Md5PasswordEncoder();

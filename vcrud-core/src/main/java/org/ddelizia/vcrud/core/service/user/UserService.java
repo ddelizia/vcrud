@@ -21,7 +21,7 @@ public interface UserService {
 
     public User registerUser(String username, String email, String password, String password2, Domain domain);
 
-    public User registerUser(String username, String email, String password, String password2, Domain domain, Class <? extends User> userClass);
+    public <T extends User> T registerUser(String username, String email, String password, String password2, Domain domain, Class <T> userClass);
 
     public User getCurrentUser(HttpServletRequest request);
 
