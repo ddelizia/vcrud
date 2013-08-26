@@ -53,24 +53,25 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    @Transactional
     public User registerUser(String username, String email, String password, String password2, Domain domain) {
         return registerUser(username, email, password, password2, domain, User.class);
     }
 
     @Override
     @Transactional
-    public User registerUser(String username, String email, String password, String password2, Domain domain, Class<? extends User> userClass) {
+    public <T extends User> T registerUser(String username, String email, String password, String password2, Domain domain, Class<T> userClass) {
         if (StringUtils.isNotEmpty(password) && StringUtils.equals(password,password2)){
-            User u= null;
+            T t= null;
             try {
-                u = userClass.newInstance();
+                t = userClass.newInstance();
                 PasswordEncoder passwordEncoder =  new Md5PasswordEncoder();
-                u.setUsername(username);
-                u.setPassword(passwordEncoder.encodePassword(password,null));
-                u.setDomain(domain);
-                u.setEmail(email);
-                modelService.persist(u);
-                return u;
+                t.setUsername(username);
+                t.setPassword(passwordEncoder.encodePassword(password,null));
+                t.setDomain(domain);
+                t.setEmail(email);
+                modelService.persist(t);
+                return t;
             } catch (InstantiationException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             } catch (IllegalAccessException e) {
