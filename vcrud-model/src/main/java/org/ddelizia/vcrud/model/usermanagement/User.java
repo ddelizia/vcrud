@@ -20,7 +20,7 @@ import java.util.Date;
 
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @VcrudItem(group = "User Management", parent = VcrudItem.ROOT, label = "User")
 public class User extends VcrudModel {
 

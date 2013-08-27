@@ -24,7 +24,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.InvocationTargetException;
 import java.security.Principal;
-import java.util.*;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -41,15 +44,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public User vcrudLogIn(String username, String password, Domain domain) {
-        Map<String,Object> map = new HashMap<String, Object>();
-        map.put(User_.username.getName(),username);
-        map.put(User_.password.getName(),new Md5PasswordEncoder().encodePassword(password,null));
-
-        //if(domainEnabled!=null && domainEnabled.equals(true)){
-            //map.put(User_.domain.getName(),domain);
-        //}
-
-        return modelService.getModel(map,User.class);
+        User user = getUserByUsernameOrEmail(username);
+        if (user != null && new Md5PasswordEncoder().encodePassword(password,null).equals(user.getPassword())){
+            return user;
+        }
+        else{
+            return null;
+        }
     }
 
     @Override

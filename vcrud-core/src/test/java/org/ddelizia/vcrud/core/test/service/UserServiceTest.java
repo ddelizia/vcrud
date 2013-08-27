@@ -20,9 +20,13 @@ public class UserServiceTest extends AbstractJunit4Vcrud{
     @Autowired
     private UserService userService;
 
-    private static final String USERNAME = "test";
-    private static final String EMAIL = "email@email.it";
+    private static final String USERNAME = "test2";
+    private static final String EMAIL = "email2@email.it";
     private static final String PASSWORD = "testPass";
+
+    private static final String USERNAME2 = "test";
+    private static final String EMAIL2 = "email@email.it";
+    private static final String PASSWORD2 = "testPass";
 
     @Override
     public void vcrudBefore() {
@@ -36,5 +40,16 @@ public class UserServiceTest extends AbstractJunit4Vcrud{
         User user = userService.getUserByUsernameOrEmail(USERNAME);
 
         Assert.assertEquals(new Md5PasswordEncoder().encodePassword(PASSWORD, null), user.getPassword());
+    }
+
+    @Test
+    public void loginUser(){
+        userService.registerUser(USERNAME2, EMAIL2, PASSWORD2, PASSWORD2, null);
+
+        User user = userService.vcrudLogIn(USERNAME2, PASSWORD2, null);
+        Assert.assertNotNull(user);
+
+        User user2 = userService.vcrudLogIn(EMAIL2, PASSWORD2, null);
+        Assert.assertNotNull(user2);
     }
 }
