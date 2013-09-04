@@ -77,6 +77,8 @@
     <orderEntry type="library" name="Maven: org.imgscalr:imgscalr-lib:4.2" level="project" />
     <orderEntry type="library" name="Maven: javax.servlet:servlet-api:2.5" level="project" />
     <orderEntry type="library" name="Maven: org.mockito:mockito-all:1.9.5" level="project" />
+    <orderEntry type="library" name="Maven: com.sun.jersey:jersey-core:1.17.1" level="project" />
+    <orderEntry type="library" name="Maven: com.sun.jersey:jersey-server:1.17.1" level="project" />
   </component>
 </module>
 

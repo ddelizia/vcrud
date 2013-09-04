@@ -1,5 +1,9 @@
 package org.ddelizia.vcrud.core.service.media;
 
+import org.ddelizia.vcrud.model.media.Image;
+import org.ddelizia.vcrud.model.media.Preset;
+import org.springframework.web.multipart.MultipartFile;
+
 /**
  * Created with IntelliJ IDEA.
  * User: danilo.delizia
@@ -8,5 +12,15 @@ package org.ddelizia.vcrud.core.service.media;
  * To change this template use File | Settings | File Templates.
  */
 public interface ImageService extends MediaService{
+
+    public Image storeImage(MultipartFile multipartFile);
+
+    public Image storeImage(MultipartFile multipartFile, String code);
+
+    public String getImagePath(Image image);
+
+    public String getImagePath(String imageCode);
+
+    public String getImagePathForPreset (Image image, Preset preset);
 
 }

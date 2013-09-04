@@ -16,6 +16,7 @@
         <vaadin.version>7.0.6</vaadin.version>
         <vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
         <spring.social.version>1.0.3.RELEASE</spring.social.version>
+        <jersey.version>1.17.1</jersey.version>
     </properties>
 
     <modules>
