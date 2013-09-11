@@ -25,7 +25,7 @@ public class Permission extends VcrudModel {
     private String description;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "permission", nullable = false, unique = true)
+    @Column(name = "permission", nullable = false)
     private PermissionEnum permission;
 
     @OneToMany(mappedBy = "permission", fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, orphanRemoval = true)
