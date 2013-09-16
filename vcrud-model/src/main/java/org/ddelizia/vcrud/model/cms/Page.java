@@ -1,6 +1,6 @@
 package org.ddelizia.vcrud.model.cms;
 
-import org.ddelizia.vcrud.model.VcrudModel;
+import org.ddelizia.vcrud.model.system.VcrudModel;
 import org.ddelizia.vcrud.model.annotation.VcrudItem;
 
 import javax.persistence.*;

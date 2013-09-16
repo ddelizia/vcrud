@@ -1,6 +1,6 @@
 package org.ddelizia.vcrud.model.interceprtor.impl;
 
-import org.ddelizia.vcrud.model.VcrudModel;
+import org.ddelizia.vcrud.model.system.VcrudModel;
 import org.ddelizia.vcrud.model.interceprtor.InterceptorExecutor;
 import org.ddelizia.vcrud.model.interceprtor.InterceptorMapper;
 

@@ -1,7 +1,7 @@
 package org.ddelizia.vcrud.core.service.user;
 
 
-import org.ddelizia.vcrud.model.usermanagement.Domain;
+import org.ddelizia.vcrud.model.system.Domain;
 import org.ddelizia.vcrud.model.usermanagement.User;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +18,8 @@ import java.util.Map;
 public interface UserService {
 
     public User vcrudLogIn(String username, String password, Domain domain);
+
+    public User getUserFromSocialUser(String userName, String accessToken);
 
     public User registerUser(String username, String email, String password, String password2, Domain domain);
 

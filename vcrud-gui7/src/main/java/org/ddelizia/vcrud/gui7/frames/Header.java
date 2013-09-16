@@ -1,7 +1,6 @@
 package org.ddelizia.vcrud.gui7.frames;
 
 import com.vaadin.ui.*;
-import org.ddelizia.vcrud.model.VcrudModel;
 
 
 /**

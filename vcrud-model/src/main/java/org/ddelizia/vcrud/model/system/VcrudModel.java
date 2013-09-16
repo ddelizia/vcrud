@@ -1,6 +1,5 @@
-package org.ddelizia.vcrud.model;
+package org.ddelizia.vcrud.model.system;
 
-import org.ddelizia.vcrud.model.usermanagement.Domain;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -32,10 +31,6 @@ public abstract class VcrudModel {
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastModification;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "domain_ref")
-    private Domain domain;
-
     public String getId() {
         return id;
     }
@@ -58,14 +53,6 @@ public abstract class VcrudModel {
 
     public void setLastModification(Date lastModification) {
         this.lastModification = lastModification;
-    }
-
-    public Domain getDomain() {
-        return domain;
-    }
-
-    public void setDomain(Domain domain) {
-        this.domain = domain;
     }
 
     @PrePersist

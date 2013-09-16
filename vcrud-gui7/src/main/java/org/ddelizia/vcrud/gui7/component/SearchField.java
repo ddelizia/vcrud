@@ -10,7 +10,7 @@ import org.ddelizia.vcrud.core.utils.ReflectionUtils;
 import org.ddelizia.vcrud.core.utils.VcrudAnnotationUtils;
 import org.ddelizia.vcrud.gui7.config.SpringContextHelper;
 import org.ddelizia.vcrud.gui7.frames.scaffolding.SearchPanel;
-import org.ddelizia.vcrud.model.VcrudModel;
+import org.ddelizia.vcrud.model.system.VcrudModel;
 import org.ddelizia.vcrud.model.VcrudModel_;
 
 import java.lang.reflect.Field;

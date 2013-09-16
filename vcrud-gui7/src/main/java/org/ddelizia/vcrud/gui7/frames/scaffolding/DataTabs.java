@@ -2,7 +2,7 @@ package org.ddelizia.vcrud.gui7.frames.scaffolding;
 
 import com.vaadin.ui.TabSheet;
 import org.apache.commons.lang.StringUtils;
-import org.ddelizia.vcrud.model.VcrudModel;
+import org.ddelizia.vcrud.model.system.VcrudModel;
 import org.ddelizia.vcrud.model.annotation.VcrudProperty;
 
 import javax.persistence.Transient;

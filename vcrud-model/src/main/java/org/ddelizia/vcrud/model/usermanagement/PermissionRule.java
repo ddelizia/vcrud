@@ -1,7 +1,7 @@
 package org.ddelizia.vcrud.model.usermanagement;
 
 import org.ddelizia.vcrud.model.language.MultilanguageString;
-import org.ddelizia.vcrud.model.VcrudModel;
+import org.ddelizia.vcrud.model.system.VcrudModel;
 import org.ddelizia.vcrud.model.annotation.VcrudItem;
 
 import javax.persistence.*;

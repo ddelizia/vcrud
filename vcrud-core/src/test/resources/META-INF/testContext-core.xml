@@ -27,6 +27,9 @@
         <property name="jpaVendorAdapter">
             <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
         </property>
+        <property name="persistenceProvider" ref="thePersistenceProvider">
+
+        </property>
         <property name="jpaProperties">
             <props>
                 <prop key="hibernate.ejb.naming_strategy">${jpa.naming_strategy}</prop>
@@ -41,10 +44,14 @@
 
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager" >
         <property name="entityManagerFactory" ref="entityManagerFactory"/>
-
     </bean>
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
+    <bean id="thePersistenceProvider" class="org.ddelizia.vcrud.model.interceprtor.TestClass">
+        <property name="interceptor">
+            <bean class="org.ddelizia.vcrud.model.interceprtor.PropertyChangeInterceptor"/>
+        </property>
+    </bean>
 
 </beans>

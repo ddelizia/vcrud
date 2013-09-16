@@ -4,7 +4,7 @@ import com.vaadin.ui.*;
 import org.ddelizia.vcrud.core.service.model.ModelService;
 import org.ddelizia.vcrud.gui7.component.search.EntityQueryFactory;
 import org.ddelizia.vcrud.gui7.config.SpringContextHelper;
-import org.ddelizia.vcrud.model.VcrudModel;
+import org.ddelizia.vcrud.model.system.VcrudModel;
 import org.vaadin.addons.lazyquerycontainer.*;
 import org.vaadin.peter.contextmenu.ContextMenu;
 

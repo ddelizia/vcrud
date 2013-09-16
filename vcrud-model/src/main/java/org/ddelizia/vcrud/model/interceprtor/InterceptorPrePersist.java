@@ -1,6 +1,6 @@
 package org.ddelizia.vcrud.model.interceprtor;
 
-import org.ddelizia.vcrud.model.VcrudModel;
+import org.ddelizia.vcrud.model.system.VcrudModel;
 
 /**
  * Created with IntelliJ IDEA.

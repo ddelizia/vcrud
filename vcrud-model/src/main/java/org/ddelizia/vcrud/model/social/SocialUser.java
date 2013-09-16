@@ -1,6 +1,6 @@
 package org.ddelizia.vcrud.model.social;
 
-import org.ddelizia.vcrud.model.VcrudModel;
+import org.ddelizia.vcrud.model.system.VcrudModel;
 import org.ddelizia.vcrud.model.usermanagement.User;
 
 import javax.persistence.*;

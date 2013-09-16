@@ -1,5 +1,7 @@
 package org.ddelizia.vcrud.core.service.language;
 
+import org.ddelizia.vcrud.model.language.MultilanguageString;
+
 import java.util.Locale;
 
 /**
@@ -18,5 +20,7 @@ public interface TranslationService {
      * @return
      */
     public String getTranslationForKey(String key, Locale locale);
+
+    public String getCurrentLocalizedValue(MultilanguageString multilanguageString);
 
 }

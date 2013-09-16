@@ -4,13 +4,12 @@ import com.vaadin.data.Property;
 import com.vaadin.ui.*;
 import org.ddelizia.vcrud.core.utils.VcrudAnnotationUtils;
 import org.ddelizia.vcrud.gui7.component.SearchField;
-import org.ddelizia.vcrud.model.VcrudModel;
+import org.ddelizia.vcrud.model.system.VcrudModel;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.

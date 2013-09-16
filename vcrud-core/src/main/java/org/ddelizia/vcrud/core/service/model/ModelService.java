@@ -1,6 +1,6 @@
 package org.ddelizia.vcrud.core.service.model;
 
-import org.ddelizia.vcrud.model.VcrudModel;
+import org.ddelizia.vcrud.model.system.VcrudModel;
 
 import javax.persistence.EntityManager;
 import java.util.List;

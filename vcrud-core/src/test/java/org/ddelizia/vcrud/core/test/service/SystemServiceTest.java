@@ -2,7 +2,7 @@ package org.ddelizia.vcrud.core.test.service;
 
 import org.apache.log4j.Logger;
 import org.ddelizia.vcrud.core.test.AbstractJunit4Vcrud;
-import org.ddelizia.vcrud.model.Type;
+import org.ddelizia.vcrud.model.system.Type;
 import org.hibernate.SessionFactory;
 import org.hibernate.ejb.HibernateEntityManager;
 import org.hibernate.metadata.ClassMetadata;

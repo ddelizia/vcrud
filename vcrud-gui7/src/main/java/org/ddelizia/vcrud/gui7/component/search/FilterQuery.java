@@ -6,7 +6,7 @@ import org.ddelizia.vcrud.core.filter.FilterObject;
 import org.ddelizia.vcrud.core.filter.FilterType;
 import org.ddelizia.vcrud.core.service.model.ModelService;
 import org.ddelizia.vcrud.gui7.config.SpringContextHelper;
-import org.ddelizia.vcrud.model.VcrudModel;
+import org.ddelizia.vcrud.model.system.VcrudModel;
 import org.vaadin.addons.lazyquerycontainer.QueryDefinition;
 
 import java.util.ArrayList;

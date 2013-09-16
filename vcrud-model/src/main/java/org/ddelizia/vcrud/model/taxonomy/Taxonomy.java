@@ -1,6 +1,6 @@
 package org.ddelizia.vcrud.model.taxonomy;
 
-import org.ddelizia.vcrud.model.VcrudModel;
+import org.ddelizia.vcrud.model.system.VcrudModel;
 
 import javax.persistence.*;
 import java.util.Collection;

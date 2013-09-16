@@ -1,7 +1,7 @@
 package org.ddelizia.vcrud.core.service.model.impl;
 
 import org.ddelizia.vcrud.core.service.model.ModelService;
-import org.ddelizia.vcrud.model.VcrudModel;
+import org.ddelizia.vcrud.model.system.VcrudModel;
 import org.ddelizia.vcrud.model.annotation.VcrudItem;
 import org.hibernate.SessionFactory;
 import org.hibernate.ejb.HibernateEntityManager;

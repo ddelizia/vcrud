@@ -2,6 +2,8 @@ package org.ddelizia.vcrud.core.service.language.impl;
 
 import org.ddelizia.vcrud.core.service.model.ModelService;
 import org.ddelizia.vcrud.core.service.language.TranslationService;
+import org.ddelizia.vcrud.core.service.web.RequestService;
+import org.ddelizia.vcrud.model.language.MultilanguageString;
 import org.ddelizia.vcrud.model.language.Translation;
 import org.ddelizia.vcrud.model.language.Translation_;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +22,18 @@ public class TranslationServiceImpl implements TranslationService{
     @Autowired
     private ModelService modelService;
 
+    @Autowired
+    private RequestService requestService;
+
     @Override
     public String getTranslationForKey(String key, Locale locale) {
         Translation translation = modelService.getModel(Translation_.key.getName(), key, Translation.class);
         return translation.getTranslation().getString(locale.getISO3Language());
+    }
+
+    @Override
+    public String getCurrentLocalizedValue(MultilanguageString multilanguageString) {
+        return multilanguageString.getString(requestService.getCurrentLocale().getLanguage());
     }
 
 }

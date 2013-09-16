@@ -4,7 +4,9 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 import org.ddelizia.vcrud.core.service.model.ModelService;
 import org.ddelizia.vcrud.core.service.user.UserService;
-import org.ddelizia.vcrud.model.usermanagement.Domain;
+import org.ddelizia.vcrud.model.social.SocialUser;
+import org.ddelizia.vcrud.model.social.SocialUser_;
+import org.ddelizia.vcrud.model.system.Domain;
 import org.ddelizia.vcrud.model.usermanagement.Role;
 import org.ddelizia.vcrud.model.usermanagement.User;
 import org.ddelizia.vcrud.model.usermanagement.User_;
@@ -24,10 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.InvocationTargetException;
 import java.security.Principal;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -54,6 +53,19 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    public User getUserFromSocialUser(String userName, String accessToken) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put(SocialUser_.providerUserId.getName(), userName);
+        map.put(SocialUser_.accessToken.getName(), accessToken);
+        SocialUser socialUser = modelService.getModel(map, SocialUser.class);
+        if (socialUser!=null){
+            return socialUser.getUser();
+        }else {
+            return null;
+        }
+    }
+
+    @Override
     @Transactional
     public User registerUser(String username, String email, String password, String password2, Domain domain) {
         return registerUser(username, email, password, password2, domain, User.class);
@@ -69,7 +81,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 PasswordEncoder passwordEncoder =  new Md5PasswordEncoder();
                 t.setUsername(username);
                 t.setPassword(passwordEncoder.encodePassword(password,null));
-                t.setDomain(domain);
                 t.setEmail(email);
                 modelService.persist(t);
                 return t;
