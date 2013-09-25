@@ -20,7 +20,7 @@
         <property name="dataSource" ref="dataSource"/>
         <property name="persistenceUnitName" value="vcrudPU"/>
         <property name="persistenceProvider">
-            <bean class="org.ddelizia.vcrud.model.interceprtor.TestClass">
+            <bean class="org.ddelizia.vcrud.model.interceprtor.VcrudHibernatePersistence">
                 <property name="interceptor">
                     <bean class="org.ddelizia.vcrud.model.interceprtor.PropertyChangeInterceptor"/>
                 </property>

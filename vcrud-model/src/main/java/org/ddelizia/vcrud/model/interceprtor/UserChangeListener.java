@@ -1,5 +1,6 @@
 package org.ddelizia.vcrud.model.interceprtor;
 
+import org.apache.log4j.Logger;
 import org.ddelizia.vcrud.model.usermanagement.User;
 
 /**
@@ -11,10 +12,10 @@ import org.ddelizia.vcrud.model.usermanagement.User;
  */
 public class UserChangeListener implements PropertyChangeListener<User> {
 
+    private static final Logger LOGGER = org.apache.log4j.Logger.getLogger(UserChangeListener.class);
+
     @Override
-    public <E> void onChange(E oldVal, E newVal, String propertyName) {
-        System.out.println("property:" + propertyName);
-        System.out.println("old  val:" + oldVal);
-        System.out.println("new  val:" + newVal);
+    public void onChange(User entity, Object[] oldValue, Object[] newValue, String[] propertyNames, Object[] changedOldValue, Object[] changedNewValue, String[] changedPropertyNames) {
+        LOGGER.info("IM entering here");
     }
 }

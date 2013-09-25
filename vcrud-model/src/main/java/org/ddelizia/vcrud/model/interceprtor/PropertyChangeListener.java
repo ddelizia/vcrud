@@ -10,11 +10,17 @@ package org.ddelizia.vcrud.model.interceprtor;
 public interface PropertyChangeListener <T> {
 
     /**
-     * Used to do something on change. Note that the type of values is inferred by <E>
+     * Used to do something on change.
      *
-     * @param propertyName - the property name on the entity
-     * @param oldVal - the old value
-     * @param newVal - the new value
+     * @param entity - the entity
+     * @param oldValue - the old object
+     * @param newValue - the new object
+     * @param propertyNames - the list of property names
+     * @param changedOldValue - the list of changed properties in the old object
+     * @param changedNewValue - the list of changed properties in the new object
+     * @param changedPropertyNames - the list of changed property names
      */
-    <E> void onChange(E oldVal, E newVal, String propertyName);
+    public void onChange(T entity,
+                         Object[] oldValue, Object[] newValue, String[] propertyNames,
+                         Object[] changedOldValue, Object[] changedNewValue, String[] changedPropertyNames);
 }
