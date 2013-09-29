@@ -17,6 +17,8 @@ public interface ImageService extends MediaService{
 
     public Image storeImage(MultipartFile multipartFile, String code);
 
+    public Image storeImage(byte [] bytes, String code);
+
     public String getImagePath(Image image);
 
     public String getImagePath(String imageCode);

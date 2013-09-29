@@ -45,10 +45,12 @@ public class ImageServiceImpl extends MediaServiceImpl implements ImageService {
     private String propertyRequestMapping4CodePreset;
 
     @Transactional
+    @Override
     public Image storeImage(MultipartFile multipartFile){
         return storeImage(multipartFile, null);
     }
 
+    @Override
     public Image storeImage(MultipartFile multipartFile, String code){
         Image image = null;
         try {
@@ -67,6 +69,18 @@ public class ImageServiceImpl extends MediaServiceImpl implements ImageService {
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
+        return image;
+    }
+
+    @Override
+    @Transactional
+    public Image storeImage(byte[] bytes, String name) {
+        Image image = null;
+        image.setCode(name + "-" + UUID.randomUUID().toString());
+        image.setExt(name.substring(name.lastIndexOf("."), name.length()));
+        String pathToFile = storeMedia(bytes, name);
+        image.setRelativePath(pathToFile.replace(mediaDirectory,""));
+        modelService.persist(image);
         return image;
     }
 
