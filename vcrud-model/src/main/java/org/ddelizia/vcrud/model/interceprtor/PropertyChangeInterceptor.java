@@ -1,11 +1,11 @@
 package org.ddelizia.vcrud.model.interceprtor;
 
-import org.ddelizia.vcrud.model.usermanagement.User;
 import org.hibernate.EmptyInterceptor;
 
 import java.io.Serializable;
-import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,11 +18,16 @@ import java.util.Map;
 public class PropertyChangeInterceptor  extends EmptyInterceptor {
 
     private static final long serialVersionUID = 1L;
+
     private Map<Class, PropertyChangeListener<?>> listeners;
 
     @Override
     public boolean onFlushDirty(Object entity, Serializable id, Object[] currentState, Object[] previousState, String[] propertyNames, org.hibernate.type.Type[] types) {
         PropertyChangeListener listener = listeners.get(entity.getClass());
+
+        List<Object> currentStateChanged = new ArrayList<Object>();
+        List<Object> previousStateChanged = new ArrayList<Object>();
+        List<String> propertyNamesChanged = new ArrayList<String>();
 
         //Only check for changes if an entity-specific listener was registered
         if (listener != null) {
@@ -37,17 +42,30 @@ public class PropertyChangeInterceptor  extends EmptyInterceptor {
                 }
 
                 if (report) {
-                    listener.onChange(previousState[i], currentState[i], propertyNames[i]);
+                    currentStateChanged.add(currentState[i]);
+                    previousStateChanged.add(previousState[i]);
+                    propertyNamesChanged.add(propertyNames[i]);
                     report = false;
                 }
             }
+            listener.onChange(entity, previousState, currentState, propertyNames, previousStateChanged.toArray(), currentStateChanged.toArray(), propertyNamesChanged.toArray(new String[0]));
         }
         return false;
     }
 
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public Map<Class, PropertyChangeListener<?>> getListeners() {
+        return listeners;
+    }
+
+    public void setListeners(Map<Class, PropertyChangeListener<?>> listeners) {
+        this.listeners = listeners;
+    }
 
     public PropertyChangeInterceptor() {
         listeners = new HashMap<Class, PropertyChangeListener<?>>();
-        listeners.put(User.class, new UserChangeListener());
     }
 }

@@ -1,6 +1,7 @@
 package org.ddelizia.vcrud.model.patch;
 
-import org.ddelizia.vcrud.model.VcrudModel;
+
+import org.ddelizia.vcrud.model.system.VcrudModel;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
