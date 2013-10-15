@@ -19,7 +19,7 @@ import java.util.Set;
  * To change this template use File | Settings | File Templates.
  */
 
-@Component("org.ddelizia.vcrud.core.dao.jpa.UserDaoJpa")
+@Component("vcrudUserDao")
 public class UserDaoJpa extends DaoJpa<User> implements UserDao{
 
 

@@ -2,6 +2,7 @@ package org.ddelizia.vcrud.core.service.social;
 
 import org.ddelizia.vcrud.core.dao.SocialUserDao;
 import org.ddelizia.vcrud.core.service.model.ModelService;
+import org.ddelizia.vcrud.core.service.user.UserService;
 import org.ddelizia.vcrud.core.utils.DynamicComparator;
 import org.ddelizia.vcrud.model.social.SocialUser;
 import org.ddelizia.vcrud.model.social.SocialUser_;
@@ -25,13 +26,19 @@ import java.util.*;
  * Time: 15:01
  * To change this template use File | Settings | File Templates.
  */
-public class VcrudSocialConnectionRepository implements ConnectionRepository {
+
+public class VcrudConnectionRepository implements ConnectionRepository {
 
     @Autowired
     private ModelService modelService;
 
     @Autowired
     private SocialUserDao socialUserDao;
+
+    @Autowired
+    private UserService userService;
+
+    private User currentUser;
 
     private final String userId;
 
@@ -41,7 +48,7 @@ public class VcrudSocialConnectionRepository implements ConnectionRepository {
 
     private final TextEncryptor textEncryptor;
 
-    public VcrudSocialConnectionRepository(String userId, ConnectionFactoryLocator connectionFactoryLocator, TextEncryptor textEncryptor) {
+    public VcrudConnectionRepository(String userId, ConnectionFactoryLocator connectionFactoryLocator, TextEncryptor textEncryptor) {
         this.userId=userId;
         this.connectionFactoryLocator = connectionFactoryLocator;
         this.textEncryptor=textEncryptor;
@@ -51,7 +58,7 @@ public class VcrudSocialConnectionRepository implements ConnectionRepository {
     public MultiValueMap<String, Connection<?>> findAllConnections() {
         List<Connection<?>> resultList = connectionMapper.mapEntities(
                 modelService.getModels(SocialUser_.user.getName(),
-                        modelService.getModel(User_.username.getName(),userId, User.class),
+                        findUser(),
                         SocialUser.class,
                         null,
                         null)
@@ -74,9 +81,13 @@ public class VcrudSocialConnectionRepository implements ConnectionRepository {
     @Override
     public List<Connection<?>> findConnections(String providerId) {
         Map<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put(SocialUser_.user.getName(), modelService.getModel(User_.username.getName(),userId, User.class));
+        parameters.put(SocialUser_.user.getName(), findUser());
         parameters.put(SocialUser_.providerId.getName(), providerId);
-        return connectionMapper.mapEntities(modelService.getModels(parameters, SocialUser.class, null, null));
+        List <SocialUser> resultCollection = modelService.getModels(parameters, SocialUser.class, null, null);
+        Collections.sort(resultCollection
+                , new DynamicComparator(SocialUser_.rank.getName())
+        );
+        return connectionMapper.mapEntities(resultCollection);
     }
 
     @Override
@@ -91,7 +102,8 @@ public class VcrudSocialConnectionRepository implements ConnectionRepository {
             throw new IllegalArgumentException("Unable to execute find: no providerUsers provided");
         }
 
-        List<Connection<?>> resultList = connectionMapper.mapEntities(socialUserDao.findIn(userId,providerUsers));
+
+        List<Connection<?>> resultList = connectionMapper.mapEntities(socialUserDao.findIn(findUser(),providerUsers));
 
         MultiValueMap<String, Connection<?>> connectionsForUsers = new LinkedMultiValueMap<String, Connection<?>>();
         for (Connection<?> connection : resultList) {
@@ -116,7 +128,7 @@ public class VcrudSocialConnectionRepository implements ConnectionRepository {
     public Connection<?> getConnection(ConnectionKey connectionKey) {
         try {
             Map<String, Object> parameters = new HashMap<String, Object>();
-            parameters.put(SocialUser_.user.getName(), modelService.getModel(User_.username.getName(),userId, User.class));
+            parameters.put(SocialUser_.user.getName(),findUser());
             parameters.put(SocialUser_.providerId.getName(), connectionKey.getProviderId());
             parameters.put(SocialUser_.providerUserId.getName(), connectionKey.getProviderUserId());
 
@@ -155,23 +167,35 @@ public class VcrudSocialConnectionRepository implements ConnectionRepository {
             ConnectionData data = connection.createData();
 
             Map<String, Object> parameters = new HashMap<String, Object>();
-            parameters.put(SocialUser_.user.getName(), modelService.getModel(User_.username.getName(),userId, User.class));
+            parameters.put(SocialUser_.user.getName(), findUser());
             parameters.put(SocialUser_.providerId.getName(), data.getProviderId());
+            parameters.put(SocialUser_.providerUserId.getName(), data.getProviderUserId());
+
             List <SocialUser> socialUsers = modelService.getModels(parameters, SocialUser.class, null, null);
-            SocialUser maxrank = Collections.max(socialUsers, new DynamicComparator(SocialUser_.rank.getName()));
+
+            Integer currentRank = 1;
+
+            if(!socialUsers.isEmpty()){
+                SocialUser maxrank = Collections.max(socialUsers, new DynamicComparator(SocialUser_.rank.getName()));
+                currentRank = maxrank.getRank() + 1 ;
+            }
+
+
 
             SocialUser socialUser = new SocialUser();
-            socialUser.setUser(modelService.getModel(User_.username.getName(),userId, User.class));
+            socialUser.setUser(findUser());
             socialUser.setProviderId(data.getProviderId());
             socialUser.setProviderUserId(data.getProviderUserId());
-            socialUser.setRank(maxrank.getRank());
+            socialUser.setRank(currentRank);
             socialUser.setDisplayName(data.getDisplayName());
             socialUser.setImageUrl(data.getImageUrl());
             socialUser.setProfileUrl(data.getProfileUrl());
             socialUser.setAccessToken(encrypt(data.getAccessToken()));
             socialUser.setSecret(encrypt(data.getSecret()));
             socialUser.setRefreshToken(encrypt(data.getRefreshToken()));
-            socialUser.setExpireTime(new Date(data.getExpireTime()));
+            if (data.getExpireTime()!=null){
+                socialUser.setExpireTime(new Date(data.getExpireTime()));
+            }
             modelService.persist(socialUser);
         } catch (DuplicateKeyException e) {
             throw new DuplicateConnectionException(connection.getKey());
@@ -184,7 +208,7 @@ public class VcrudSocialConnectionRepository implements ConnectionRepository {
         ConnectionData data = connection.createData();
 
         Map<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put(SocialUser_.user.getName(), modelService.getModel(User_.username.getName(),userId, User.class));
+        parameters.put(SocialUser_.user.getName(), findUser());
         parameters.put(SocialUser_.providerId.getName(), data.getProviderId());
         parameters.put(SocialUser_.providerUserId.getName(), data.getProviderUserId());
         SocialUser socialUser = modelService.getModel(parameters, SocialUser.class);
@@ -196,8 +220,9 @@ public class VcrudSocialConnectionRepository implements ConnectionRepository {
             socialUser.setAccessToken(encrypt(data.getAccessToken()));
             socialUser.setSecret(encrypt(data.getSecret()));
             socialUser.setRefreshToken(encrypt(data.getRefreshToken()));
-            socialUser.setExpireTime(new Date(data.getExpireTime()));
-
+            if (data.getExpireTime()!=null){
+                socialUser.setExpireTime(new Date(data.getExpireTime()));
+            }
             modelService.persist(socialUser);
         }
     }
@@ -206,7 +231,7 @@ public class VcrudSocialConnectionRepository implements ConnectionRepository {
     @Transactional
     public void removeConnections(String s) {
         Map<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put(SocialUser_.user.getName(), modelService.getModel(User_.username.getName(),userId, User.class));
+        parameters.put(SocialUser_.user.getName(), findUser());
         parameters.put(SocialUser_.providerId.getName(), s);
         List<SocialUser> socialUsers = modelService.getModels(parameters, SocialUser.class, null, null);
 
@@ -218,7 +243,7 @@ public class VcrudSocialConnectionRepository implements ConnectionRepository {
     @Override
     public void removeConnection(ConnectionKey connectionKey) {
         Map<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put(SocialUser_.user.getName(), modelService.getModel(User_.username.getName(),userId, User.class));
+        parameters.put(SocialUser_.user.getName(), findUser());
         parameters.put(SocialUser_.providerId.getName(), connectionKey.getProviderId());
         parameters.put(SocialUser_.providerUserId.getName(), connectionKey.getProviderUserId());
         SocialUser socialUser = modelService.getModel(parameters, SocialUser.class);
@@ -228,10 +253,18 @@ public class VcrudSocialConnectionRepository implements ConnectionRepository {
         }
     }
 
+    private User findUser(){
+        if (currentUser==null){
+            currentUser = userService.getUserByUsernameOrEmail(userId);
+        }
+        return currentUser;
+    }
+
     private Connection<?> findPrimaryConnection(String providerId) {
         Map<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put(SocialUser_.user.getName(), modelService.getModel(User_.username.getName(),userId, User.class));
+        parameters.put(SocialUser_.user.getName(), findUser());
         parameters.put(SocialUser_.providerId.getName(), providerId);
+        parameters.put(SocialUser_.rank.getName(), new Integer(1));
         List<SocialUser> socialUsers = modelService.getModels(parameters, SocialUser.class, null, null);
 
         List<Connection<?>> connections = connectionMapper.mapEntities(socialUsers);

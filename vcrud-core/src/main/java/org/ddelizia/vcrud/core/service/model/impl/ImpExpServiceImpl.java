@@ -2,15 +2,14 @@ package org.ddelizia.vcrud.core.service.model.impl;
 
 import au.com.bytecode.opencsv.CSVReader;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.ddelizia.vcrud.core.factory.modelproperty.ModelPropertyResolver;
 import org.ddelizia.vcrud.core.service.model.ImpExpService;
 import org.ddelizia.vcrud.core.service.model.ModelService;
-import org.ddelizia.vcrud.model.*;
 import org.ddelizia.vcrud.model.system.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
@@ -28,6 +27,9 @@ public class ImpExpServiceImpl implements ImpExpService {
 
     @Autowired
     private ModelService modelService;
+
+    @Autowired
+    private ModelPropertyResolver modelPropertyFactory;
 
     private final static String DELETE_TEXT="DELETE";
     private final static String INSERT_TEXT="INSERT";
@@ -212,8 +214,14 @@ public class ImpExpServiceImpl implements ImpExpService {
             Class propertyClass =  Class.forName(property.getClazz());
 
             //Instanciate property object
-            Object propertyObject=null;
+            Object propertyObject=modelPropertyFactory.modelPropertyBuilder(propertyClass, data, getAttributes());
+
+
+            /*
             if (propertyClass.getName().startsWith("java.lang")){
+                Constructor constructor = propertyClass.getConstructor(String.class);
+                propertyObject = constructor.newInstance(data);
+            }if(propertyClass.equals(BigDecimal.class)){
                 Constructor constructor = propertyClass.getConstructor(String.class);
                 propertyObject = constructor.newInstance(data);
             }else if(modelService.getModel(Property_.clazz.getName(),propertyClass.getName(), Type.class)!=null){
@@ -236,6 +244,7 @@ public class ImpExpServiceImpl implements ImpExpService {
                 propertyObject= modelService.getModel(attributeMap, innerTypeClass);
 
             }
+            */
             return propertyObject;
         }
     }

@@ -43,4 +43,10 @@ public interface UserService {
 
     public boolean updateUser(User user, Map <String,Object> keyValue);
 
+    public boolean confirmAccount(String usernameOrEmail, String uuid);
+
+    public boolean restorePasswordFor(String usernameOrEmail);
+
+    public boolean confirmRestorePasswordFor(String usernameOrEmail, String newPassword, String uuid) ;
+
 }

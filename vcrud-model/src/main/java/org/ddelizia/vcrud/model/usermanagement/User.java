@@ -68,6 +68,12 @@ public class User extends VcrudModel {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<SocialUser> socialUsers;
 
+    @Column(name = "uuidConfirm")
+    private String uuidConfirm;
+
+    @Column(name = "uuidRestorePass")
+    private String uuidRestorePass;
+
     public Collection<SocialUser> getSocialUsers() {
         return socialUsers;
     }
@@ -162,5 +168,21 @@ public class User extends VcrudModel {
 
     public void setExpriteDateCredentials(Date expriteDateCredentials) {
         this.expriteDateCredentials = expriteDateCredentials;
+    }
+
+    public String getUuidConfirm() {
+        return uuidConfirm;
+    }
+
+    public void setUuidConfirm(String uuidConfirm) {
+        this.uuidConfirm = uuidConfirm;
+    }
+
+    public String getUuidRestorePass() {
+        return uuidRestorePass;
+    }
+
+    public void setUuidRestorePass(String uuidRestorePass) {
+        this.uuidRestorePass = uuidRestorePass;
     }
 }

@@ -1,9 +1,11 @@
 package org.ddelizia.vcrud.core.dao;
 
 import org.ddelizia.vcrud.model.social.SocialUser;
+import org.ddelizia.vcrud.model.usermanagement.User;
 import org.springframework.util.MultiValueMap;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,6 +16,8 @@ import java.util.List;
  */
 public interface SocialUserDao extends Dao<SocialUser> {
 
-    public List<SocialUser> findIn(String userId, MultiValueMap<String, String> providerUsers);
+    public List<SocialUser> findIn(User user, MultiValueMap<String, String> providerUsers);
+
+    public Set<String> findUsersConnectedTo(String providerId, Set<String> providerUserIds);
 
 }

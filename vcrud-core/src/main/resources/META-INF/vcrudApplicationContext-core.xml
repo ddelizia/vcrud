@@ -9,10 +9,43 @@
            http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
     <!-- Component Scan -->
+    <context:component-scan base-package="org.ddelizia.vcrud.core.dao"/>
     <context:component-scan base-package="org.ddelizia.vcrud.core.service"/>
     <context:component-scan base-package="org.ddelizia.vcrud.core.config"/>
+    <context:component-scan base-package="org.ddelizia.vcrud.core.factory.modelproperty"/>
+
 
     <bean name="org.ddelizia.vcrud.core.filter.FilterTypeMapping" class="org.ddelizia.vcrud.core.filter.FilterTypeMapping"/>
 
+    <bean name="modelPropertyResolver" class="org.ddelizia.vcrud.core.factory.modelproperty.ModelPropertyResolver">
+        <property name="mapClass">
+            <map>
+                <entry key="org.ddelizia.vcrud.model.system.VcrudModel">
+                    <bean name="modelPropertyBuilderRef" class="org.ddelizia.vcrud.core.factory.modelproperty.ModelPropertyBuilderRef"/>
+                </entry>
+                <entry key="java.math.BigDecimal" value-ref="modelPropertyBuilderStringConstructor"/>
+                <entry key="java.math.BigInteger" value-ref="modelPropertyBuilderStringConstructor"/>
+            </map>
+        </property>
+        <property name="mapPackage">
+            <map>
+                <entry key="java.lang" value-ref="modelPropertyBuilderStringConstructor"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean name="modelPropertyBuilderStringConstructor" class="org.ddelizia.vcrud.core.factory.modelproperty.ModelPropertyBuilderStringConstructor"/>
+
+    <bean id="javeMailSender" class ="org.springframework.mail.javamail.JavaMailSenderImpl" >
+        <property name="host" value="smtp.gmail.com" />
+        <property name="port" value="587" />
+        <property name="username" value="ddelizia@gmail.com" />
+        <property name="password" value="Maverick1984" />
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.smtp.starttls.enable">true</prop>
+            </props>
+        </property>
+    </bean>
 
 </beans>

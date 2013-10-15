@@ -4,9 +4,9 @@
     <facet type="Spring" name="Spring">
       <configuration>
         <fileset id="fileset" name="Spring Application Context" removed="false">
-          <file>file://$MODULE_DIR$/src/main/resources/META-INF/dbContext-core.xml</file>
           <file>file://$MODULE_DIR$/src/main/resources/META-INF/vcrudApplicationContext-core.xml</file>
-          <file>file://$MODULE_DIR$/../vcrud-model/src/main/resources/META-INF/vcrudApplicationContext-model.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/META-INF/dbContext-core.xml</file>
+          <file>file://$MODULE_DIR$/src/test/resources/META-INF/testContext-core.xml</file>
         </fileset>
       </configuration>
     </facet>
@@ -23,7 +23,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: org.mockito:mockito-all:1.9.5" level="project" />
     <orderEntry type="module" module-name="vcrud-model" />
     <orderEntry type="library" name="Maven: org.springframework:spring-core:3.1.2.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-asm:3.1.2.RELEASE" level="project" />
@@ -92,6 +91,10 @@
     <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.6" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpmime:4.2.3" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.codehaus.woodstox:wstx-asl:3.2.7" level="project" />
+    <orderEntry type="library" name="Maven: javax.mail:mail:1.4.5" level="project" />
+    <orderEntry type="library" name="Maven: javax.activation:activation:1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.velocity:velocity:1.7" level="project" />
+    <orderEntry type="library" name="Maven: commons-collections:commons-collections:3.2.1" level="project" />
   </component>
 </module>
 

@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
  * To change this template use File | Settings | File Templates.
  */
 
-@Service("CronJobService")
+//@Service("CronJobService")
 public class CronJobServiceImpl implements CronJobService{
 
     private SchedulerFactory sf = new StdSchedulerFactory();

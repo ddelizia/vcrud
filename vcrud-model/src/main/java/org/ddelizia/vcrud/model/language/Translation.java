@@ -16,7 +16,7 @@ import java.util.Locale;
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Translation extends VcrudModel {
 
-    @Column(name = "key", unique = true)
+    @Column(name = "key_id", unique = true)
     private String key;
 
     @Embedded

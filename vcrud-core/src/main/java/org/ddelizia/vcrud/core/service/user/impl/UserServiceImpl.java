@@ -2,6 +2,7 @@ package org.ddelizia.vcrud.core.service.user.impl;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
+import org.ddelizia.vcrud.core.service.mail.MailService;
 import org.ddelizia.vcrud.core.service.model.ModelService;
 import org.ddelizia.vcrud.core.service.user.UserService;
 import org.ddelizia.vcrud.model.social.SocialUser;
@@ -11,6 +12,7 @@ import org.ddelizia.vcrud.model.usermanagement.Role;
 import org.ddelizia.vcrud.model.usermanagement.User;
 import org.ddelizia.vcrud.model.usermanagement.User_;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailSender;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.security.core.Authentication;
@@ -40,6 +42,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Autowired
     private ModelService modelService;
+
+    @Autowired
+    private MailService mailService;
 
     @Override
     public User vcrudLogIn(String username, String password, Domain domain) {
@@ -80,9 +85,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 t = userClass.newInstance();
                 PasswordEncoder passwordEncoder =  new Md5PasswordEncoder();
                 t.setUsername(username);
-                t.setPassword(passwordEncoder.encodePassword(password,null));
+                t.setPassword(passwordEncoder.encodePassword(password, null));
                 t.setEmail(email);
+                t.setAccountNonLocked(false);
+                t.setEnabled(false);
+                String generatedUUID = UUID.randomUUID().toString();
+
+                t.setUuidConfirm(generatedUUID);
                 modelService.persist(t);
+
+                //TODO Send email
                 return t;
             } catch (InstantiationException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
@@ -213,12 +225,58 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    public boolean confirmAccount(String usernameOrEmail, String uuid) {
+        User user = getUserByUsernameOrEmail(usernameOrEmail);
+        if (user != null && user.getUuidConfirm().equals(uuid)){
+            user.setEnabled(true);
+            user.setAccountNonLocked(true);
+            user.setUuidConfirm(null);
+            modelService.rapidPersist(user);
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean restorePasswordFor(String usernameOrEmail) {
+        User user = getUserByUsernameOrEmail(usernameOrEmail);
+        if(user!=null){
+            String generatedUUID = UUID.randomUUID().toString();
+
+            user.setUuidConfirm(generatedUUID);
+            modelService.rapidPersist(user);
+            //TODO sendemail
+            return true;
+        }else{
+            return false;
+        }
+
+
+    }
+
+    @Override
+    public boolean confirmRestorePasswordFor(String usernameOrEmail, String newPassword, String uuid) {
+        User user = getUserByUsernameOrEmail(usernameOrEmail);
+        if(user!=null && user.getUuidConfirm().equals(uuid)){
+            PasswordEncoder passwordEncoder =  new Md5PasswordEncoder();
+            user.setPassword(passwordEncoder.encodePassword(newPassword, null));
+            user.setUuidRestorePass(null);
+            modelService.rapidPersist(user);
+            return true;
+        } else{
+            return false;
+        }
+
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         org.ddelizia.vcrud.model.usermanagement.User vcrudUser = getUserByUsernameOrEmail(s);
         if (vcrudUser == null){
             throw new UsernameNotFoundException("User not found");
         }
-        return createUserDetail(vcrudUser);  //To change body of implemented methods use File | Settings | File Templates.
+        return createUserDetail(vcrudUser);
     }
 
     private org.springframework.security.core.userdetails.User createUserDetail(org.ddelizia.vcrud.model.usermanagement.User user){
