@@ -285,13 +285,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         grantedAuthority.add(new SimpleGrantedAuthority(role.getCode()));
 
         Date date = new Date();
-        Boolean accountNonExpired=false;
-        if (user.getExpriteDateAccount()==null || user.getExpriteDateAccount().before(date)){
-            accountNonExpired=true;
+        Boolean accountNonExpired=true;
+        if (user.getExpriteDateAccount()!=null && user.getExpriteDateAccount().before(date)){
+            accountNonExpired=false;
         }
-        Boolean credentialsNonExpired=false;
-        if (user.getExpriteDateCredentials()==null || user.getExpriteDateCredentials().before(date)){
-            accountNonExpired=true;
+        Boolean credentialsNonExpired=true;
+        if (user.getExpriteDateCredentials()!=null && user.getExpriteDateCredentials().before(date)){
+            accountNonExpired=false;
         }
 
         return new org.springframework.security.core.userdetails.User(

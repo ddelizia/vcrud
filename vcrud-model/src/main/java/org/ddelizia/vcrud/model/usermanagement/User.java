@@ -35,7 +35,7 @@ public class User extends VcrudModel {
     private Boolean enabled=false;
 
     @Column(name = "accountNonLocked")
-    private Boolean accountNonLocked=false;
+    private Boolean accountNonLocked=true;
 
     @Column(name = "expriteDateAccount")
     @Temporal(TemporalType.TIMESTAMP)
