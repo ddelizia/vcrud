@@ -16,6 +16,15 @@
             <id>JBoss Repo</id>
             <url>http://repository.jboss.com/maven2</url>
         </repository>
+
+        <repository>
+            <id>vcrud-mvn-repo</id>
+            <url>https://raw.github.com/ddelizia/repository/master/</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -136,6 +145,13 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
             <version>4.2.0.Final</version>
+        </dependency>
+
+        <!-- Quartz -->
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+            <version>2.2.0</version>
         </dependency>
     </dependencies>
 

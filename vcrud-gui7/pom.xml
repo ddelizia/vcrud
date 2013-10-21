@@ -8,7 +8,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>vcrud-gui7</artifactId>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>Vcrud GUI</name>
 
     <repositories>
@@ -24,6 +24,15 @@
             </releases>
             <snapshots>
                 <enabled>true</enabled>
+            </snapshots>
+        </repository>
+
+        <repository>
+            <id>vcrud-mvn-repo</id>
+            <url>https://raw.github.com/ddelizia/repository/master/</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
             </snapshots>
         </repository>
     </repositories>
