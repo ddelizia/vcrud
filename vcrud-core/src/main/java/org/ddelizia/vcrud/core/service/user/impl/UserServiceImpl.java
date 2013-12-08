@@ -2,17 +2,13 @@ package org.ddelizia.vcrud.core.service.user.impl;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
-import org.ddelizia.vcrud.core.service.mail.MailService;
 import org.ddelizia.vcrud.core.service.model.ModelService;
 import org.ddelizia.vcrud.core.service.user.UserService;
-import org.ddelizia.vcrud.model.social.SocialUser;
-import org.ddelizia.vcrud.model.social.SocialUser_;
 import org.ddelizia.vcrud.model.system.Domain;
 import org.ddelizia.vcrud.model.usermanagement.Role;
 import org.ddelizia.vcrud.model.usermanagement.User;
 import org.ddelizia.vcrud.model.usermanagement.User_;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailSender;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.security.core.Authentication;
@@ -43,9 +39,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Autowired
     private ModelService modelService;
 
-    @Autowired
-    private MailService mailService;
-
     @Override
     public User vcrudLogIn(String username, String password, Domain domain) {
         User user = getUserByUsernameOrEmail(username);
@@ -53,19 +46,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             return user;
         }
         else{
-            return null;
-        }
-    }
-
-    @Override
-    public User getUserFromSocialUser(String userName, String accessToken) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put(SocialUser_.providerUserId.getName(), userName);
-        map.put(SocialUser_.accessToken.getName(), accessToken);
-        SocialUser socialUser = modelService.getModel(map, SocialUser.class);
-        if (socialUser!=null){
-            return socialUser.getUser();
-        }else {
             return null;
         }
     }

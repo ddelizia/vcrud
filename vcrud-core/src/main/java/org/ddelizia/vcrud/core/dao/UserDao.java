@@ -14,6 +14,6 @@ import java.util.Set;
  */
 public interface UserDao extends Dao<User> {
 
-    public List<User> findUsersConnectedTo(String providerId, Set<String> providerUserIds);
+    //public List<User> findUsersConnectedTo(String providerId, Set<String> providerUserIds);
 
 }

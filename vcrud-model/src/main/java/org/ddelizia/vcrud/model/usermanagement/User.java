@@ -1,9 +1,8 @@
 package org.ddelizia.vcrud.model.usermanagement;
 
-import org.ddelizia.vcrud.model.system.VcrudModel;
 import org.ddelizia.vcrud.model.annotation.VcrudItem;
 import org.ddelizia.vcrud.model.annotation.VcrudProperty;
-import org.ddelizia.vcrud.model.social.SocialUser;
+import org.ddelizia.vcrud.model.system.VcrudModel;
 import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.*;
@@ -65,14 +64,16 @@ public class User extends VcrudModel {
     @JoinTable(name="user2permissionrule")
     private Collection<PermissionRule> permissionRules;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Collection<SocialUser> socialUsers;
 
     @Column(name = "uuidConfirm")
     private String uuidConfirm;
 
     @Column(name = "uuidRestorePass")
     private String uuidRestorePass;
+
+    /*
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Collection<SocialUser> socialUsers;
 
     public Collection<SocialUser> getSocialUsers() {
         return socialUsers;
@@ -81,6 +82,7 @@ public class User extends VcrudModel {
     public void setSocialUsers(Collection<SocialUser> socialUsers) {
         this.socialUsers = socialUsers;
     }
+    */
 
     public String getUsername() {
         return username;

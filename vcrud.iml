@@ -9,6 +9,10 @@
         <webroots>
           <root url="file://$MODULE_DIR$/vcrud-security/target/SpringAppSecurity" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/src/main/java" />
+          <root url="file://$MODULE_DIR$/src/main/resources" />
+        </sourceRoots>
       </configuration>
     </facet>
     <facet type="web" name="Web2">
@@ -19,6 +23,10 @@
         <webroots>
           <root url="file://$MODULE_DIR$/vcrud-security/src/main/webapp" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/src/main/java" />
+          <root url="file://$MODULE_DIR$/src/main/resources" />
+        </sourceRoots>
       </configuration>
     </facet>
     <facet type="web" name="Web3">
@@ -29,6 +37,10 @@
         <webroots>
           <root url="file://$MODULE_DIR$/repo/apache-tomcat-6.0.37/webapps/ROOT" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/src/main/java" />
+          <root url="file://$MODULE_DIR$/src/main/resources" />
+        </sourceRoots>
       </configuration>
     </facet>
     <facet type="web" name="Web4">
@@ -39,6 +51,10 @@
         <webroots>
           <root url="file://$MODULE_DIR$/repo/apache-tomcat-6.0.37/webapps/host-manager" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/src/main/java" />
+          <root url="file://$MODULE_DIR$/src/main/resources" />
+        </sourceRoots>
       </configuration>
     </facet>
     <facet type="Spring" name="Spring">

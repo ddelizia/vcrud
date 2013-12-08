@@ -24,6 +24,13 @@
         <module>vcrud-gui7</module>
         <module>vcrud-core</module>
         <module>vcrud-model</module>
+        <module>vcrud-cms</module>
+        <module>vcrud-email</module>
+        <module>vcrud-cronjob</module>
+        <module>vcrud-elasticsearch</module>
+        <module>vcrud-social</module>
+        <module>vcrud-test</module>
+        <module>vcrud-media</module>
     </modules>
 
 
@@ -52,7 +59,7 @@
             <plugin>
                 <groupId>com.github.github</groupId>
                 <artifactId>site-maven-plugin</artifactId>
-                <version>0.8</version>
+                <version>0.9</version>
                 <configuration>
                     <message>Maven artifacts for ${project.version}</message>  <!-- git commit message -->
                     <noJekyll>true</noJekyll>                                  <!-- disable webpage processing -->
@@ -77,10 +84,15 @@
 
     <distributionManagement>
         <repository>
-            <id>internal.repo</id>
+            <id>release.internal.repo</id>
             <name>Temporary Staging Repository</name>
-            <url>file://${repo.output.directory}</url>
+            <url>file://${repo.output.directory}/releases</url>
         </repository>
+        <snapshotRepository>
+            <id>snapshot.internal.repo</id>
+            <name>Temporary Staging Repository</name>
+            <url>file://${repo.output.directory}/snapshots</url>
+        </snapshotRepository>
     </distributionManagement>
 
 

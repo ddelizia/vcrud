@@ -1,7 +1,6 @@
 package org.ddelizia.vcrud.model.taxonomy;
 
 import org.ddelizia.vcrud.model.system.VcrudModel;
-import org.ddelizia.vcrud.model.media.Image;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -42,8 +41,8 @@ public class TaxonomyItem extends VcrudModel {
     @Temporal(TemporalType.TIMESTAMP)
     private Date endActiveDAte;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    private Collection<Image> taxonomyImages;
+    //@OneToMany(fetch = FetchType.LAZY)
+    //private Collection<Image> taxonomyImages;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Taxonomy taxonomy;
@@ -104,13 +103,13 @@ public class TaxonomyItem extends VcrudModel {
         this.endActiveDAte = endActiveDAte;
     }
 
-    public Collection<Image> getTaxonomyImages() {
-        return taxonomyImages;
-    }
-
-    public void setTaxonomyImages(Collection<Image> taxonomyImages) {
-        this.taxonomyImages = taxonomyImages;
-    }
+//    public Collection<Image> getTaxonomyImages() {
+//        return taxonomyImages;
+//    }
+//
+//    public void setTaxonomyImages(Collection<Image> taxonomyImages) {
+//        this.taxonomyImages = taxonomyImages;
+//    }
 
     public Taxonomy getTaxonomy() {
         return taxonomy;

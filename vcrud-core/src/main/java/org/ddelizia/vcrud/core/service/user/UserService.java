@@ -19,8 +19,6 @@ public interface UserService {
 
     public User vcrudLogIn(String username, String password, Domain domain);
 
-    public User getUserFromSocialUser(String userName, String accessToken);
-
     public User registerUser(String username, String email, String password, String password2, Domain domain);
 
     public <T extends User> T registerUser(String username, String email, String password, String password2, Domain domain, Class<T> userClass);

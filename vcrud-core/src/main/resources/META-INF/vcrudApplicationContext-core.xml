@@ -36,16 +36,4 @@
 
     <bean name="modelPropertyBuilderStringConstructor" class="org.ddelizia.vcrud.core.factory.modelproperty.ModelPropertyBuilderStringConstructor"/>
 
-    <bean id="javeMailSender" class ="org.springframework.mail.javamail.JavaMailSenderImpl" >
-        <property name="host" value="smtp.gmail.com" />
-        <property name="port" value="587" />
-        <property name="username" value="ddelizia@gmail.com" />
-        <property name="password" value="Maverick1984" />
-        <property name="javaMailProperties">
-            <props>
-                <prop key="mail.smtp.starttls.enable">true</prop>
-            </props>
-        </property>
-    </bean>
-
 </beans>
