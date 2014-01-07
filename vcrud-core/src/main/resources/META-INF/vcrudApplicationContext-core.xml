@@ -20,7 +20,7 @@
     <bean name="modelPropertyResolver" class="org.ddelizia.vcrud.core.factory.modelproperty.ModelPropertyResolver">
         <property name="mapClass">
             <map>
-                <entry key="org.ddelizia.vcrud.model.system.VcrudModel">
+                <entry key="org.ddelizia.vcrud.test.TenantTest.basic.VcrudItem">
                     <bean name="modelPropertyBuilderRef" class="org.ddelizia.vcrud.core.factory.modelproperty.ModelPropertyBuilderRef"/>
                 </entry>
                 <entry key="java.math.BigDecimal" value-ref="modelPropertyBuilderStringConstructor"/>

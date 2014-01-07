@@ -46,14 +46,14 @@
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
-    <bean id="thePersistenceProvider" class="org.ddelizia.vcrud.model.interceprtor.VcrudHibernatePersistence">
+    <bean id="thePersistenceProvider" class="org.ddelizia.vcrud.test.TenantTest.interceprtor.VcrudHibernatePersistence">
         <property name="interceptors">
             <list>
-                <bean class="org.ddelizia.vcrud.model.interceprtor.PropertyChangeInterceptor">
+                <bean class="org.ddelizia.vcrud.test.TenantTest.interceprtor.PropertyChangeInterceptor">
                     <property name="listeners">
                         <map>
-                            <entry key="org.ddelizia.vcrud.model.usermanagement.User">
-                                <bean class="org.ddelizia.vcrud.model.interceprtor.UserChangeListener"/>
+                            <entry key="org.ddelizia.vcrud.test.TenantTest.usermanagement.User">
+                                <bean class="org.ddelizia.vcrud.test.TenantTest.interceprtor.UserChangeListener"/>
                             </entry>
                         </map>
                     </property>

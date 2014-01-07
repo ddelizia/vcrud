@@ -12,7 +12,7 @@ import org.quartz.impl.StdSchedulerFactory;
  * To change this template use File | Settings | File Templates.
  */
 
-//@Service("CronJobService")
+//@service("CronJobService")
 public class CronJobServiceImpl implements CronJobService{
 
     private SchedulerFactory sf = new StdSchedulerFactory();
