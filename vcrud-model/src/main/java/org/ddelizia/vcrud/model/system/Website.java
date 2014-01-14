@@ -1,6 +1,6 @@
 package org.ddelizia.vcrud.model.system;
 
-import org.ddelizia.vcrud.model.basic.LocalizedString;
+import org.ddelizia.vcrud.model.basic.MultilanguageString;
 import org.ddelizia.vcrud.model.basic.VcrudItem;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -19,7 +19,7 @@ public class Website extends VcrudItem {
 
     private String regex;
 
-    private LocalizedString name;
+    private MultilanguageString name = new MultilanguageString();
 
     @Indexed(unique = true)
     private String code;
@@ -30,9 +30,8 @@ public class Website extends VcrudItem {
     public Website() {
     }
 
-    public Website(String regex, LocalizedString name, String code, Tenant tenant) {
+    public Website(String regex, String code, Tenant tenant) {
         this.regex = regex;
-        this.name = name;
         this.code = code;
         this.tenant = tenant;
     }
@@ -43,14 +42,6 @@ public class Website extends VcrudItem {
 
     public void setRegex(String regex) {
         this.regex = regex;
-    }
-
-    public LocalizedString getName() {
-        return name;
-    }
-
-    public void setName(LocalizedString name) {
-        this.name = name;
     }
 
     public String getCode() {
@@ -67,5 +58,13 @@ public class Website extends VcrudItem {
 
     public void setTenant(Tenant tenant) {
         this.tenant = tenant;
+    }
+
+    public MultilanguageString getName() {
+        return name;
+    }
+
+    public void setName(MultilanguageString name) {
+        this.name = name;
     }
 }

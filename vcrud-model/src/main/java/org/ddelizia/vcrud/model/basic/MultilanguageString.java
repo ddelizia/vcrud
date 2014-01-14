@@ -1,6 +1,6 @@
 package org.ddelizia.vcrud.model.basic;
 
-import sun.util.calendar.LocalGregorianCalendar;
+import org.ddelizia.vcrud.basic.provider.RequestProvider;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -24,4 +24,21 @@ public class MultilanguageString {
     public void setMap(Map<Locale, LocalizedString> map) {
         this.map = map;
     }
+
+    public void addLocalizedString (LocalizedString localizedString){
+        map.put(localizedString.getLocale(), localizedString);
+    }
+
+    public LocalizedString removeLocalizedStringWithLocale(Locale locale){
+        return map.remove(locale);
+    }
+
+    public void addCurrentLocale(String value){
+        map.put(RequestProvider.getRequestLocale(), new LocalizedString(RequestProvider.getRequestLocale(), value));
+    }
+
+    public String getCurrentLocale(){
+        return map.get(RequestProvider.getRequestLocale()).getValue();
+    }
+
 }

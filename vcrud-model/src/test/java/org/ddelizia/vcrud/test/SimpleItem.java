@@ -1,5 +1,6 @@
 package org.ddelizia.vcrud.test;
 
+import org.ddelizia.vcrud.model.basic.MultilanguageString;
 import org.ddelizia.vcrud.model.basic.VcrudItem;
 import org.ddelizia.vcrud.model.basic.VcrudTenantItem;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -17,6 +18,8 @@ public class SimpleItem extends VcrudItem implements VcrudTenantItem {
     private String code;
 
     private Integer i;
+
+    private MultilanguageString multilanguageString = new MultilanguageString();
 
     public SimpleItem() {
     }
@@ -40,5 +43,13 @@ public class SimpleItem extends VcrudItem implements VcrudTenantItem {
 
     public void setI(Integer i) {
         this.i = i;
+    }
+
+    public MultilanguageString getMultilanguageString() {
+        return multilanguageString;
+    }
+
+    public void setMultilanguageString(MultilanguageString multilanguageString) {
+        this.multilanguageString = multilanguageString;
     }
 }

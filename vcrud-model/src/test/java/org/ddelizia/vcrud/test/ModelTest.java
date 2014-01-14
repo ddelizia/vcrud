@@ -22,7 +22,7 @@ import java.util.Locale;
  * Time: 12:31
  * To change this template use File | Settings | File Templates.
  */
-public class TenantTest extends AbstractJunit4Vcrud{
+public class ModelTest extends AbstractJunit4Vcrud{
 
     @Autowired
     private VcrudTenantContextService vcrudTenantContextService;
@@ -31,6 +31,9 @@ public class TenantTest extends AbstractJunit4Vcrud{
     private Website website2 = null;
 
     private static final int NUMBER_OF_INSTANCE = 10;
+
+    private static final String MULTILANGUAGE_VALUE = "test";
+    private static final Locale MULTILANGUAGE_LOCALE = Locale.ENGLISH;
 
     @Test
     public void testTenant(){
@@ -47,6 +50,28 @@ public class TenantTest extends AbstractJunit4Vcrud{
                 simpleItems2.size(),
                 NUMBER_OF_INSTANCE/2);
 
+    }
+
+    @Test
+    public void testMultilanguage(){
+        MongoTemplate mongoTemplate1 = vcrudTenantContextService.getTenantForWebsite(website1, SimpleItem.class);
+        List<SimpleItem> simpleItems1 = mongoTemplate1.findAll(SimpleItem.class);
+
+        Assert.assertNotNull(simpleItems1.get(0));
+
+        Assert.assertTrue(simpleItems1.get(0).getMultilanguageString().getMap().get(MULTILANGUAGE_LOCALE).getValue().equals(MULTILANGUAGE_VALUE));
+
+    }
+
+    @Override
+    public void vcrudAfter() {
+
+        MongoTemplate mongoTemplate1 = vcrudTenantContextService.getTenantForWebsite(website1, SimpleItem.class);
+        MongoTemplate mongoTemplate2 = vcrudTenantContextService.getTenantForWebsite(website2,SimpleItem.class);
+
+        List<SimpleItem> simpleItems1 = mongoTemplate1.findAll(SimpleItem.class);
+        List<SimpleItem> simpleItems2 = mongoTemplate2.findAll(SimpleItem.class);
+
         for(SimpleItem simpleItem: simpleItems1){
             mongoTemplate1.remove(simpleItem);
         }
@@ -62,11 +87,6 @@ public class TenantTest extends AbstractJunit4Vcrud{
         Assert.assertEquals(
                 mongoTemplate2.findAll(SimpleItem.class).size(),
                 0);
-
-    }
-
-    @Override
-    public void vcrudAfter() {
 
     }
 
@@ -93,9 +113,9 @@ public class TenantTest extends AbstractJunit4Vcrud{
         vcrudTenantContextService.getBasicMongoTemplate().save(tenant1);
 
         website1 =  new Website("website1",
-                new LocalizedString(Locale.ITALIAN, "website1"),
                 "website1",
                 tenant1);
+        website1.getName().addLocalizedString(new LocalizedString(Locale.ITALIAN, "website1"));
 
 
         TenantHostMongo tenantHostMongo2 = new TenantHostMongo(
@@ -119,9 +139,9 @@ public class TenantTest extends AbstractJunit4Vcrud{
         vcrudTenantContextService.getBasicMongoTemplate().save(tenant2);
 
         website2 =  new Website("website2",
-                new LocalizedString(Locale.ITALIAN, "website2"),
                 "website2",
                 tenant2);
+        website2.getName().addLocalizedString(new LocalizedString(Locale.ITALIAN, "website2"));
 
         vcrudTenantContextService.getBasicMongoTemplate().save(website1);
         vcrudTenantContextService.getBasicMongoTemplate().save(website2);
@@ -132,6 +152,7 @@ public class TenantTest extends AbstractJunit4Vcrud{
     private void createSimpleItems(){
         for (int i=0; i< NUMBER_OF_INSTANCE; i++){
             SimpleItem simpleItem = new SimpleItem("code"+i, i);
+            simpleItem.getMultilanguageString().addLocalizedString(new LocalizedString(MULTILANGUAGE_LOCALE, MULTILANGUAGE_VALUE));
             if (i % 2 == 0){
                 vcrudTenantContextService.getTenantForWebsite(website1,SimpleItem.class).save(simpleItem);
             }else {

@@ -28,4 +28,35 @@ public class Type extends VcrudItem {
 
     private String simpleName;
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Class getaClass() {
+        return aClass;
+    }
+
+    public void setaClass(Class aClass) {
+        this.aClass = aClass;
+    }
+
+    public String getSimpleName() {
+        return simpleName;
+    }
+
+    public void setSimpleName(String simpleName) {
+        this.simpleName = simpleName;
+    }
 }
