@@ -2,6 +2,7 @@ package org.ddelizia.vcrud.model.system;
 
 import org.ddelizia.vcrud.model.basic.VcrudItem;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Set;
 
@@ -12,6 +13,7 @@ import java.util.Set;
  * Time: 16:15
  * To change this template use File | Settings | File Templates.
  */
+@Document(collection = "TenantHost")
 public class TenantHost extends VcrudItem{
 
     @Indexed(unique = true)
@@ -20,6 +22,15 @@ public class TenantHost extends VcrudItem{
     private String host;
 
     private Integer port;
+
+    public TenantHost() {
+    }
+
+    public TenantHost(String code, String host, Integer port) {
+        this.code = code;
+        this.host = host;
+        this.port = port;
+    }
 
     public String getCode() {
         return code;

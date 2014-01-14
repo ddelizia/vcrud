@@ -3,6 +3,8 @@ package org.ddelizia.vcrud.model.usermanagement;
 import org.ddelizia.vcrud.model.basic.VcrudItem;
 import org.springframework.data.mongodb.core.index.Indexed;
 
+import java.security.Principal;
+
 /**
  * Created with IntelliJ IDEA.
  * User: ddelizia
@@ -11,9 +13,16 @@ import org.springframework.data.mongodb.core.index.Indexed;
  * To change this template use File | Settings | File Templates.
  */
 
-public abstract class VcrudPrincipal extends VcrudItem{
+public abstract class VcrudPrincipal extends VcrudItem implements Principal {
 
     @Indexed(unique = true)
-    private String code;
+    private String name;
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

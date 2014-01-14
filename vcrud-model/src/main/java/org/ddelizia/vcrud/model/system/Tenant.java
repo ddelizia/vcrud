@@ -3,6 +3,7 @@ package org.ddelizia.vcrud.model.system;
 import org.ddelizia.vcrud.model.basic.VcrudItem;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,6 +12,8 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
  * Time: 12:02
  * To change this template use File | Settings | File Templates.
  */
+
+@Document(collection = "Tenant")
 public class Tenant extends VcrudItem{
 
     @Indexed(unique = true)
@@ -25,6 +28,17 @@ public class Tenant extends VcrudItem{
 
     @DBRef
     private TenantHost tenantHost;
+
+    public Tenant() {
+    }
+
+    public Tenant(String code, String dbName, String username, String password, TenantHost tenantHost) {
+        this.code = code;
+        this.dbName = dbName;
+        this.username = username;
+        this.password = password;
+        this.tenantHost = tenantHost;
+    }
 
     public String getCode() {
         return code;

@@ -11,5 +11,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * To change this template use File | Settings | File Templates.
  */
 
-public class UserGroupCustomer extends VcrudPrincipalGroup implements VcrudTenantItem{
+@Document(collection = "UserGroup")
+public class UserGroup extends VcrudPrincipalGroup{
 }

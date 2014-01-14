@@ -8,31 +8,6 @@
     http://www.springframework.org/schema/data/mongo
     http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd">
 
-    <bean id="vcrudTenantAppContextWrapper" class="org.ddelizia.vcrud.model.multitenancy.TenantContextWrapper"/>
-    <bean id="vcrudTenantBeanFactory" class="org.ddelizia.vcrud.model.multitenancy.TenantBeanFactory">
-        <property name="tenantContextWrapper" ref="vcrudTenantAppContextWrapper"/>
-    </bean>
-
-    <!-- Creating bean for basic tenant -->
-    <bean id="mongoFactoryBeanCentral" class="org.springframework.data.mongodb.core.MongoFactoryBean" >
-        <property name="host" value=""/>
-        <property name="port" value="123"/>
-    </bean>
-    <bean id="centralMongoDbFactory" class="org.springframework.data.mongodb.core.SimpleMongoDbFactory">
-
-        <constructor-arg index="0" ref="mongoFactoryBeanCentral"/>
-        <constructor-arg index="1" value=""/>
-        <constructor-arg index="2" ref=""/>
-        <constructor-arg index="3" value=""/>
-    </bean>
-    <bean id="mongoBasicTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
-        <constructor-arg ref="centralMongoDbFactory"/>
-    </bean>
-
-    <!-- tenant Context Service -->
-    <bean id="vcudTenantContext" class="org.ddelizia.vcrud.model.multitenancy.service.mongo.VcrudTenantContextServiceMongo">
-        <property name="tenantBeanFactory" ref="vcrudTenantBeanFactory"/>
-        <property name="basicMongoTemplate" ref="mongoBasicTemplate"/>
-    </bean>
+    <bean id="vcrudTenantBeanFactory" class="org.ddelizia.vcrud.model.multitenancy.TenantBeanFactory"/>
 
 </beans>

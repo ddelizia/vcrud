@@ -28,6 +28,12 @@
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>org.ddelizia.vcrud</groupId>
+            <artifactId>vcrud-basic</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
         <!-- Spring framework -->
         <dependency>
             <groupId>org.springframework</groupId>

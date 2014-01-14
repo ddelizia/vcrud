@@ -24,6 +24,17 @@ public class TenantHostMongo extends TenantHost{
 
     private List<ServerAddress> replicaPair;
 
+    public TenantHostMongo() {
+    }
+
+    public TenantHostMongo(String code, String host, Integer port, MongoOptions mongoOptions, WriteConcern writeConcern, List<ServerAddress> replicaSetSeeds, List<ServerAddress> replicaPair) {
+        super(code, host, port);
+        this.mongoOptions = mongoOptions;
+        this.writeConcern = writeConcern;
+        this.replicaSetSeeds = replicaSetSeeds;
+        this.replicaPair = replicaPair;
+    }
+
     public MongoOptions getMongoOptions() {
         return mongoOptions;
     }

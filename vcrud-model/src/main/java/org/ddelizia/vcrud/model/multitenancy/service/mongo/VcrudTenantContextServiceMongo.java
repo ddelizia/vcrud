@@ -1,19 +1,19 @@
 package org.ddelizia.vcrud.model.multitenancy.service.mongo;
 
+import org.ddelizia.vcrud.basic.provider.RequestProvider;
+import org.ddelizia.vcrud.basic.utils.CodeGenerator;
 import org.ddelizia.vcrud.model.basic.VcrudItem;
 import org.ddelizia.vcrud.model.basic.VcrudTenantItem;
 import org.ddelizia.vcrud.model.multitenancy.TenantBeanFactory;
 import org.ddelizia.vcrud.model.multitenancy.service.VcrudTenantContextService;
 import org.ddelizia.vcrud.model.system.Tenant;
+import org.ddelizia.vcrud.model.system.Website;
 import org.ddelizia.vcrud.model.system.mongo.TenantHostMongo;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,18 +24,11 @@ import java.util.UUID;
  */
 public class VcrudTenantContextServiceMongo implements VcrudTenantContextService{
 
-    private String dbTenantDefaultPort;
-
-    private String dbTenantDefaultHost;
-
-    @Autowired
-    private ApplicationContext appContext;
-
     private MongoTemplate basicMongoTemplate;
 
     private TenantBeanFactory tenantBeanFactory;
 
-    private Map<String, MongoTemplate> cache;
+    private Map<String, Website> webSiteCache = new HashMap<>();
 
     public void registerTenant(String hostname,
                                Integer port,
@@ -44,63 +37,68 @@ public class VcrudTenantContextServiceMongo implements VcrudTenantContextService
                                String password) throws Exception {
 
         TenantHostMongo tenantHostMongo = new TenantHostMongo();
-        tenantHostMongo.setCode(calculateUUIDCode(tenantHostMongo));
+        tenantHostMongo.setCode(CodeGenerator.calculateUUIDCode(tenantHostMongo));
         tenantHostMongo.setHost(hostname);
         tenantHostMongo.setPort(port);
 
         Tenant tenant = new Tenant();
-        tenant.setCode(calculateUUIDCode(tenant));
+        tenant.setCode(CodeGenerator.calculateUUIDCode(tenant));
         tenant.setDbName(dbName);
         tenant.setUsername(username);
         tenant.setPassword(password);
 
         tenantBeanFactory.getOrCreateBeanMongoTemplate(
                 tenant,
-                tenantBeanFactory.getOrCreateBeanMongoFactoryBean(tenantHostMongo));
+                tenantBeanFactory.getOrCreateBeanMongo(tenantHostMongo));
 
         basicMongoTemplate.save(tenant);
         basicMongoTemplate.save(tenantHostMongo);
     }
 
-    private String calculateUUIDCode(Object o){
-        return UUID.randomUUID()+"_"+o.getClass();
-    }
-
     public void initTenants(){
         List<Tenant> tenants = basicMongoTemplate.findAll(Tenant.class);
         for(Tenant tenant : tenants){
-            try{
-                if (tenant.getTenantHost() instanceof TenantHostMongo){
-                    tenantBeanFactory.getOrCreateBeanMongoTemplate(
-                            tenant, tenantBeanFactory.getOrCreateBeanMongoFactoryBean((TenantHostMongo)tenant.getTenantHost()));
-                }
-            }catch (Exception e){
-
-            }
+            getMongoTemplateForTenant(tenant);
         }
     }
 
 
-    public MongoTemplate getTenant (Class<VcrudItem> vcrudItemClass){
+    public MongoTemplate getTenantCurrentTenant (Class<? extends VcrudItem> vcrudItemClass){
+        return getTenantForWebsite(RequestProvider.getServerName(), vcrudItemClass);
+    }
 
-        //TODO get current session
+    public MongoTemplate getTenantForWebsite (String serverName, Class<? extends VcrudItem> vcrudItemClass){
+        Website websiteCached = webSiteCache.get(serverName);
+        if (websiteCached==null){
+            List<Website> websites = basicMongoTemplate.findAll(Website.class);
+            for(Website website: websites){
+                if(serverName.matches(website.getRegex())){
+                    webSiteCache.put(serverName, website);
+                    return getTenantForWebsite(website, vcrudItemClass);
+                }
+            }
+            return null;
+        }else {
+            return getTenantForWebsite(websiteCached, vcrudItemClass);
+        }
+    }
 
-
-        if(!vcrudItemClass.isAssignableFrom(VcrudTenantItem.class)){
+    public MongoTemplate getTenantForWebsite (Website website, Class<? extends VcrudItem> vcrudItemClass){
+        if (!VcrudTenantItem.class.isAssignableFrom(vcrudItemClass)){
             return basicMongoTemplate;
         }
-        if (cache.containsKey(pattern)){
-            return cache.get(pattern);
-        }
-        //TODO to be improoved with correct query
-        List<Tenant> tenants = basicMongoTemplate.findAll(Tenant.class);
-        Tenant correctTenant = null;
-        for(Tenant tenant : tenants){
-            if (pattern.matches(tenant.getPattern())){
-                MongoTemplate mongoTemplate = appContext.getBean(tenant.getCode(), MongoTemplate.class);
-                cache.put(pattern, mongoTemplate);
-                return mongoTemplate;
+        return getMongoTemplateForTenant(website.getTenant());
+    }
+
+    public MongoTemplate getMongoTemplateForTenant(Tenant tenant){
+        try {
+            if (tenant.getTenantHost() instanceof TenantHostMongo){
+                return tenantBeanFactory.getOrCreateBeanMongoTemplate(
+                        tenant, tenantBeanFactory.getOrCreateBeanMongo((TenantHostMongo)tenant.getTenantHost()));
             }
+        } catch (Exception e) {
+            //TODO control this exception and also if it is not a mongohost
+            e.printStackTrace();
         }
         return null;
     }
@@ -113,4 +111,7 @@ public class VcrudTenantContextServiceMongo implements VcrudTenantContextService
         this.basicMongoTemplate = basicMongoTemplate;
     }
 
+    public MongoTemplate getBasicMongoTemplate() {
+        return basicMongoTemplate;
+    }
 }
