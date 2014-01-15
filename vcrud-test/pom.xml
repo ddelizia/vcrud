@@ -49,5 +49,36 @@
         </dependency>
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>droneio</id>
+            <activation>
+                <property>
+                    <name>droneio</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.2.1</version>
+                        <executions>
+                            <execution><!-- Run our version calculation script -->
+                                <id>Version Calculation</id>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>./droneio.sh</executable>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>
