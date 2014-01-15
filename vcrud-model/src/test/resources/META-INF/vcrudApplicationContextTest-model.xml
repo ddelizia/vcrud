@@ -21,8 +21,4 @@
         <property name="basicMongoTemplate" ref="mongoBasicTemplate"/>
     </bean>
 
-    <bean id="vcrudListener" class="org.ddelizia.vcrud.model.listener.VcrudListener">
-        <constructor-arg value="org.ddelizia.vcrud.test.SimpleItem"/>
-    </bean>
-
 </beans>

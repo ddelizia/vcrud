@@ -23,9 +23,11 @@
     <modules>
         <module>vcrud-test</module>
         <module>vcrud-model</module>
+        <module>vcrud-core</module>
+        <module>vcrud-basic</module>
         <!--
         <module>vcrud-gui7</module>
-        <module>vcrud-core</module>
+
         <module>vcrud-cms</module>
         <module>vcrud-email</module>
         <module>vcrud-cronjob</module>
@@ -76,6 +78,23 @@
                         <phase>deploy</phase>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.1.1</version>
+                <executions>
+                    <execution>
+                        <id>droneIo</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <executable>drone.io</executable>
+                </configuration>
             </plugin>
         </plugins>
     </build>
