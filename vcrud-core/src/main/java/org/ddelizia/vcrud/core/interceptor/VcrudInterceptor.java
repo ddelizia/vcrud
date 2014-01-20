@@ -1,4 +1,4 @@
-package org.ddelizia.vcrud.core.listener;
+package org.ddelizia.vcrud.core.interceptor;
 
 /**
  * Created with IntelliJ IDEA.

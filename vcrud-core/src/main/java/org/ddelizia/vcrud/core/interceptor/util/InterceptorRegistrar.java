@@ -1,4 +1,4 @@
-package org.ddelizia.vcrud.core.listener;
+package org.ddelizia.vcrud.core.interceptor.util;
 
 import org.ddelizia.vcrud.basic.collections.map.MappingRegistrar;
 import org.ddelizia.vcrud.basic.collections.map.MappingRegistry;

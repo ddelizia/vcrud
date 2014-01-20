@@ -1,4 +1,4 @@
-package org.ddelizia.vcrud.core.comparator;
+package org.ddelizia.vcrud.core.interceptor.util;
 
 import java.util.Comparator;
 

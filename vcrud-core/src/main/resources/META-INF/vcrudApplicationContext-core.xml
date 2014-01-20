@@ -8,8 +8,8 @@
            http://www.springframework.org/schema/context
            http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
-    <bean id="interceptorRegistry" class="org.ddelizia.vcrud.core.listener.InterceptorRegistry"/>
+    <bean id="interceptorRegistry" class="org.ddelizia.vcrud.core.interceptor.util.InterceptorRegistry"/>
 
-    <bean id="interceptorListener" class="org.ddelizia.vcrud.core.listener.VcrudInterceptorListener"/>
+    <bean id="interceptorListener" class="org.ddelizia.vcrud.core.interceptor.VcrudInterceptorListener"/>
 
 </beans>

@@ -4,11 +4,13 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 import org.apache.log4j.RollingFileAppender;
+import org.springframework.beans.factory.config.MethodInvokingFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.util.Log4jConfigurer;
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,15 +20,31 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
  * To change this template use File | Settings | File Templates.
  */
 @Configuration
-@PropertySource({"classpath:/META-INF/test.properties", "classpath:/META-INF/moduletest.properties"})
+@PropertySource({"classpath:/META-INF/default-test.properties", "classpath:/META-INF/moduletest.properties"})
 public class PropertyConfig
 {
     static @Bean
     public PropertySourcesPlaceholderConfigurer myPropertySourcesPlaceholderConfigurer()
     {
-        Logger rootLogger = Logger.getRootLogger();
-        rootLogger.setLevel(Level.DEBUG);
         return new PropertySourcesPlaceholderConfigurer();
+    }
+
+    static @Bean
+    public MethodInvokingFactoryBean defaultMethodInvokingFactoryBean(){
+        MethodInvokingFactoryBean methodInvokingFactoryBean = new MethodInvokingFactoryBean();
+        methodInvokingFactoryBean.setTargetClass(Log4jConfigurer.class);
+        methodInvokingFactoryBean.setTargetMethod("initLogging");
+        methodInvokingFactoryBean.setArguments(new Object[]{"classpath:META-INF/moduletest.properties"});
+        return methodInvokingFactoryBean;
+    }
+
+    static @Bean
+    public MethodInvokingFactoryBean basicMethodInvokingFactoryBean(){
+        MethodInvokingFactoryBean methodInvokingFactoryBean = new MethodInvokingFactoryBean();
+        methodInvokingFactoryBean.setTargetClass(Log4jConfigurer.class);
+        methodInvokingFactoryBean.setTargetMethod("initLogging");
+        methodInvokingFactoryBean.setArguments(new Object[]{"classpath:META-INF/default-test.properties"});
+        return methodInvokingFactoryBean;
     }
 
 }

@@ -1,21 +1,22 @@
-package org.ddelizia.vcrud.core.listener;
+package org.ddelizia.vcrud.core.interceptor;
 
 import com.mongodb.DBObject;
 import org.apache.log4j.Logger;
-import org.ddelizia.vcrud.basic.provider.ApplicationContextProvider;
-import org.ddelizia.vcrud.core.comparator.ClassComparatorByClassType;
+import org.ddelizia.vcrud.core.interceptor.type.AfterSaveInterceptor;
+import org.ddelizia.vcrud.core.interceptor.type.BeforeConvertInterceptor;
+import org.ddelizia.vcrud.core.interceptor.util.ClassComparatorByClassType;
+import org.ddelizia.vcrud.core.interceptor.type.AfterConvertIntereptor;
+import org.ddelizia.vcrud.core.interceptor.type.BeforeSaveInterceptor;
+import org.ddelizia.vcrud.core.interceptor.util.InterceptorRegistry;
+import org.ddelizia.vcrud.core.interceptor.util.InterceptorWrapper;
 import org.ddelizia.vcrud.model.basic.VcrudItem;
-import org.ddelizia.vcrud.model.multitenancy.service.VcrudTenantContextService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventListener;
 import org.springframework.data.mongodb.core.mapping.event.MongoMappingEvent;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -47,7 +48,7 @@ public class VcrudInterceptorListener<T extends VcrudItem> extends AbstractMongo
         runInterceptor(source.getClass(),
                 AfterConvertIntereptor.class,
                 Thread.currentThread().getStackTrace()[1].getMethodName(),
-                new Class[]{dbo.getClass(), source.getClass()},
+                new Class[]{DBObject.class, VcrudItem.class},
                 new Object[]{dbo, source});
 
     }
@@ -55,8 +56,6 @@ public class VcrudInterceptorListener<T extends VcrudItem> extends AbstractMongo
     @Override
     public void onBeforeSave(T source, DBObject dbo) {
         super.onBeforeSave(source, dbo);
-
-        logger.info("tftyfyyfy");
 
         runInterceptor(source.getClass(),
                 BeforeSaveInterceptor.class,
@@ -67,7 +66,13 @@ public class VcrudInterceptorListener<T extends VcrudItem> extends AbstractMongo
 
     @Override
     public void onAfterSave(T source, DBObject dbo) {
-        super.onAfterSave(source, dbo);    //To change body of overridden methods use File | Settings | File Templates.
+        super.onAfterSave(source, dbo);
+
+        runInterceptor(source.getClass(),
+                AfterSaveInterceptor.class,
+                Thread.currentThread().getStackTrace()[1].getMethodName(),
+                new Class[]{VcrudItem.class, DBObject.class},
+                new Object[]{source});
     }
 
     @Override
@@ -96,6 +101,12 @@ public class VcrudInterceptorListener<T extends VcrudItem> extends AbstractMongo
 
         //updating modification date
         source.setLastModification(new Date());
+
+        runInterceptor(source.getClass(),
+                BeforeConvertInterceptor.class,
+                Thread.currentThread().getStackTrace()[1].getMethodName(),
+                new Class[]{VcrudItem.class},
+                new Object[]{source});
     }
 
     @Override

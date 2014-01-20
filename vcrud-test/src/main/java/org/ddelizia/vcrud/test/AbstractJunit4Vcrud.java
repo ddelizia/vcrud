@@ -17,7 +17,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={
         "classpath*:/META-INF/vcrudApplicationContext-*.xml",
-        "classpath:/META-INF/testContext.xml",
+        "classpath:/META-INF/default-testContext.xml",
         "classpath*:/META-INF/vcrudApplicationContextTest-*.xml"})
 public abstract class AbstractJunit4Vcrud {
 
