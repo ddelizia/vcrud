@@ -1,5 +1,6 @@
 package org.ddelizia.vcrud.core.test;
 
+import org.ddelizia.vcrud.core.test.model.Sub;
 import org.ddelizia.vcrud.core.test.model.Super;
 import org.ddelizia.vcrud.model.basic.LocalizedString;
 import org.ddelizia.vcrud.model.multitenancy.service.VcrudTenantContextService;
@@ -7,8 +8,11 @@ import org.ddelizia.vcrud.model.system.Tenant;
 import org.ddelizia.vcrud.model.system.Website;
 import org.ddelizia.vcrud.model.system.mongo.TenantHostMongo;
 import org.ddelizia.vcrud.test.AbstractJunit4Vcrud;
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 
 import java.util.Locale;
 
@@ -26,6 +30,10 @@ public class InterceptorTests extends AbstractJunit4Vcrud {
 
     private Website website1 = null;
     private Website website2 = null;
+
+    public final static String SUB_VALUE = "test";
+
+    public final static String SUPER_VALUE = "test1";
 
     @Override
     public void vcrudAfter() {
@@ -93,9 +101,31 @@ public class InterceptorTests extends AbstractJunit4Vcrud {
     public void interceptorTest(){
 
         Super theSuper = new Super();
-        theSuper.setI(1);
-
         vcrudTenantContextService.getTenantForWebsite(website1, Super.class).save(theSuper);
 
+        Super superResult = vcrudTenantContextService.getTenantForWebsite(website1, Super.class).findOne(
+                new Query(Criteria.where("code").is(SUPER_VALUE)),
+                Super.class);
+
+        Assert.assertNotNull(superResult);
+
+        Sub theSub = new Sub();
+        vcrudTenantContextService.getTenantForWebsite(website1, Sub.class).save(theSub);
+
+        Sub subResult = vcrudTenantContextService.getTenantForWebsite(website1, Sub.class).findOne(
+                new Query(Criteria.where("code").is(SUB_VALUE)),
+                Sub.class);
+
+        Assert.assertNotNull(subResult);
+        Assert.assertEquals(subResult.getCreation(),subResult.getLastModification());
+
+        //doing modification
+        subResult.setI(2);
+        vcrudTenantContextService.getTenantForWebsite(website1, Sub.class).save(subResult);
+        Assert.assertNotEquals(subResult.getCreation(),subResult.getLastModification());
+
+        //remove both instances
+        vcrudTenantContextService.getTenantForWebsite(website1, Sub.class).remove(theSub);
+        vcrudTenantContextService.getTenantForWebsite(website1, Sub.class).remove(theSuper);
     }
 }

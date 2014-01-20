@@ -94,13 +94,15 @@ public class VcrudInterceptorListener<T extends VcrudItem> extends AbstractMongo
     public void onBeforeConvert(T source) {
         super.onBeforeConvert(source);
 
+        Date now = new Date();
+
         //Updating Date
         if(source.getCreation()==null){
-            source.setCreation(new Date());
+            source.setCreation(now);
         }
 
         //updating modification date
-        source.setLastModification(new Date());
+        source.setLastModification(now);
 
         runInterceptor(source.getClass(),
                 BeforeConvertInterceptor.class,

@@ -1,6 +1,7 @@
 package org.ddelizia.vcrud.core.test.interceptor;
 
 import com.mongodb.DBObject;
+import org.ddelizia.vcrud.core.interceptor.type.BeforeConvertInterceptor;
 import org.ddelizia.vcrud.core.interceptor.type.BeforeSaveInterceptor;
 import org.ddelizia.vcrud.model.basic.VcrudItem;
 
@@ -11,10 +12,10 @@ import org.ddelizia.vcrud.model.basic.VcrudItem;
  * Time: 18:38
  * To change this template use File | Settings | File Templates.
  */
-public class BeforeSaveInterceptorVcrudItem implements BeforeSaveInterceptor<VcrudItem>{
+public class BeforeConvertInterceptorVcrudItem implements BeforeConvertInterceptor<VcrudItem> {
 
     @Override
-    public void onBeforeSave(VcrudItem source, DBObject dbo) {
-        System.out.println("INTERCEPROR LAUNCHED");
+    public void onBeforeConvert(VcrudItem source) {
+        //do nothing
     }
 }

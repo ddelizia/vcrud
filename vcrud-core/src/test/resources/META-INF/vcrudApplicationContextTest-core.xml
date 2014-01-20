@@ -30,7 +30,7 @@
             <bean class="org.ddelizia.vcrud.core.interceptor.util.InterceptorWrapper">
                 <property name="order" value="0"></property>
                 <property name="interceptor">
-                    <bean id="vcrudItemInterceptor" class="org.ddelizia.vcrud.core.test.interceptor.BeforeSaveInterceptorVcrudItem"/>
+                    <bean id="vcrudItemInterceptor" class="org.ddelizia.vcrud.core.test.interceptor.BeforeConvertInterceptorVcrudItem"/>
                 </property>
             </bean>
         </property>
@@ -42,7 +42,7 @@
             <bean class="org.ddelizia.vcrud.core.interceptor.util.InterceptorWrapper">
                 <property name="order" value="0"></property>
                 <property name="interceptor">
-                    <bean id="superInterceptor" class="org.ddelizia.vcrud.core.test.interceptor.BeforeSaveInterceptorSuper"/>
+                    <bean id="superInterceptor" class="org.ddelizia.vcrud.core.test.interceptor.BeforeConvertInterceptorSuper"/>
                 </property>
             </bean>
         </property>
@@ -54,7 +54,7 @@
         <bean class="org.ddelizia.vcrud.core.interceptor.util.InterceptorWrapper">
             <property name="order" value="0"></property>
             <property name="interceptor">
-                <bean id="subInterceptor" class="org.ddelizia.vcrud.core.test.interceptor.BeforeSaveInterceptorSub"/>
+                <bean id="subInterceptor" class="org.ddelizia.vcrud.core.test.interceptor.BeforeConvertInterceptorSub "/>
             </property>
         </bean>
     </property>
