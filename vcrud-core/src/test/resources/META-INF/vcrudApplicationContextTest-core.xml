@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+    <!-- Creating bean for base tenant -->
+    <bean id="mongoFactoryBeanCentral" class="org.springframework.data.mongodb.core.MongoFactoryBean" >
+        <property name="host" value="localhost"/>
+        <property name="port" value="27017"/>
+    </bean>
+    <bean id="mongoBasicTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg index="0" type="com.mongodb.Mongo" ref="mongoFactoryBeanCentral"/>
+        <constructor-arg index="1" type="java.lang.String" value="dbBase"/>
+    </bean>
+
+    <!-- tenant Context Service -->
+    <bean id="vcudTenantContext" class="org.ddelizia.vcrud.model.multitenancy.service.mongo.VcrudTenantContextServiceMongo">
+        <property name="tenantBeanFactory" ref="vcrudTenantBeanFactory"/>
+        <property name="basicMongoTemplate" ref="mongoBasicTemplate"/>
+    </bean>
+
+    <bean id="vcrudItemInterceptorMapping" class="org.ddelizia.vcrud.core.listener.InterceptorRegistrar" >
+        <property name="key" value="org.ddelizia.vcrud.model.basic.VcrudItem"/>
+        <property name="value">
+            <bean class="org.ddelizia.vcrud.core.listener.InterceptorWrapper">
+                <property name="order" value="0"></property>
+                <property name="interceptor">
+                    <bean id="vcrudItemInterceptor" class="org.ddelizia.vcrud.core.test.interceptor.BeforeSaveInterceptorVcrudItem"/>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="superInterceptorMapping" class="org.ddelizia.vcrud.core.listener.InterceptorRegistrar" >
+        <property name="key" value="org.ddelizia.vcrud.core.test.model.Super"/>
+        <property name="value">
+            <bean class="org.ddelizia.vcrud.core.listener.InterceptorWrapper">
+                <property name="order" value="0"></property>
+                <property name="interceptor">
+                    <bean id="superInterceptor" class="org.ddelizia.vcrud.core.test.interceptor.BeforeSaveInterceptorSuper"/>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="subInterceptorMapping" class="org.ddelizia.vcrud.core.listener.InterceptorRegistrar" >
+        <property name="key" value="org.ddelizia.vcrud.core.test.model.Sub"/>
+        <property name="value">
+            <bean class="org.ddelizia.vcrud.core.listener.InterceptorWrapper">
+                <property name="order" value="0"></property>
+                <property name="interceptor">
+                    <bean id="subInterceptor" class="org.ddelizia.vcrud.core.test.interceptor.BeforeSaveInterceptorSub"/>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+
+
+</beans>

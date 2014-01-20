@@ -1,17 +1,16 @@
 package org.ddelizia.vcrud.core.listener;
 
-import com.mongodb.DBObject;
+import org.ddelizia.vcrud.basic.collections.map.MappingRegistryList;
 import org.ddelizia.vcrud.model.basic.VcrudItem;
 
 /**
  * Created with IntelliJ IDEA.
  * User: ddelizia
- * Date: 14/01/14
- * Time: 15:49
+ * Date: 17/01/14
+ * Time: 18:38
  * To change this template use File | Settings | File Templates.
  */
-public interface AfterConvertIntereptor<T extends VcrudItem> extends VcrudInterceptor{
+public class InterceptorRegistry extends MappingRegistryList<Class<? extends VcrudItem>, InterceptorWrapper> {
 
-    public abstract void onAfterConvert(DBObject dbo, T source);
 
 }
