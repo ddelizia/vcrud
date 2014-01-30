@@ -25,6 +25,7 @@
         <module>vcrud-model</module>
         <module>vcrud-core</module>
         <module>vcrud-basic</module>
+        <module>vcrud-agui</module>
         <!--
         <module>vcrud-gui7</module>
 
