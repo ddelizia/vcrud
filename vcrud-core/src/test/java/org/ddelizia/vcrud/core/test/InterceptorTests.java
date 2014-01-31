@@ -37,7 +37,14 @@ public class InterceptorTests extends AbstractJunit4Vcrud {
 
     @Override
     public void vcrudAfter() {
-        //To change body of implemented methods use File | Settings | File Templates.
+        vcrudTenantContextService.getBasicMongoTemplate().remove(website1.getTenant().getTenantHost());
+        vcrudTenantContextService.getBasicMongoTemplate().remove(website2.getTenant().getTenantHost());
+
+        vcrudTenantContextService.getBasicMongoTemplate().remove(website1.getTenant());
+        vcrudTenantContextService.getBasicMongoTemplate().remove(website2.getTenant());
+
+        vcrudTenantContextService.getBasicMongoTemplate().remove(website1);
+        vcrudTenantContextService.getBasicMongoTemplate().remove(website2);
     }
 
     @Override
@@ -95,6 +102,11 @@ public class InterceptorTests extends AbstractJunit4Vcrud {
 
         vcrudTenantContextService.getBasicMongoTemplate().save(website1);
         vcrudTenantContextService.getBasicMongoTemplate().save(website2);
+
+        //modify website 2 to test version
+        Website website2retrieved =  vcrudTenantContextService.getBasicMongoTemplate().findOne(Query.query(Criteria.where("code").is("website2")),Website.class);
+        website2retrieved.setRegex("hola la");
+        vcrudTenantContextService.getBasicMongoTemplate().save(website2retrieved);
     }
 
     @Test

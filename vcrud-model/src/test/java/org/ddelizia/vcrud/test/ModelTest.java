@@ -1,6 +1,7 @@
 package org.ddelizia.vcrud.test;
 
 
+import org.apache.log4j.Logger;
 import org.ddelizia.vcrud.model.basic.LocalizedString;
 import org.ddelizia.vcrud.model.multitenancy.service.VcrudTenantContextService;
 import org.ddelizia.vcrud.model.system.Tenant;
@@ -11,6 +12,8 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 
 import java.util.List;
 import java.util.Locale;
@@ -23,6 +26,8 @@ import java.util.Locale;
  * To change this template use File | Settings | File Templates.
  */
 public class ModelTest extends AbstractJunit4Vcrud{
+
+    private static final Logger LOG = Logger.getLogger(ModelTest.class);
 
     @Autowired
     private VcrudTenantContextService vcrudTenantContextService;
@@ -50,6 +55,11 @@ public class ModelTest extends AbstractJunit4Vcrud{
                 simpleItems2.size(),
                 NUMBER_OF_INSTANCE/2);
 
+        Website website2retrievedV0 =  vcrudTenantContextService.getBasicMongoTemplate().findOne(Query.query(Criteria.where("code").is("website2").and("version").is(0)),Website.class);
+
+
+        Website website2retrievedV1 =  vcrudTenantContextService.getBasicMongoTemplate().findOne(Query.query(Criteria.where("code").is("website2").and("version").is(1)),Website.class);
+
     }
 
     @Test
@@ -57,9 +67,9 @@ public class ModelTest extends AbstractJunit4Vcrud{
         MongoTemplate mongoTemplate1 = vcrudTenantContextService.getTenantForWebsite(website1, SimpleItem.class);
         List<SimpleItem> simpleItems1 = mongoTemplate1.findAll(SimpleItem.class);
 
-        Assert.assertNotNull(simpleItems1.get(0));
+        Assert.assertNotNull(simpleItems1.iterator().next());
 
-        Assert.assertTrue(simpleItems1.get(0).getMultilanguageString().getMap().get(MULTILANGUAGE_LOCALE).getValue().equals(MULTILANGUAGE_VALUE));
+        Assert.assertTrue(simpleItems1.iterator().next().getMultilanguageString().getMap().get(MULTILANGUAGE_LOCALE).getValue().equals(MULTILANGUAGE_VALUE));
 
     }
 
@@ -87,6 +97,15 @@ public class ModelTest extends AbstractJunit4Vcrud{
         Assert.assertEquals(
                 mongoTemplate2.findAll(SimpleItem.class).size(),
                 0);
+
+        vcrudTenantContextService.getBasicMongoTemplate().remove(website1.getTenant().getTenantHost());
+        vcrudTenantContextService.getBasicMongoTemplate().remove(website2.getTenant().getTenantHost());
+
+        vcrudTenantContextService.getBasicMongoTemplate().remove(website1.getTenant());
+        vcrudTenantContextService.getBasicMongoTemplate().remove(website2.getTenant());
+
+        vcrudTenantContextService.getBasicMongoTemplate().remove(website1);
+        vcrudTenantContextService.getBasicMongoTemplate().remove(website2);
 
     }
 
@@ -145,6 +164,16 @@ public class ModelTest extends AbstractJunit4Vcrud{
 
         vcrudTenantContextService.getBasicMongoTemplate().save(website1);
         vcrudTenantContextService.getBasicMongoTemplate().save(website2);
+
+
+        LOG.debug("Website version is: " + website2.getVersion());
+
+        //modify website 2 to test version
+        Website website2retrieved =  vcrudTenantContextService.getBasicMongoTemplate().findOne(Query.query(Criteria.where("code").is("website2")),Website.class);
+        website2retrieved.setRegex("hola la");
+        vcrudTenantContextService.getBasicMongoTemplate().save(website2retrieved);
+        LOG.debug("Website version is: " + website2retrieved.getVersion());
+
 
         createSimpleItems();
     }

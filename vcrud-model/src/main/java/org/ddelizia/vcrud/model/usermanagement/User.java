@@ -2,6 +2,7 @@ package org.ddelizia.vcrud.model.usermanagement;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.persistence.Entity;
 import java.util.List;
 
 /**
@@ -11,7 +12,7 @@ import java.util.List;
  * Time: 12:04
  * To change this template use File | Settings | File Templates.
  */
-
+@Entity
 @Document(collection = "User")
 public abstract class User extends VcrudPrincipal{
 

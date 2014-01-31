@@ -45,6 +45,24 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- SPRING SOCIAL -->
+        <dependency>
+            <groupId>org.springframework.social</groupId>
+            <artifactId>spring-social-core</artifactId>
+            <version>1.0.3.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.social</groupId>
+            <artifactId>spring-social-facebook</artifactId>
+            <version>1.0.3.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.social</groupId>
+            <artifactId>spring-social-facebook</artifactId>
+            <version>1.0.3.RELEASE</version>
+        </dependency>
+        <!-- END SPRING SOCIAL -->
+
     </dependencies>
 
     <build>

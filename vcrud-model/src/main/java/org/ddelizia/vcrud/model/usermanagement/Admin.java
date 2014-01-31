@@ -1,7 +1,9 @@
 package org.ddelizia.vcrud.model.usermanagement;
 
 import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.persistence.Entity;
 import java.util.List;
 
 /**
@@ -11,6 +13,7 @@ import java.util.List;
  * Time: 12:06
  * To change this template use File | Settings | File Templates.
  */
+@Entity
 public class Admin extends User {
 
     @DBRef

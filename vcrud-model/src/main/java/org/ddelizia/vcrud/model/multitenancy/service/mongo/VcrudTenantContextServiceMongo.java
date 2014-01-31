@@ -1,5 +1,6 @@
 package org.ddelizia.vcrud.model.multitenancy.service.mongo;
 
+import org.apache.log4j.Logger;
 import org.ddelizia.vcrud.basic.provider.RequestProvider;
 import org.ddelizia.vcrud.basic.utils.CodeGenerator;
 import org.ddelizia.vcrud.model.basic.VcrudItem;
@@ -29,6 +30,8 @@ public class VcrudTenantContextServiceMongo implements VcrudTenantContextService
     private TenantBeanFactory tenantBeanFactory;
 
     private Map<String, Website> webSiteCache = new HashMap<>();
+
+    Logger LOG = Logger.getLogger(VcrudTenantContextServiceMongo.class);
 
     public void registerTenant(String hostname,
                                Integer port,
@@ -84,7 +87,11 @@ public class VcrudTenantContextServiceMongo implements VcrudTenantContextService
     }
 
     public MongoTemplate getTenantForWebsite (Website website, Class<? extends VcrudItem> vcrudItemClass){
+        if (website == null){
+            return getBasicMongoTemplate();
+        }
         if (!VcrudTenantItem.class.isAssignableFrom(vcrudItemClass)){
+            LOG.info("No website found fall back on basic tenant");
             return basicMongoTemplate;
         }
         return getMongoTemplateForTenant(website.getTenant());
@@ -97,8 +104,9 @@ public class VcrudTenantContextServiceMongo implements VcrudTenantContextService
                         tenant, tenantBeanFactory.getOrCreateBeanMongo((TenantHostMongo)tenant.getTenantHost()));
             }
         } catch (Exception e) {
-            //TODO control this exception and also if it is not a mongohost
+            LOG.info("No session found fall back on basic tenant");
             e.printStackTrace();
+            return getBasicMongoTemplate();
         }
         return null;
     }

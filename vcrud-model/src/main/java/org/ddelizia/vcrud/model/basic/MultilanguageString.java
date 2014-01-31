@@ -2,6 +2,7 @@ package org.ddelizia.vcrud.model.basic;
 
 import org.ddelizia.vcrud.basic.provider.RequestProvider;
 
+import javax.persistence.Entity;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -13,6 +14,8 @@ import java.util.Map;
  * Time: 10:23
  * To change this template use File | Settings | File Templates.
  */
+
+@Entity
 public class MultilanguageString {
 
     private Map<Locale, LocalizedString> map = new HashMap<>();

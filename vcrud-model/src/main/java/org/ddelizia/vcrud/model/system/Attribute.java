@@ -14,6 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * To change this template use File | Settings | File Templates.
  */
 
+
 @Document
 public class Attribute extends VcrudItem {
 

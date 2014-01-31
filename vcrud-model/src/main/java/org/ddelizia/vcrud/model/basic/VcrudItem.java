@@ -1,9 +1,14 @@
 package org.ddelizia.vcrud.model.basic;
 
 
+import org.joda.time.DateTime;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.persistence.Entity;
 import java.util.Date;
 
 /**
@@ -14,15 +19,21 @@ import java.util.Date;
  * To change this template use File | Settings | File Templates.
  */
 
+@Entity
 @Document(collection = "VcrudItem")
 public abstract class VcrudItem {
 
     @Id
     private String id;
 
-    private Date creation;
+    @Version
+    private Long version;
 
-    private Date lastModification;
+    @CreatedDate
+    private DateTime creation;
+
+    @LastModifiedDate
+    private DateTime lastModification;
 
     public String getId() {
         return id;
@@ -32,19 +43,27 @@ public abstract class VcrudItem {
         this.id = id;
     }
 
-    public Date getCreation() {
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
+    }
+
+    public DateTime getCreation() {
         return creation;
     }
 
-    public void setCreation(Date creation) {
+    public void setCreation(DateTime creation) {
         this.creation = creation;
     }
 
-    public Date getLastModification() {
+    public DateTime getLastModification() {
         return lastModification;
     }
 
-    public void setLastModification(Date lastModification) {
+    public void setLastModification(DateTime lastModification) {
         this.lastModification = lastModification;
     }
 }

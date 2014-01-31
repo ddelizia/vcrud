@@ -3,6 +3,8 @@ package org.ddelizia.vcrud.model.usermanagement;
 import org.ddelizia.vcrud.model.basic.VcrudTenantItem;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.persistence.Entity;
+
 /**
  * Created with IntelliJ IDEA.
  * User: ddelizia
@@ -11,5 +13,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * To change this template use File | Settings | File Templates.
  */
 
+@Entity
 public class UserGroupTenant extends VcrudPrincipalGroup implements VcrudTenantItem{
 }

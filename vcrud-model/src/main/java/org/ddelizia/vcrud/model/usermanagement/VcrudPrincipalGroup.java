@@ -2,6 +2,8 @@ package org.ddelizia.vcrud.model.usermanagement;
 
 import org.springframework.data.mongodb.core.index.Indexed;
 
+import javax.persistence.Entity;
+
 /**
  * Created with IntelliJ IDEA.
  * User: ddelizia
@@ -9,6 +11,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
  * Time: 12:02
  * To change this template use File | Settings | File Templates.
  */
+@Entity
 public abstract class VcrudPrincipalGroup extends VcrudPrincipal{
 
     @Indexed(unique = true)

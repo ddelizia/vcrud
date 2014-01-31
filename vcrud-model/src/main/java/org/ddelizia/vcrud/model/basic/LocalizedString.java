@@ -2,6 +2,7 @@ package org.ddelizia.vcrud.model.basic;
 
 import org.ddelizia.vcrud.basic.provider.RequestProvider;
 
+import javax.persistence.Entity;
 import java.util.Locale;
 
 /**
@@ -11,6 +12,8 @@ import java.util.Locale;
  * Time: 17:43
  * To change this template use File | Settings | File Templates.
  */
+
+@Entity
 public class LocalizedString {
 
     private Locale locale;

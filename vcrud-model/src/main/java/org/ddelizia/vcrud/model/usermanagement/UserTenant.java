@@ -3,6 +3,7 @@ package org.ddelizia.vcrud.model.usermanagement;
 import org.ddelizia.vcrud.model.basic.VcrudTenantItem;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
+import javax.persistence.Entity;
 import java.util.List;
 
 /**
@@ -12,6 +13,7 @@ import java.util.List;
  * Time: 12:11
  * To change this template use File | Settings | File Templates.
  */
+@Entity
 public class UserTenant extends User implements VcrudTenantItem{
 
     @DBRef
