@@ -15,6 +15,6 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 @Entity
-public class Employee extends UserTenant{
+public class Employee extends User{
 
 }

@@ -29,11 +29,7 @@ public class ModelTest extends AbstractJunit4Vcrud{
 
     private static final Logger LOG = Logger.getLogger(ModelTest.class);
 
-    @Autowired
-    private VcrudTenantContextService vcrudTenantContextService;
 
-    private Website website1 = null;
-    private Website website2 = null;
 
     private static final int NUMBER_OF_INSTANCE = 10;
 

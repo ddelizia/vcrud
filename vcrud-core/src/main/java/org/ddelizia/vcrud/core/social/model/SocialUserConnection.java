@@ -1,6 +1,7 @@
-package org.ddelizia.vcrud.core.social;
+package org.ddelizia.vcrud.core.social.model;
 
 import org.ddelizia.vcrud.model.basic.VcrudItem;
+import org.ddelizia.vcrud.model.usermanagement.User;
 import org.ddelizia.vcrud.model.usermanagement.VcrudPrincipal;
 import org.joda.time.DateTime;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -41,7 +42,7 @@ public class SocialUserConnection extends VcrudItem{
     private DateTime expireTime;
 
     @DBRef
-    private org.ddelizia.vcrud.model.usermanagement.VcrudPrincipal user;
+    private User user;
 
     public String getAccessToken() {
         return accessToken;
@@ -123,11 +124,11 @@ public class SocialUserConnection extends VcrudItem{
         this.expireTime = expireTime;
     }
 
-    public VcrudPrincipal getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(VcrudPrincipal user) {
+    public void setUser(User user) {
         this.user = user;
     }
 }

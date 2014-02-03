@@ -11,20 +11,11 @@
 
     <mongo:auditing />
 
-    <!-- Creating bean for base tenant -->
-    <bean id="mongoFactoryBeanCentral" class="org.springframework.data.mongodb.core.MongoFactoryBean" >
-        <property name="host" value="localhost"/>
-        <property name="port" value="27017"/>
-    </bean>
-    <bean id="mongoBasicTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
-        <constructor-arg index="0" type="com.mongodb.Mongo" ref="mongoFactoryBeanCentral"/>
-        <constructor-arg index="1" type="java.lang.String" value="dbBase"/>
-    </bean>
+    <mongo:mongo host="127.0.0.1" port="27017" />
+    <mongo:db-factory id="mongoDbFactory" dbname="yourdb" username="ddelizia" password="ddelizia"/>
 
-    <!-- tenant Context Service -->
-    <bean id="vcudTenantContext" class="org.ddelizia.vcrud.model.multitenancy.service.mongo.VcrudTenantContextServiceMongo">
-        <property name="tenantBeanFactory" ref="vcrudTenantBeanFactory"/>
-        <property name="basicMongoTemplate" ref="mongoBasicTemplate"/>
+    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
     </bean>
 
 </beans>
