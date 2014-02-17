@@ -13,9 +13,9 @@ import org.springframework.stereotype.Service;
  * @since 17/02/14 15:20
  */
 @Service(VerificationTokenService.DEFAULT_BEAN_NAME)
-public class VerificationTokenServiceI implements VerificationTokenService{
+public class VerificationTokenServiceImpl implements VerificationTokenService{
 
-    private static final Logger LOGGER = Logger.getLogger(VerificationTokenServiceI.class);
+    private static final Logger LOGGER = Logger.getLogger(VerificationTokenServiceImpl.class);
     
     @Autowired
     private VerificationTokenRepository verificationTokenRepository;
