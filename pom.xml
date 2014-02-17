@@ -28,7 +28,6 @@
         <module>vcrud-core</module>
         <module>vcrud-agui</module>
         <module>vcrud-commons</module>
-        <module>vcrud-android</module>
     </modules>
 
     <dependencies>
@@ -41,12 +40,13 @@
 
     <profiles>
         <profile>
-            <id>droneio</id>
+            <id>android</id>
             <modules>
                 <module>vcrud-test</module>
                 <module>vcrud-core</module>
                 <module>vcrud-agui</module>
                 <module>vcrud-commons</module>
+                <module>vcrud-android</module>
             </modules>
         </profile>
     </profiles>
