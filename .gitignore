@@ -10,3 +10,5 @@
 target/
 /vcrud-gui7/src/main/webapp/VAADIN
 /.idea
+gen-external-apklibs
+vcrud-android/gen/
