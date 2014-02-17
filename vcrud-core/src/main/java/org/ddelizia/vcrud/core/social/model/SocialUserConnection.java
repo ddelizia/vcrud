@@ -1,8 +1,7 @@
 package org.ddelizia.vcrud.core.social.model;
 
-import org.ddelizia.vcrud.model.basic.VcrudItem;
-import org.ddelizia.vcrud.model.usermanagement.User;
-import org.ddelizia.vcrud.model.usermanagement.VcrudPrincipal;
+import org.ddelizia.vcrud.core.basic.model.VcrudItem;
+import org.ddelizia.vcrud.core.usermanagement.model.User;
 import org.joda.time.DateTime;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;

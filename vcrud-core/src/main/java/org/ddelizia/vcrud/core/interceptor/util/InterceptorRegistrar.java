@@ -1,8 +1,8 @@
 package org.ddelizia.vcrud.core.interceptor.util;
 
-import org.ddelizia.vcrud.basic.collections.map.MappingRegistrar;
-import org.ddelizia.vcrud.basic.collections.map.MappingRegistry;
-import org.ddelizia.vcrud.model.basic.VcrudItem;
+import org.ddelizia.vcrud.core.basic.collection.map.MappingRegistrar;
+import org.ddelizia.vcrud.core.basic.collection.map.MappingRegistry;
+import org.ddelizia.vcrud.core.basic.model.VcrudItem;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;

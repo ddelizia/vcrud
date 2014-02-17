@@ -20,7 +20,7 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-mongodb</artifactId>
-            <version>${spring-data.version}</version>
+            <version>${spring.data.version}</version>
         </dependency>
 
         <dependency>
@@ -64,8 +64,8 @@
                         <artifactId>exec-maven-plugin</artifactId>
                         <version>1.2.1</version>
                         <executions>
-                            <execution><!-- Run our version calculation script -->
-                                <id>Version Calculation</id>
+                            <execution>
+                                <id>Execute drone.io</id>
                                 <phase>compile</phase>
                                 <goals>
                                     <goal>exec</goal>

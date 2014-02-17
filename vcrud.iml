@@ -1,53 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
-  <component name="FacetManager">
-    <facet type="gwt" name="GWT">
-      <configuration>
-        <setting name="compilerMaxHeapSize" value="256" />
-        <setting name="gwtScriptOutputStyle" value="DETAILED" />
-        <setting name="gwtSdkUrl" value="file://" />
-      </configuration>
-    </facet>
-    <facet type="web" name="Web">
-      <configuration>
-        <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/vcrud-gui7/src/main/webapp/WEB-INF/web.xml" />
-        </descriptors>
-        <webroots>
-          <root url="file://$MODULE_DIR$/vcrud-gui7/src/main/webapp" relative="/" />
-        </webroots>
-        <sourceRoots>
-          <root url="file://$MODULE_DIR$/src/main/java" />
-          <root url="file://$MODULE_DIR$/src/main/resources" />
-        </sourceRoots>
-      </configuration>
-    </facet>
-    <facet type="Spring" name="Spring">
-      <configuration>
-        <fileset id="fileset" name="Spring Application Context" removed="false">
-          <file>file://$MODULE_DIR$/vcrud-social/src/main/resources/META-INF/vcrudApplicationContext-social.xml</file>
-          <file>file://$MODULE_DIR$/vcrud-elasticsearch/src/test/resources/app-context.xml</file>
-          <file>file://$MODULE_DIR$/vcrud-gui7/src/main/resources/META-INF/vcrudApplicationContext-gui7.xml</file>
-          <file>file://$MODULE_DIR$/vcrud-core/src/main/resources/META-INF/vcrudApplicationContext-core.xml</file>
-          <file>file://$MODULE_DIR$/vcrud-core/src/main/resources/META-INF/dbContext-core.xml</file>
-          <file>file://$MODULE_DIR$/vcrud-core/src/test/resources/META-INF/testContext-core.xml</file>
-          <file>file://$MODULE_DIR$/vcrud-media/src/main/resources/META-INF/vcrudApplicationContext-media.xml</file>
-          <file>file://$MODULE_DIR$/vcrud-email/src/main/resources/META-INF/vcrudApplicationContext-email.xml</file>
-        </fileset>
-      </configuration>
-    </facet>
-    <facet type="web" name="Web2">
-      <configuration>
-        <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/vcrud-agui/src/main/webapp/WEB-INF/web.xml" />
-        </descriptors>
-        <webroots>
-          <root url="file://$MODULE_DIR$/vcrud-agui/src/main/webapp" relative="/" />
-        </webroots>
-      </configuration>
-    </facet>
-  </component>
-  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_6" inherit-compiler-output="false">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_7" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
     <exclude-output />

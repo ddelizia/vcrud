@@ -1,8 +1,9 @@
 package org.ddelizia.vcrud.core.security.model;
 
-import org.ddelizia.vcrud.model.basic.VcrudItem;
-import org.ddelizia.vcrud.model.usermanagement.VcrudPrincipal;
+import org.ddelizia.vcrud.core.basic.model.VcrudItem;
+import org.ddelizia.vcrud.core.usermanagement.model.User;
 import org.joda.time.DateTime;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Entity;
@@ -25,13 +26,21 @@ public class VerificationToken extends VcrudItem{
     private DateTime expiryDate;
     private VerificationTokenType tokenType;
     private boolean verified;
-    private VcrudPrincipal principal;
 
+    @DBRef
+    private User user;
 
     public VerificationToken() {
         super();
         this.token = UUID.randomUUID().toString();
         this.expiryDate = calculateExpiryDate(DEFAULT_EXPIRY_TIME_IN_MINS);
+    }
+
+    public VerificationToken(User user, VerificationTokenType tokenType, int expirationTimeInMinutes) {
+        this();
+        this.user = user;
+        this.tokenType = tokenType;
+        this.expiryDate = calculateExpiryDate(expirationTimeInMinutes);
     }
 
     private DateTime calculateExpiryDate(int expiryTimeInMinutes) {
@@ -80,11 +89,11 @@ public class VerificationToken extends VcrudItem{
         this.verified = verified;
     }
 
-    public VcrudPrincipal getPrincipal() {
-        return principal;
+    public User getUser() {
+        return user;
     }
 
-    public void setPrincipal(VcrudPrincipal principal) {
-        this.principal = principal;
+    public void setUser(User user) {
+        this.user = user;
     }
 }

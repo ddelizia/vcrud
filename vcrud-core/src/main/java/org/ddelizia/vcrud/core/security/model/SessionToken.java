@@ -1,8 +1,8 @@
 package org.ddelizia.vcrud.core.security.model;
 
-import org.ddelizia.vcrud.model.basic.VcrudItem;
-import org.ddelizia.vcrud.model.usermanagement.User;
-import org.ddelizia.vcrud.model.usermanagement.VcrudPrincipal;
+import org.ddelizia.vcrud.core.basic.model.VcrudItem;
+import org.ddelizia.vcrud.core.usermanagement.model.User;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Entity;
@@ -20,13 +20,15 @@ import java.util.UUID;
 public class SessionToken extends VcrudItem implements Comparable<SessionToken>{
 
     private String token;
-    private VcrudPrincipal principal;
+
+    @DBRef
+    private User user;
 
     public SessionToken() {
     }
 
-    public SessionToken(VcrudPrincipal principal) {
-        this.principal = principal;
+    public SessionToken(User user) {
+        this.user = user;
         this.token = UUID.randomUUID().toString();
     }
 
@@ -38,12 +40,12 @@ public class SessionToken extends VcrudItem implements Comparable<SessionToken>{
         this.token = token;
     }
 
-    public VcrudPrincipal getPrincipal() {
-        return principal;
+    public User getUser() {
+        return user;
     }
 
-    public void setPrincipal(VcrudPrincipal principal) {
-        this.principal = principal;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     /**

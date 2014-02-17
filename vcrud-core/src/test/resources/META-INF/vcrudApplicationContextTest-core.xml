@@ -39,7 +39,7 @@
     </bean>
 
     <bean id="superInterceptorMapping" class="org.ddelizia.vcrud.core.interceptor.util.InterceptorRegistrar" >
-        <property name="key" value="org.ddelizia.vcrud.core.test.model.Super"/>
+        <property name="key" value="org.ddelizia.vcrud.core.test.interceptor.model.Super"/>
         <property name="value">
             <bean class="org.ddelizia.vcrud.core.interceptor.util.InterceptorWrapper">
                 <property name="order" value="0"></property>
@@ -51,7 +51,7 @@
     </bean>
 
     <bean id="subInterceptorMapping" class="org.ddelizia.vcrud.core.interceptor.util.InterceptorRegistrar" >
-        <property name="key" value="org.ddelizia.vcrud.core.test.model.Sub"/>
+        <property name="key" value="org.ddelizia.vcrud.core.test.interceptor.model.Sub"/>
         <property name="value">
             <bean class="org.ddelizia.vcrud.core.interceptor.util.InterceptorWrapper">
                 <property name="order" value="0"></property>

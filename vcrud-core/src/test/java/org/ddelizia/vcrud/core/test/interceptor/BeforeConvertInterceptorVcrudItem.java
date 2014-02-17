@@ -1,9 +1,7 @@
 package org.ddelizia.vcrud.core.test.interceptor;
 
-import com.mongodb.DBObject;
+import org.ddelizia.vcrud.core.basic.model.VcrudItem;
 import org.ddelizia.vcrud.core.interceptor.type.BeforeConvertInterceptor;
-import org.ddelizia.vcrud.core.interceptor.type.BeforeSaveInterceptor;
-import org.ddelizia.vcrud.model.basic.VcrudItem;
 
 /**
  * Created with IntelliJ IDEA.

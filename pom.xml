@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.ddelizia.vcrud</groupId>
@@ -10,34 +8,27 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
+        <project.version>1.0-SNAPSHOT</project.version>
         <spring.version>3.2.6.RELEASE</spring.version>
-        <spring-data.version>1.3.2.RELEASE</spring-data.version>
+        <spring.data.version>1.3.2.RELEASE</spring.data.version>
+        <spring.security.version>3.2.0.RELEASE</spring.security.version>
+        <spring.social.version>1.0.3.RELEASE</spring.social.version>
         <mongodb.driver.version>2.11.3</mongodb.driver.version>
         <cglib.version>2.2.2</cglib.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring.social.version>1.0.3.RELEASE</spring.social.version>
         <jersey.version>1.17.1</jersey.version>
+        <gson.version>2.2.4</gson.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <log.slf4j.version>1.7.5</log.slf4j.version>
         <github.global.server>github</github.global.server>
+        <repo.output.directory>default</repo.output.directory>
     </properties>
 
     <modules>
         <module>vcrud-test</module>
-        <module>vcrud-model</module>
         <module>vcrud-core</module>
-        <module>vcrud-basic</module>
         <module>vcrud-agui</module>
         <module>vcrud-commons</module>
-        <!--
-        <module>vcrud-gui7</module>
-
-        <module>vcrud-cms</module>
-        <module>vcrud-email</module>
-        <module>vcrud-cronjob</module>
-        <module>vcrud-elasticsearch</module>
-        <module>vcrud-social</module>
-
-        <module>vcrud-media</module>
-        -->
+        <module>vcrud-android</module>
     </modules>
 
     <dependencies>
@@ -48,14 +39,26 @@
         </dependency>
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>droneio</id>
+            <modules>
+                <module>vcrud-test</module>
+                <module>vcrud-core</module>
+                <module>vcrud-agui</module>
+                <module>vcrud-commons</module>
+            </modules>
+        </profile>
+    </profiles>
+
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -78,6 +81,27 @@
                             <goal>site</goal>
                         </goals>
                         <phase>deploy</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.3</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals><goal>copy</goal></goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.mortbay.jetty</groupId>
+                                    <artifactId>jetty-runner</artifactId>
+                                    <version>8.1.14.v20131031</version>
+                                    <destFileName>jetty-runner.jar</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

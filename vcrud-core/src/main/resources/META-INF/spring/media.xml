@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+    <context:component-scan base-package="org.ddelizia.vcrud.core.media"/>
+
+    <bean id="resizeProcessorRegistry" class="org.ddelizia.vcrud.core.media.image.processor.resize.ResizeProcessorRegistry"/>
+
+    <!-- REGISTERING PROCESSORS -->
+    <bean id="resizeProcessorRegistarFitToWidth" class="org.ddelizia.vcrud.core.media.image.processor.resize.ResizeProcessorRegistar" >
+        <constructor-arg ref="resizeProcessorRegistry"/>
+        <property name="key">
+            <value type="org.ddelizia.vcrud.core.media.image.processor.resize.ResizeEnum">FIT_TO_WIDTH</value>
+        </property>
+        <property name="value">
+                <bean id="resizeProcessorFitToWidth" class="org.ddelizia.vcrud.core.media.image.processor.resize.impl.ResizeProcessorFitToWidth"/>
+        </property>
+    </bean>
+    <bean id="resizeProcessorRegistarFitToHeight" class="org.ddelizia.vcrud.core.media.image.processor.resize.ResizeProcessorRegistar" >
+        <constructor-arg ref="resizeProcessorRegistry"/>
+        <property name="key">
+            <value type="org.ddelizia.vcrud.core.media.image.processor.resize.ResizeEnum">FIT_TO_HEIGHT</value>
+        </property>
+        <property name="value">
+            <bean id="resizeProcessorFitToWidth" class="org.ddelizia.vcrud.core.media.image.processor.resize.impl.ResizeProcessorFitToHeight"/>
+        </property>
+    </bean>
+    <bean id="resizeProcessorRegistarFitExact" class="org.ddelizia.vcrud.core.media.image.processor.resize.ResizeProcessorRegistar" >
+        <constructor-arg ref="resizeProcessorRegistry"/>
+        <property name="key">
+            <value type="org.ddelizia.vcrud.core.media.image.processor.resize.ResizeEnum">FIT_EXACT</value>
+        </property>
+        <property name="value">
+            <bean id="resizeProcessorFitToWidth" class="org.ddelizia.vcrud.core.media.image.processor.resize.impl.ResizeProcessorFitExact"/>
+        </property>
+    </bean>
+    <bean id="resizeProcessorRegistarFitOrCrop" class="org.ddelizia.vcrud.core.media.image.processor.resize.ResizeProcessorRegistar" >
+        <constructor-arg ref="resizeProcessorRegistry"/>
+        <property name="key">
+            <value type="org.ddelizia.vcrud.core.media.image.processor.resize.ResizeEnum">FIT_OR_CROP</value>
+        </property>
+        <property name="value">
+            <bean id="resizeProcessorFitToWidth" class="org.ddelizia.vcrud.core.media.image.processor.resize.impl.ResizeProcessorFitOrCrop"/>
+        </property>
+    </bean>
+    <!-- END REGISTERING PROCESSORS -->
+
+
+</beans>

@@ -3,6 +3,7 @@ package org.ddelizia.vcrud.commons;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,7 +13,7 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 
-public class ExternalUser extends Principal {
+public class ExternalUser implements Principal {
 
     private String id;
 
@@ -24,9 +25,9 @@ public class ExternalUser extends Principal {
 
     private boolean isVerified;
 
-    private String role;
+    private Set<String> roles;
 
-    private List<SocialProfile> socialProfiles = new ArrayList<SocialProfile>();
+    private List<SocialProfile> socialProfiles = new ArrayList<>();
 
     public ExternalUser() {}
 
@@ -34,27 +35,10 @@ public class ExternalUser extends Principal {
         this.id = userId;
     }
 
-    public ExternalUser(User user) {
-        this.id = user.getUuid().toString();
-        this.emailAddress = user.getEmailAddress();
-        this.firstName = user.getFirstName();
-        this.lastName = user.getLastName();
-        this.isVerified = user.isVerified();
-        for(SocialUser socialUser: user.getSocialUsers()) {
-            SocialProfile profile = new SocialProfile();
-            profile.setDisplayName(socialUser.getDisplayName());
-            profile.setImageUrl(socialUser.getImageUrl());
-            profile.setProfileUrl(socialUser.getProfileUrl());
-            profile.setProvider(socialUser.getProviderId());
-            profile.setProviderUserId(socialUser.getProviderUserId());
-            socialProfiles.add(profile);
-        }
-        role = user.getRole().toString();
-    }
-
+    /*
     public ExternalUser(User user, SessionToken activeSession) {
         this(user);
-    }
+    }     */
 
     public String getFirstName() {
         return firstName;
@@ -88,7 +72,7 @@ public class ExternalUser extends Principal {
         return id;
     }
 
-    public boolean isVerified() {
+    public boolean isVerified(boolean verified) {
         return isVerified;
     }
 
@@ -96,8 +80,24 @@ public class ExternalUser extends Principal {
         return emailAddress;
     }
 
-    public String getRole() {
-        return role;
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setVerified(boolean verified) {
+        isVerified = verified;
+    }
+
+    public void setSocialProfiles(List<SocialProfile> socialProfiles) {
+        this.socialProfiles = socialProfiles;
+    }
+
+    public Set<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<String> roles) {
+        this.roles = roles;
     }
 
 }

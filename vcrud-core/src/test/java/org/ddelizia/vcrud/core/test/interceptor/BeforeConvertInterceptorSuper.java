@@ -1,10 +1,7 @@
 package org.ddelizia.vcrud.core.test.interceptor;
 
-import com.mongodb.DBObject;
 import org.ddelizia.vcrud.core.interceptor.type.BeforeConvertInterceptor;
-import org.ddelizia.vcrud.core.interceptor.type.BeforeSaveInterceptor;
-import org.ddelizia.vcrud.core.test.InterceptorTests;
-import org.ddelizia.vcrud.core.test.model.Super;
+import org.ddelizia.vcrud.core.test.interceptor.model.Super;
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,6 +15,6 @@ public class BeforeConvertInterceptorSuper implements BeforeConvertInterceptor<S
 
     @Override
     public void onBeforeConvert(Super source) {
-        source.setCode(InterceptorTests.SUPER_VALUE);
+        //source.setCode(InterceptorTests.SUPER_VALUE);
     }
 }

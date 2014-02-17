@@ -1,7 +1,7 @@
 package org.ddelizia.vcrud.core.interceptor.util;
 
-import org.ddelizia.vcrud.basic.collections.map.MappingRegistryList;
-import org.ddelizia.vcrud.model.basic.VcrudItem;
+import org.ddelizia.vcrud.core.basic.collection.map.MappingRegistryList;
+import org.ddelizia.vcrud.core.basic.model.VcrudItem;
 
 /**
  * Created with IntelliJ IDEA.
