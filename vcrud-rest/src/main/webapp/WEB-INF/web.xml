@@ -3,16 +3,39 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee 
 	http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
-	<display-name>Spring MVC Application</display-name>
+    <display-name>Archetype Created Web Application</display-name>
 
     <servlet>
-		<servlet-name>mvc-dispatcher</servlet-name>
-		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <servlet-name>spring</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>/WEB-INF/spring-servlet.xml</param-value>
+        </init-param>
         <load-on-startup>1</load-on-startup>
-	</servlet>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>spring</servlet-name>
+        <url-pattern>/*</url-pattern>
+    </servlet-mapping>
 
-	<servlet-mapping>
-		<servlet-name>mvc-dispatcher</servlet-name>
-		<url-pattern>/</url-pattern>
-	</servlet-mapping>
+    <servlet>
+        <servlet-name>jersey-serlvet</servlet-name>
+        <servlet-class>com.sun.jersey.spi.spring.container.servlet.SpringServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>jersey-serlvet</servlet-name>
+        <url-pattern>/rest/*</url-pattern>
+    </servlet-mapping>
+
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    <listener>
+        <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+    </listener>
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath*:/META-INF/vcrudApplicationContext-*.xml</param-value>
+    </context-param>
 </web-app>
