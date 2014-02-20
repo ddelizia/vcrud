@@ -28,6 +28,7 @@
         <module>vcrud-core</module>
         <module>vcrud-agui</module>
         <module>vcrud-commons</module>
+        <module>vcrud-rest</module>
     </modules>
 
     <dependencies>
