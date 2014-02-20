@@ -16,7 +16,7 @@
             <bean class="org.ddelizia.vcrud.core.interceptor.util.InterceptorWrapper">
                 <property name="order" value="0"></property>
                 <property name="interceptor">
-                    <bean id="vcrudItemInterceptor" class="org.ddelizia.vcrud.core.test.interceptor.BeforeConvertInterceptorVcrudItem"/>
+                    <bean id="vcrudItemInterceptor" class="org.ddelizia.vcrud.core.test.interceptor.instances.BeforeConvertInterceptorVcrudItem"/>
                 </property>
             </bean>
         </property>

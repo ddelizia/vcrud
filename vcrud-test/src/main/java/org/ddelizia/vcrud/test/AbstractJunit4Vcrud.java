@@ -3,6 +3,7 @@ package org.ddelizia.vcrud.test;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -16,9 +17,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={
-        "classpath*:/META-INF/vcrudApplicationContext-*.xml",
-        "classpath:/META-INF/default-testContext.xml",
+        "classpath*:/META-INF/spring/vcrudApplicationContext-*.xml",
         "classpath*:/META-INF/vcrudApplicationContextTest-*.xml"})
+@ActiveProfiles(value = "test")
 public abstract class AbstractJunit4Vcrud {
 
     @Before

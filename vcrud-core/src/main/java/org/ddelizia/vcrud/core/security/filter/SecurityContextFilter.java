@@ -34,14 +34,13 @@ public class SecurityContextFilter implements ResourceFilter, ContainerRequestFi
 
     protected static final String HEADER_NONCE = "nonce";
 
+    @Autowired
     private AuthorizationService authorizationService;
 
-    @Autowired
     private AppConfig appConfig;
 
     @Autowired
     public SecurityContextFilter(UserRepository userRepository, UserService userService, AppConfig appConfig) {
-        delegateAuthorizationService(userRepository, userService, appConfig);
         this.appConfig = appConfig;
 
     }
@@ -72,20 +71,6 @@ public class SecurityContextFilter implements ResourceFilter, ContainerRequestFi
         return request;
     }
 
-    /**
-     * Specify the AuthorizationService that the application should use
-     *
-     * @param userRepository
-     * @param userService
-     * @param appConfig
-     */
-    private void delegateAuthorizationService(UserRepository userRepository, UserService userService, AppConfig appConfig) {
-        if(appConfig.getProperty(AppConfig.SECURITY_AUTHORIZATION_REQUIRE_SIGNED_REQUESTS, Boolean.class, null)) {
-            this.authorizationService = new RequestSigningAuthorizationService();
-        } else {
-            this.authorizationService = new SessionTokenAuthorizationService();
-        }
-    }
 
 
     public ContainerRequestFilter getRequestFilter() {

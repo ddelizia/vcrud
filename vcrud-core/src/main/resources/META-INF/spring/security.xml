@@ -15,4 +15,12 @@
 
     <mongo:repositories base-package="org.ddelizia.vcrud.core.security.repository"/>
 
+    <beans profile="default,dev">
+        <bean id="authorizationService" class="org.ddelizia.vcrud.core.security.service.impl.SessionTokenAuthorizationService"/>
+    </beans>
+    <beans profile="prod,test,uat">
+        <bean id="authorizationService" class="org.ddelizia.vcrud.core.security.service.impl.RequestSigningAuthorizationService"
+                init-method="initNonceCache"/>
+    </beans>
+
 </beans>

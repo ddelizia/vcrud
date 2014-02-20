@@ -40,6 +40,8 @@ public class AppConfig {
     public final static String USER_USERGROUP_AUTHENTICATED =                      "user.usergroup.authenticated";
     public final static String HASH_SALT =                                         "crypto.hash.salt";
     public final static String HASH_ITERATIONS =                                   "crypto.hash.iterations";
+    public final static String SOCIAL_FACEBOOK_CLIENT_ID =                         "facebook.clientId";
+    public final static String SOCIAL_FACEBOOK_CLIENT_SECRET =                     "facebook.clientSecret";
 
 
     @Autowired

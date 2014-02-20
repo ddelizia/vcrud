@@ -30,4 +30,5 @@ public interface SocialUserConnectionRepository extends MongoRepository<SocialUs
 
     public List<SocialUserConnection> findByUser (User user);
 
+
 }

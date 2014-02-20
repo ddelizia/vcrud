@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.core.query.Query;
  * Time: 17:05
  * To change this template use File | Settings | File Templates.
  */
-public class UserGroupRepositoryCustomImpl extends AbstractCustomRepository implements UserGroupRepositoryCustom{
+public class UserGroupRepositoryImpl extends AbstractCustomRepository implements UserGroupRepositoryCustom{
 
     @Override
     public boolean findUserBelongsToGroup(User user, UserGroup userGroup) {

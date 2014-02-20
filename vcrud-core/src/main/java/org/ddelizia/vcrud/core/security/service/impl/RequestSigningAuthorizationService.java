@@ -25,6 +25,7 @@ import org.springframework.security.core.token.Sha512DigestUtils;
 import org.springframework.security.crypto.codec.Base64;
 import org.springframework.util.Assert;
 
+import javax.annotation.PostConstruct;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -101,12 +102,10 @@ public class RequestSigningAuthorizationService extends AbstractService implemen
     @Autowired
     private ConverterUser2ExternalUser converterUser2ExternalUser;
 
-    @Autowired
     public RequestSigningAuthorizationService() {
-        initNonceCache();
     }
 
-    private void initNonceCache() {
+    public void initNonceCache() {
         nonceCache = CacheBuilder.newBuilder()
                 .maximumSize(NONCE_CACHE_SIZE)
                 .expireAfterWrite(appConfig.getProperty(AppConfig.SESSION_DATE_OFFSET_IN_MINUTES, Integer.class, null)
@@ -273,40 +272,20 @@ public class RequestSigningAuthorizationService extends AbstractService implemen
         }
     }
 
-    public SessionTokenRepository getSessionTokenRepository() {
-        return sessionTokenRepository;
-    }
-
-    public void setSessionTokenRepository(SessionTokenRepository sessionTokenRepository) {
-        this.sessionTokenRepository = sessionTokenRepository;
-    }
-
-    public UserRepository getUserRepository() {
-        return userRepository;
-    }
-
-    public AppConfig getAppConfig() {
-        return appConfig;
-    }
-
     public void setAppConfig(AppConfig appConfig) {
         this.appConfig = appConfig;
-    }
-
-    public UserService getUserService() {
-        return userService;
     }
 
     public void setUserService(UserService userService) {
         this.userService = userService;
     }
 
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public void setSessionTokenRepository(SessionTokenRepository sessionTokenRepository) {
+        this.sessionTokenRepository = sessionTokenRepository;
     }
 
-    public ConverterUser2ExternalUser getConverterUser2ExternalUser() {
-        return converterUser2ExternalUser;
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     public void setConverterUser2ExternalUser(ConverterUser2ExternalUser converterUser2ExternalUser) {

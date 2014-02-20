@@ -4,6 +4,7 @@ import org.ddelizia.vcrud.core.social.model.SocialUserConnection;
 import org.springframework.util.MultiValueMap;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,5 +18,7 @@ public interface SocialUserConnectionRepositoryCustom {
     public SocialUserConnection findByUserNameAndProviderIdMaxRank(String providerId, String providerUserId);
 
     public List<SocialUserConnection> findByUserNameInProviderUsers(String userId, MultiValueMap<String, String> providerUsers);
+
+    public Set<String> findUsersConnectedTo(String providerId, Set<String> providerUserIds);
 
 }

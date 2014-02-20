@@ -23,6 +23,7 @@ import org.springframework.social.connect.DuplicateConnectionException;
 import org.springframework.social.connect.NoSuchConnectionException;
 import org.springframework.social.connect.NotConnectedException;
 import org.springframework.social.connect.UserProfile;
+import org.springframework.stereotype.Repository;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
@@ -233,68 +234,6 @@ public class SocialConnectionRepository implements ConnectionRepository{
                         connectionKey.getProviderId(),
                         connectionKey.getProviderUserId())
         );
-    }
-
-    /**
-     * Find User with the Connection profile (providerId and providerUserId)
-     * If this is the first connection attempt there will be nor User so create one and
-     * persist the Connection information
-     * In reality there will only be one User associated with the Connection
-     *
-     * @param connection
-     * @return List of User Ids (see User.getUuid())
-     */
-    public List<String> findUserIdsWithConnection(Connection<?> connection) {
-        List<String> userIds = new ArrayList<String>();
-        ConnectionKey key = connection.getKey();
-        List<SocialUserConnection> users =
-                socialUserConnectionRepository.findByProviderIdAndProviderUserId
-                        (key.getProviderId(), key.getProviderUserId());
-        if (!users.isEmpty()) {
-            for (SocialUserConnection user : users) {
-                userIds.add(user.getUser().getName());
-            }
-            return userIds;
-        }
-
-        User user = findUserFromSocialProfile(connection);
-        String userId;
-        UserGroup socialUserGroup = userGroupRepository.findByGroupName(
-                appConfig.getProperty(
-                        AppConfig.USER_USERGROUP_SOCIAL,
-                        String.class,
-                        null
-                )
-        );
-        if(user == null) {
-            userId = userService.createCustomerInGroup(socialUserGroup).getId();
-        } else {
-            userId = user.getName();
-        }
-        //persist the Connection
-        createConnectionRepository(userId).addConnection(connection);
-        userIds.add(userId);
-        return userIds;
-    }
-
-    public ConnectionRepository createConnectionRepository(String userId) {
-        if (userId == null) {
-            throw new IllegalArgumentException("userId cannot be null");
-        }
-        User user = userRepository.findByName(userId);
-        if(user == null) {
-            throw new IllegalArgumentException("User not Found");
-        }
-        return new SocialConnectionRepository(userId, connectionFactoryLocator, textEncryptor);
-    }
-
-    private User findUserFromSocialProfile(Connection connection) {
-        User user = null;
-        UserProfile profile = connection.fetchUserProfile();
-        if(profile != null && StringUtils.hasText(profile.getEmail())) {
-            user = userRepository.findByEmail(profile.getEmail());
-        }
-        return user;
     }
 
 

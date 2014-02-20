@@ -72,16 +72,8 @@ public class UserGroupServiceImpl implements UserGroupService{
     }
 
 
-    public UserGroupRepository getUserGroupRepository() {
-        return userGroupRepository;
-    }
-
     public void setUserGroupRepository(UserGroupRepository userGroupRepository) {
         this.userGroupRepository = userGroupRepository;
-    }
-
-    public AppConfig getAppConfig() {
-        return appConfig;
     }
 
     public void setAppConfig(AppConfig appConfig) {

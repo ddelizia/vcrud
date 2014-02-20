@@ -12,7 +12,10 @@
             http://www.springframework.org/schema/data/mongo/spring-mongo-1.3.xsd">
 
     <context:component-scan base-package="org.ddelizia.vcrud.core.usermanagement.service"/>
+    <context:component-scan base-package="org.ddelizia.vcrud.core.usermanagement.repository.custom"/>
 
-    <mongo:repositories base-package="org.ddelizia.vcrud.core.usermanagement.repository"/>
+    <mongo:repositories
+            base-package="org.ddelizia.vcrud.core.usermanagement.repository"
+            mongo-template-ref="mongoTemplate"/>
 
 </beans>

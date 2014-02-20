@@ -15,8 +15,6 @@ import java.util.List;
  */
 public interface VerificationTokenRepository extends MongoRepository<VerificationToken, String>{
 
-    public VerificationToken findByUuid(String uuid);
-
     public VerificationToken findByToken(String token);
 
     public List<VerificationToken> findByUser(User user);

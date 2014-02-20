@@ -3,16 +3,46 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:mongo="http://www.springframework.org/schema/data/mongo"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-            http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+            http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
             http://www.springframework.org/schema/context
-            http://www.springframework.org/schema/context/spring-context-3.1.xsd
+            http://www.springframework.org/schema/context/spring-context-3.2.xsd
+            http://www.springframework.org/schema/aop
+            http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
             http://www.springframework.org/schema/data/mongo
             http://www.springframework.org/schema/data/mongo/spring-mongo-1.3.xsd">
 
     <context:component-scan base-package="org.ddelizia.vcrud.core.social"/>
 
     <mongo:repositories base-package="org.ddelizia.vcrud.core.social.repository"/>
+
+    <!-- Social Configuration -->
+    <bean id="connectionFactoryLocator" class="org.springframework.social.connect.support.ConnectionFactoryRegistry">
+        <property name="connectionFactories">
+            <list>
+                <ref bean="facebookConnectionFactory"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="facebookConnectionFactory" class="org.springframework.social.facebook.connect.FacebookConnectionFactory">
+        <constructor-arg value="${facebook.clientId}" />
+        <constructor-arg value="${facebook.clientSecret}" />
+    </bean>
+
+    <bean id="usersConnectionRepository" class="org.ddelizia.vcrud.core.social.repository.SocialUsersConnectionRepository">
+        <constructor-arg ref="connectionFactoryLocator" />
+        <constructor-arg ref="textEncryptor" />
+    </bean>
+
+    <bean id="connectionRepository" factory-method="createConnectionRepository" factory-bean="usersConnectionRepository" scope="prototype">
+        <constructor-arg value="#{session.getAttribute('userSocial')}" />
+        <aop:scoped-proxy proxy-target-class="false"/>
+    </bean>
+
+    <bean id="textEncryptor" class="org.springframework.security.crypto.encrypt.Encryptors" factory-method="noOpText" />
+    <!-- END Social Configuration -->
 
 </beans>

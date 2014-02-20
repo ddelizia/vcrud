@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.util.MultiValueMap;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,7 +17,7 @@ import java.util.List;
  * Time: 12:23
  * To change this template use File | Settings | File Templates.
  */
-public class SocialUserConnectionRepositoryCustomImpl extends AbstractCustomRepository implements SocialUserConnectionRepositoryCustom{
+public class SocialUserConnectionRepositoryImpl extends AbstractCustomRepository implements SocialUserConnectionRepositoryCustom{
 
     private Class<SocialUserConnection> clazz = SocialUserConnection.class;
 
@@ -32,4 +33,12 @@ public class SocialUserConnectionRepositoryCustomImpl extends AbstractCustomRepo
     public List<SocialUserConnection> findByUserNameInProviderUsers(String userId, MultiValueMap<String, String> providerUsers) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
+
+    //TODO implementing this method
+    @Override
+    public Set<String> findUsersConnectedTo(String providerId, Set<String> providerUserIds) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+
 }

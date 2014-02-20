@@ -11,6 +11,7 @@ import org.ddelizia.vcrud.core.usermanagement.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import java.util.HashSet;
  * @author ddelizia
  * @since 16/02/14 12:30
  */
+@Component
 public class ConverterUser2ExternalUser implements Converter<User, ExternalUser>{
 
     private static final Logger LOGGER = Logger.getLogger(ConverterUser2ExternalUser.class);

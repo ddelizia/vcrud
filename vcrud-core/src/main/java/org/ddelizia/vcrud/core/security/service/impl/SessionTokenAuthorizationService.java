@@ -35,8 +35,8 @@ public class SessionTokenAuthorizationService implements AuthorizationService {
     @Autowired
     private ConverterUser2ExternalUser converterUser2ExternalUser;
 
-    @Autowired
     public SessionTokenAuthorizationService() {
+        System.out.print("");
     }
 
     public ExternalUser authorize(AuthorizationRequestContext securityContext) {

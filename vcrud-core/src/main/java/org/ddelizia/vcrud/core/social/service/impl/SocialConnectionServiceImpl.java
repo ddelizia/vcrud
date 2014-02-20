@@ -4,6 +4,7 @@ import org.ddelizia.vcrud.commons.AuthenticatedUserToken;
 import org.ddelizia.vcrud.core.config.AppConfig;
 import org.ddelizia.vcrud.core.security.model.SessionToken;
 import org.ddelizia.vcrud.core.security.repository.SessionTokenRepository;
+import org.ddelizia.vcrud.core.social.repository.SocialUsersConnectionRepository;
 import org.ddelizia.vcrud.core.usermanagement.repository.UserRepository;
 import org.ddelizia.vcrud.core.security.exception.AuthenticationException;
 import org.ddelizia.vcrud.core.social.repository.SocialConnectionRepository;
@@ -30,7 +31,7 @@ import java.util.List;
 public class SocialConnectionServiceImpl implements SocialConnectionService{
 
     @Autowired
-    private SocialConnectionRepository socialConnectionRepository;
+    private SocialUsersConnectionRepository socialUsersConnectionRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -42,10 +43,12 @@ public class SocialConnectionServiceImpl implements SocialConnectionService{
     @Autowired
     private SessionTokenRepository sessionTokenRepository;
 
+
+
     @Override
     public AuthenticatedUserToken socialLogin(Connection<?> connection) {
         List<String> userUuids =
-                socialConnectionRepository.findUserIdsWithConnection(connection);
+                socialUsersConnectionRepository.findUserIdsWithConnection(connection);
         if(userUuids.size() == 0) {
             throw new AuthenticationException();
         }
@@ -75,20 +78,7 @@ public class SocialConnectionServiceImpl implements SocialConnectionService{
         userRepository.save(user);
     }
 
-
-    public void setSocialConnectionRepository(SocialConnectionRepository socialConnectionRepository) {
-        this.socialConnectionRepository = socialConnectionRepository;
-    }
-
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
-
-    public void setSessionTokenRepository(SessionTokenRepository sessionTokenRepository) {
-        this.sessionTokenRepository = sessionTokenRepository;
+    public void setSocialUsersConnectionRepository(SocialUsersConnectionRepository socialUsersConnectionRepository) {
+        this.socialUsersConnectionRepository = socialUsersConnectionRepository;
     }
 }

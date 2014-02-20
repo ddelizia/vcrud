@@ -7,6 +7,7 @@ import org.ddelizia.vcrud.core.mail.service.EmailService;
 import org.ddelizia.vcrud.core.security.service.AuthenticationEmailSenderService;
 import org.ddelizia.vcrud.core.security.service.converter.ConverterEmailServiceTokenData2EmailDetail;
 import org.ddelizia.vcrud.core.security.service.data.EmailServiceTokenData;
+import org.hibernate.validator.constraints.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ import java.util.Map;
 public class AuthenticationEmailSenderServiceImpl extends AbstractEmailSenderService implements AuthenticationEmailSenderService{
 
     @Autowired
-    @Qualifier(AuthenticationEmailSenderService.DEFAULT_BEAN_NAME)
+    @Qualifier(EmailService.DEFAULT_BEAN_NAME)
     private EmailService emailService;
 
     @Autowired
