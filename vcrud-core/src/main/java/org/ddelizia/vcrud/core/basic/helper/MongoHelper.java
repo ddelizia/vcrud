@@ -4,6 +4,7 @@ import com.mongodb.BasicDBObject;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowire;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.io.IOException;
@@ -17,7 +18,7 @@ public class MongoHelper {
 
     private static final Logger LOGGER = Logger.getLogger(MongoHelper.class);
 
-    @Autowire
+    @Autowired
     private MongoTemplate mongoTemplate;
 
     /**
