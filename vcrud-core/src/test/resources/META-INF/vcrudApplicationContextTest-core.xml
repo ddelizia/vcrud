@@ -8,6 +8,6 @@
     http://www.springframework.org/schema/data/mongo
     http://www.springframework.org/schema/data/mongo/spring-mongo-1.3.xsd">
 
-
+    <bean id="dataFactory" class="org.ddelizia.vcrud.core.test.util.UserManagmentDataFactory"/>
 
 </beans>

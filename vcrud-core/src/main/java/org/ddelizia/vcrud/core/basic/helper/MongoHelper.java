@@ -3,9 +3,11 @@ package org.ddelizia.vcrud.core.basic.helper;
 import com.mongodb.BasicDBObject;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+import org.ddelizia.vcrud.core.basic.model.VcrudItem;
 import org.springframework.beans.factory.annotation.Autowire;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Query;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -38,6 +40,10 @@ public class MongoHelper {
             LOGGER.error("Cannot load file for executing mongo command");
             e.printStackTrace();
         }
+    }
+
+    public void removeAllDataFromCollection(Class<? extends VcrudItem> collectionClass){
+        mongoTemplate.remove(new Query(), collectionClass);
     }
 
     public void setMongoTemplate(MongoTemplate mongoTemplate) {

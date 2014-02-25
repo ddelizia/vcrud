@@ -19,7 +19,7 @@ import java.util.Set;
 public class UserGroup extends VcrudPrincipalGroup {
 
     @DBRef
-    private Set<UserGroup> childs = new HashSet<>();
+    private Set<UserGroup> childs;
 
     @DBRef
     private UserGroup father;

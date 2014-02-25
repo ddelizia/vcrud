@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Entity;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -29,7 +30,7 @@ public abstract class User extends VcrudPrincipal {
     private String lastName;
 
     @DBRef
-    private List<UserGroup> userGroups;
+    private Set<UserGroup> userGroups;
 
     private DateTime expireDate;
 
@@ -39,11 +40,11 @@ public abstract class User extends VcrudPrincipal {
 
     private Boolean enabled = false;
 
-    public List<UserGroup> getUserGroups() {
+    public Set<UserGroup> getUserGroups() {
         return userGroups;
     }
 
-    public void setUserGroups(List<UserGroup> userGroups) {
+    public void setUserGroups(Set<UserGroup> userGroups) {
         this.userGroups = userGroups;
     }
 

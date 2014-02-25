@@ -10,6 +10,8 @@
 
     <bean id="validatorFactory" class="javax.validation.Validation" factory-method="buildDefaultValidatorFactory"/>
     <bean id="validator" factory-bean="validatorFactory" factory-method="getValidator"/>
+
+    <bean id="mongoHelper" class="org.ddelizia.vcrud.core.basic.helper.MongoHelper"/>
     
     <context:component-scan base-package="org.ddelizia.vcrud.core.basic.repository"/>
 

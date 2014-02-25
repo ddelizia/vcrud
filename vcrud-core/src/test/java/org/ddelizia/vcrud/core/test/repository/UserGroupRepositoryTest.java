@@ -5,6 +5,7 @@ import org.ddelizia.vcrud.core.basic.helper.MongoHelper;
 import org.ddelizia.vcrud.core.config.AppConfig;
 import org.ddelizia.vcrud.core.test.util.UserManagmentDataFactory;
 import org.ddelizia.vcrud.core.usermanagement.model.User;
+import org.ddelizia.vcrud.core.usermanagement.model.UserGroup;
 import org.ddelizia.vcrud.core.usermanagement.repository.UserGroupRepository;
 import org.ddelizia.vcrud.core.usermanagement.repository.UserRepository;
 import org.ddelizia.vcrud.test.AbstractJunit4Vcrud;
@@ -14,10 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 /**
- * @author ddelizia
- * @since 18/02/14 12:33
+ * Created with IntelliJ IDEA.
+ * User: ddelizia
+ * Date: 24/02/14
+ * Time: 22:02
+ * To change this template use File | Settings | File Templates.
  */
-public class UserRepositoryTest extends AbstractJunit4Vcrud{
+public class UserGroupRepositoryTest extends AbstractJunit4Vcrud {
 
     private static final Logger LOGGER = Logger.getLogger(UserRepositoryTest.class);
 
@@ -25,20 +29,21 @@ public class UserRepositoryTest extends AbstractJunit4Vcrud{
     private UserRepository userRepository;
 
     @Autowired
+    private UserGroupRepository userGroupRepository;
+
+    @Autowired
     private UserManagmentDataFactory userManagmentDataFactory;
 
-    @Test
-    public void findByName(){
-        User user = userRepository.findByName(UserManagmentDataFactory.CUSTOMER_VERIFIED_RESTGROUP_NAME);
-        Assert.assertNotNull(user);
-        Assert.assertEquals(user.getName(), UserManagmentDataFactory.CUSTOMER_VERIFIED_RESTGROUP_NAME);
-    }
+    @Autowired
+    private AppConfig appConfig;
 
     @Test
-    public void findByEmail (){
-        User user = userRepository.findByEmail(UserManagmentDataFactory.CUSTOMER_VERIFIED_RESTGROUP_EMAIL);
-        Assert.assertNotNull(user);
-        Assert.assertEquals(user.getEmail(), UserManagmentDataFactory.CUSTOMER_VERIFIED_RESTGROUP_EMAIL);
+    public void findByGroupName(){
+        UserGroup userGroup = userGroupRepository.findByGroupName(
+                appConfig.getProperty(AppConfig.USER_USERGROUP_AUTHENTICATED, String.class, null)
+            );
+        Assert.assertNotNull(userGroup);
+        Assert.assertEquals(userGroup.getName(), AppConfig.USER_USERGROUP_AUTHENTICATED);
     }
 
     /**
