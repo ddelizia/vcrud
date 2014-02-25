@@ -39,11 +39,12 @@ public class UserGroupRepositoryTest extends AbstractJunit4Vcrud {
 
     @Test
     public void findByGroupName(){
+        String roleAuth = appConfig.getProperty(AppConfig.USER_USERGROUP_AUTHENTICATED, String.class, null);
         UserGroup userGroup = userGroupRepository.findByGroupName(
-                appConfig.getProperty(AppConfig.USER_USERGROUP_AUTHENTICATED, String.class, null)
+                roleAuth
             );
         Assert.assertNotNull(userGroup);
-        Assert.assertEquals(userGroup.getName(), AppConfig.USER_USERGROUP_AUTHENTICATED);
+        Assert.assertEquals(userGroup.getGroupName(), roleAuth);
     }
 
     /**

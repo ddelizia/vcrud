@@ -52,7 +52,7 @@ public class UserManagmentDataFactory {
 
         UserGroup userGroupAuthenticatedUpdate = userGroupRepository.findOne(userGroupAuthenticated.getId());
         userGroupAuthenticatedUpdate.setChilds(Sets.newHashSet(userGroupRest));
-        userGroupRepository.save(userGroupAuthenticatedUpdate);
+        //userGroupRepository.save(userGroupAuthenticatedUpdate);
 
         User customerVerifiedRestGroup = new Customer();
         customerVerifiedRestGroup.setAccountLocked(false);
