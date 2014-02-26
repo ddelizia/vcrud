@@ -213,7 +213,7 @@ public class AuthenticationServiceImpl extends AbstractService implements Authen
         if (userIdentifier!=null) {
             user = userRepository.findOne(userIdentifier);
         }
-        if (userIdentifier!=null){
+        if (userIdentifier!=null && user==null){
             user = userRepository.findByEmail(userIdentifier);
         }
         if (user == null) {

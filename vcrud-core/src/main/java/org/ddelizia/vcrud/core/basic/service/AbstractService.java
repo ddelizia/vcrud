@@ -41,4 +41,8 @@ public class AbstractService {
     public void setGenericRepository(GenericRepository genericRepository) {
         this.genericRepository = genericRepository;
     }
+
+    public void setValidator(Validator validator) {
+        this.validator = validator;
+    }
 }

@@ -154,4 +154,8 @@ public class UserServiceImpl extends AbstractService implements UserService {
     public void setUserGroupService(UserGroupService userGroupService) {
         this.userGroupService = userGroupService;
     }
+
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 }
