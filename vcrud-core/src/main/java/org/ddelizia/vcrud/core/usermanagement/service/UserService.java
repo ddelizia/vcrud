@@ -1,5 +1,10 @@
 package org.ddelizia.vcrud.core.usermanagement.service;
 
+import org.ddelizia.vcrud.commons.AuthenticatedUserToken;
+import org.ddelizia.vcrud.commons.ExternalUser;
+import org.ddelizia.vcrud.commons.client.CreateUserRequest;
+import org.ddelizia.vcrud.commons.client.LoginRequest;
+import org.ddelizia.vcrud.commons.client.UpdateUserRequest;
 import org.ddelizia.vcrud.core.usermanagement.model.Customer;
 import org.ddelizia.vcrud.core.usermanagement.model.User;
 import org.ddelizia.vcrud.core.usermanagement.model.UserGroup;
@@ -44,5 +49,65 @@ public interface UserService {
     public User assignGroupToUser (String groupName, String userId);
 
     public void verifyUser(User user);
+
+    /**
+     * Create a new User with the given role
+     *
+     * @param request
+     * @param userGroup
+     * @return AuthenticatedUserToken
+     */
+    public AuthenticatedUserToken createUser(CreateUserRequest request, UserGroup userGroup);
+
+
+    /**
+     * Create a Default User with a given role
+     *
+     * @param userGroup
+     * @return AuthenticatedUserToken
+     */
+    public AuthenticatedUserToken createCustomer(UserGroup userGroup);
+
+    /**
+     * Login a User
+     *
+     * @param request
+     * @return AuthenticatedUserToken
+     */
+    public AuthenticatedUserToken login(LoginRequest request);
+
+    /**
+     * Get a User based on a unique identifier
+     *
+     * Identifiers supported are uuid, emailAddress
+     *
+     * @param userIdentifier
+     * @return  User
+     */
+    public ExternalUser getUser(ExternalUser requestingUser, String userIdentifier);
+
+    /**
+     * Delete user, only authenticated user accounts can be deleted
+     *
+     * @param userMakingRequest the user authorized to delete the user
+     * @param userId the id of the user to delete
+     */
+    public void deleteUser(ExternalUser userMakingRequest, String userId);
+
+    /**
+     * Save User
+     *
+     * @param userId
+     * @param request
+     */
+    public ExternalUser saveUser(String userId, UpdateUserRequest request);
+
+    /**
+     * Delete all SessionToken objects that have not been accessed within the duration specified by the argument timeSinceLastUpdatedInMinutes
+     *
+     * @param timeSinceLastUpdatedInMinutes
+     * @return the number of sessions removed
+     */
+    public Integer deleteExpiredSessions(int timeSinceLastUpdatedInMinutes);
 
 }

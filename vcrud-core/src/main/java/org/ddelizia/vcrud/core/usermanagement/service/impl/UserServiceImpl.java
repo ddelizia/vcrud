@@ -1,7 +1,15 @@
 package org.ddelizia.vcrud.core.usermanagement.service.impl;
 
+import org.ddelizia.vcrud.commons.AuthenticatedUserToken;
+import org.ddelizia.vcrud.commons.ExternalUser;
+import org.ddelizia.vcrud.commons.client.CreateUserRequest;
+import org.ddelizia.vcrud.commons.client.LoginRequest;
 import org.ddelizia.vcrud.core.basic.service.AbstractService;
 import org.ddelizia.vcrud.core.config.AppConfig;
+import org.ddelizia.vcrud.core.security.exception.AuthenticationException;
+import org.ddelizia.vcrud.core.security.exception.AuthorizationException;
+import org.ddelizia.vcrud.core.security.service.CryptoService;
+import org.ddelizia.vcrud.core.usermanagement.exception.DuplicateUserException;
 import org.ddelizia.vcrud.core.usermanagement.model.Customer;
 import org.ddelizia.vcrud.core.usermanagement.model.User;
 import org.ddelizia.vcrud.core.usermanagement.model.UserGroup;
@@ -35,6 +43,10 @@ public class UserServiceImpl extends AbstractService implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    @Qualifier(CryptoService.DEFAULT_BEAN_NAME)
+    private CryptoService cryptoService;
 
     @Override
     public boolean isRestUser(User user) {
@@ -147,6 +159,62 @@ public class UserServiceImpl extends AbstractService implements UserService {
         userRepository.save(user);
     }
 
+    @Override
+    public AuthenticatedUserToken createUser(CreateUserRequest request, UserGroup userGroup) {
+        validate(request);
+        User searchedForUser = userRepository.findByEmail(request.getUser().getEmailAddress());
+        if (searchedForUser != null) {
+            throw new DuplicateUserException();
+        }
+
+        User newUser = createNewUser(request, userGroup);
+        AuthenticatedUserToken token = new AuthenticatedUserToken(newUser.getId().toString(), newUser.addSessionToken().getToken());
+        userRepository.save(newUser);
+        return token;
+    }
+
+    @Override
+    public AuthenticatedUserToken createCustomer(UserGroup userGroup) {
+        User user = createCustomerInGroup(userGroup);
+        AuthenticatedUserToken token = new AuthenticatedUserToken(user.getId().toString(), user.addSessionToken().getToken());
+        userRepository.save(user);
+        return token;
+    }
+
+    @Override
+    public AuthenticatedUserToken login(LoginRequest request) {
+        validate(request);
+        User user = null;
+        user = userRepository.findByEmail(request.getUsername());
+        if (user == null) {
+            throw new AuthenticationException();
+        }
+        String hashedPassword = null;
+        try {
+            hashedPassword = cryptoService.hashPassword(
+                    request.getPassword(),
+                    user);
+        } catch (Exception e) {
+            throw new AuthenticationException();
+        }
+        if (hashedPassword.equals(user.getPassword())) {
+            return new AuthenticatedUserToken(user.getId(), user.addSessionToken().getToken());
+        } else {
+            throw new AuthenticationException();
+        }
+    }
+
+    @Override
+    public ExternalUser getUser(ExternalUser requestingUser, String userIdentifier) {
+        Assert.notNull(requestingUser);
+        Assert.notNull(userIdentifier);
+        User user = ensureUserIsLoaded(userIdentifier);
+        if(!requestingUser.getId().equals(user.getId()) && !requestingUser.getRole().equalsIgnoreCase(Role.administrator.toString()))  {
+            throw new AuthorizationException("User not authorized to load profile");
+        }
+        return new ExternalUser(user);
+    }
+
     public void setUserGroupRepository(UserGroupRepository userGroupRepository) {
         this.userGroupRepository = userGroupRepository;
     }
@@ -157,5 +225,9 @@ public class UserServiceImpl extends AbstractService implements UserService {
 
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    public void setCryptoService(CryptoService cryptoService) {
+        this.cryptoService = cryptoService;
     }
 }

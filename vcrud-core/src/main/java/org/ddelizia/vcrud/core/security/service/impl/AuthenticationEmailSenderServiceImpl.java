@@ -38,7 +38,7 @@ public class AuthenticationEmailSenderServiceImpl extends AbstractEmailSenderSer
 
 
     @Override
-        public EmailServiceTokenData sendVerificationEmail(EmailServiceTokenData emailServiceTokenModel) {
+    public EmailServiceTokenData sendVerificationEmail(EmailServiceTokenData emailServiceTokenModel) {
         Map<String, String> resources = new HashMap<>();
         EmailDetail emailDetail = converterEmailServiceTokenData2EmailDetail.convert(emailServiceTokenModel);
         emailDetail.setSubject(appConfig.getProperty(
@@ -47,7 +47,7 @@ public class AuthenticationEmailSenderServiceImpl extends AbstractEmailSenderSer
         emailService.sendEmail(
                 emailDetail,
                 emailServiceTokenModel,
-                "META-INF/velocity/VerifyEmail.vm",
+                "META-INF/email/template/authentication/VerifyEmail.vm",
                 resources);
         return emailServiceTokenModel;
     }
@@ -62,7 +62,7 @@ public class AuthenticationEmailSenderServiceImpl extends AbstractEmailSenderSer
         emailService.sendEmail(
                 emailDetail,
                 emailServiceTokenModel,
-                "META-INF/velocity/RegistrationEmail.vm",
+                "META-INF/email/template/authentication/RegistrationEmail.vm",
                 resources);
         return emailServiceTokenModel;
     }
@@ -77,7 +77,7 @@ public class AuthenticationEmailSenderServiceImpl extends AbstractEmailSenderSer
         emailService.sendEmail(
                 emailDetail,
                 emailServiceTokenModel,
-                "META-INF/velocity/LostPasswordEmail.vm",
+                "META-INF/email/template/authentication/LostPasswordEmail.vm",
                 resources);
         return emailServiceTokenModel;
     }

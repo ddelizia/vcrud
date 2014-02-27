@@ -24,7 +24,7 @@
     </beans>
 
     <beans profile="uat,prod">
-        <bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <bean id="MailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
             <!-- Email provider here-->
             <property name="host" value=""/>
             <property name="port" value=""/>
