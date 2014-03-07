@@ -19,18 +19,10 @@ import java.util.Set;
 public class UserGroup extends VcrudPrincipalGroup {
 
     @DBRef
-    private Set<UserGroup> childs;
-
-    @DBRef
     private UserGroup father;
 
-    public Set<UserGroup> getChilds() {
-        return childs;
-    }
-
-    public void setChilds(Set<UserGroup> childs) {
-        this.childs = childs;
-    }
+    @DBRef
+    private Set<UserGroup> anchestors = new HashSet<>();
 
     public UserGroup getFather() {
         return father;
@@ -38,5 +30,13 @@ public class UserGroup extends VcrudPrincipalGroup {
 
     public void setFather(UserGroup father) {
         this.father = father;
+    }
+
+    public Set<UserGroup> getAnchestors() {
+        return anchestors;
+    }
+
+    public void setAnchestors(Set<UserGroup> anchestors) {
+        this.anchestors = anchestors;
     }
 }

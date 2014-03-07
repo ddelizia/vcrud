@@ -3,6 +3,7 @@ package org.ddelizia.vcrud.core.usermanagement.repository.custom.impl;
 import org.ddelizia.vcrud.core.basic.repository.AbstractCustomRepository;
 import org.ddelizia.vcrud.core.usermanagement.model.User;
 import org.ddelizia.vcrud.core.usermanagement.model.UserGroup;
+import org.ddelizia.vcrud.core.usermanagement.model.UserGroup_;
 import org.ddelizia.vcrud.core.usermanagement.repository.custom.UserGroupRepositoryCustom;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -19,9 +20,8 @@ public class UserGroupRepositoryImpl extends AbstractCustomRepository implements
     @Override
     public boolean findUserBelongsToGroup(User user, UserGroup userGroup) {
         User u = getMongoTemplate().findOne(Query.query(
-                Criteria.where("id").is(user.getId()).and("userGroups").elemMatch(
-                        Criteria.where("id").is(userGroup.getId())
-                )
+                Criteria.where(UserGroup_.anchestors.getName()).in(userGroup)
+
         ), User.class);
 
         return u!=null;

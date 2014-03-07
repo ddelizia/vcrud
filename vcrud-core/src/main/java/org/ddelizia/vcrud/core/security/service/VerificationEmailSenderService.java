@@ -9,7 +9,7 @@ import org.ddelizia.vcrud.core.security.service.data.EmailServiceTokenData;
  * Time: 18:33
  * To change this template use File | Settings | File Templates.
  */
-public interface AuthenticationEmailSenderService {
+public interface VerificationEmailSenderService {
 
     public static final String DEFAULT_BEAN_NAME = "defaultAuthenticationEmailSenderService";
 

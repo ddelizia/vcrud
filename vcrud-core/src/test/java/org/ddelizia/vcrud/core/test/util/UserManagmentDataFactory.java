@@ -11,6 +11,9 @@ import org.ddelizia.vcrud.core.usermanagement.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Created with IntelliJ IDEA.
  * User: ddelizia
@@ -30,31 +33,45 @@ public class UserManagmentDataFactory {
     private AppConfig appConfig;
 
     @Autowired
-    private MongoTemplate mongoTemplate;
-
-    @Autowired
     private MongoHelper mongoHelper;
 
-    public static final String CUSTOMER_VERIFIED_RESTGROUP_NAME = "customerName";
-    public static final String CUSTOMER_VERIFIED_RESTGROUP_EMAIL = "email@example.com";
+    public static final String CUSTOMER_VERIFIED_RESTGROUP_NAME = "customer_verified_restgroup_name";
+    public static final String CUSTOMER_VERIFIED_RESTGROUP_EMAIL = "customer_verified_restgroup@example.com";
+
+	public static final String CUSTOMER_SIMPLE_NAME = "customer_simple_name";
+	public static final String CUSTOMER_SIMPLE_EMAIL = "customer_simple@example.com";
+
+    public static final String USERGROUP_LAST_NAME = "ROLE_LAST";
+
+	private UserGroup userGroupAuthenticated;
+	private UserGroup userGroupRest;
+	private UserGroup userGroupChildOfRest;
+
+	private Customer customerVerifiedRestGroup;
+	private Customer customerSimple;
 
     public void createData(){
-        UserGroup userGroupAuthenticated = new UserGroup();
+	    userGroupAuthenticated = new UserGroup();
         userGroupAuthenticated.setGroupName(appConfig.getProperty(AppConfig.USER_USERGROUP_AUTHENTICATED, String.class, null));
         userGroupAuthenticated.setName(appConfig.getProperty(AppConfig.USER_USERGROUP_AUTHENTICATED, String.class, null));
         userGroupRepository.save(userGroupAuthenticated);
 
-        UserGroup userGroupRest = new UserGroup();
+        userGroupRest = new UserGroup();
         userGroupRest.setGroupName(appConfig.getProperty(AppConfig.USER_USERGROUP_REST, String.class, null));
         userGroupRest.setName(appConfig.getProperty(AppConfig.USER_USERGROUP_REST, String.class, null));
         userGroupRest.setFather(userGroupAuthenticated);
         userGroupRepository.save(userGroupRest);
 
-        UserGroup userGroupAuthenticatedUpdate = userGroupRepository.findOne(userGroupAuthenticated.getId());
-        userGroupAuthenticatedUpdate.setChilds(Sets.newHashSet(userGroupRest));
-        //userGroupRepository.save(userGroupAuthenticatedUpdate);
+	    userGroupChildOfRest = new UserGroup();
+	    userGroupChildOfRest.setGroupName(USERGROUP_LAST_NAME);
+	    userGroupChildOfRest.setName(USERGROUP_LAST_NAME);
+	    userGroupChildOfRest.setFather(userGroupRest);
+        Set<UserGroup> set = new HashSet<>(userGroupRest.getAnchestors());
+        set.add(userGroupRest.getFather());
+	    userGroupChildOfRest.setAnchestors(set);
+        userGroupRepository.save(userGroupChildOfRest);
 
-        User customerVerifiedRestGroup = new Customer();
+        customerVerifiedRestGroup = new Customer();
         customerVerifiedRestGroup.setAccountLocked(false);
         customerVerifiedRestGroup.setCredentialsExpireTime(null);
         customerVerifiedRestGroup.setEmail(CUSTOMER_VERIFIED_RESTGROUP_EMAIL);
@@ -67,7 +84,22 @@ public class UserManagmentDataFactory {
         customerVerifiedRestGroup.setName(CUSTOMER_VERIFIED_RESTGROUP_NAME);
         customerVerifiedRestGroup.setUserGroups(Sets.newHashSet(userGroupRest));
         userRepository.save(customerVerifiedRestGroup);
+
+	    customerSimple = new Customer();
+	    customerSimple.setName(CUSTOMER_SIMPLE_NAME);
+	    customerSimple.setEmail(CUSTOMER_SIMPLE_EMAIL);
+	    userRepository.save(customerSimple);
+
+
     }
+
+	public Customer createBasicCustomerNotSaved(String username, String password, UserGroup userGroup){
+		Customer customer = new Customer();
+		customer.setName(username);
+		customer.setPassword(password);
+		customer.setUserGroups(Sets.newHashSet(userGroup));
+		return customer;
+	}
 
     public void removeData(){
         mongoHelper.removeAllDataFromCollection(User.class);
@@ -81,4 +113,24 @@ public class UserManagmentDataFactory {
     public void setAppConfig(AppConfig appConfig) {
         this.appConfig = appConfig;
     }
+
+	public UserGroup getUserGroupAuthenticated() {
+		return userGroupAuthenticated;
+	}
+
+	public UserGroup getUserGroupRest() {
+		return userGroupRest;
+	}
+
+	public UserGroup getUserGroupChildOfRest() {
+		return userGroupChildOfRest;
+	}
+
+	public Customer getCustomerVerifiedRestGroup() {
+		return customerVerifiedRestGroup;
+	}
+
+	public Customer getCustomerSimple() {
+		return customerSimple;
+	}
 }

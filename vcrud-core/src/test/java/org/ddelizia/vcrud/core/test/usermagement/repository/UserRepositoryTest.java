@@ -1,17 +1,13 @@
-package org.ddelizia.vcrud.core.test.repository;
+package org.ddelizia.vcrud.core.test.usermagement.repository;
 
 import org.apache.log4j.Logger;
-import org.ddelizia.vcrud.core.basic.helper.MongoHelper;
-import org.ddelizia.vcrud.core.config.AppConfig;
 import org.ddelizia.vcrud.core.test.util.UserManagmentDataFactory;
 import org.ddelizia.vcrud.core.usermanagement.model.User;
-import org.ddelizia.vcrud.core.usermanagement.repository.UserGroupRepository;
 import org.ddelizia.vcrud.core.usermanagement.repository.UserRepository;
 import org.ddelizia.vcrud.test.AbstractJunit4Vcrud;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 
 /**
  * @author ddelizia

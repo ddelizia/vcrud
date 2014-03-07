@@ -51,11 +51,6 @@ public class UserGroupServiceImpl implements UserGroupService{
         group.setFather(father);
         userGroupRepository.save(group);
 
-        father.getChilds().add(group);
-        userGroupRepository.save(father);
-
-        userGroupRepository.save(group);
-
         return group;
     }
 

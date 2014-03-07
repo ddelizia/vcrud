@@ -4,6 +4,9 @@ import org.ddelizia.vcrud.core.usermanagement.model.UserGroup;
 import org.ddelizia.vcrud.core.usermanagement.repository.custom.UserGroupRepositoryCustom;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
+import java.util.List;
+import java.util.Set;
+
 /**
  * Created with IntelliJ IDEA.
  * User: ddelizia
@@ -15,5 +18,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 public interface UserGroupRepository extends MongoRepository<UserGroup, String>, UserGroupRepositoryCustom{
 
     public UserGroup findByGroupName(String groupName);
+
+    public List<UserGroup> findByFather(UserGroup father);
 
 }

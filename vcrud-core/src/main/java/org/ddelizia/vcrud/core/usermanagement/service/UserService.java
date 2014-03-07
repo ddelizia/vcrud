@@ -92,7 +92,7 @@ public interface UserService {
      * @param userMakingRequest the user authorized to delete the user
      * @param userId the id of the user to delete
      */
-    public void deleteUser(ExternalUser userMakingRequest, String userId);
+    //public void deleteUser(ExternalUser userMakingRequest, String userId);
 
     /**
      * Save User
@@ -100,7 +100,7 @@ public interface UserService {
      * @param userId
      * @param request
      */
-    public ExternalUser saveUser(String userId, UpdateUserRequest request);
+    //public ExternalUser saveUser(String userId, UpdateUserRequest request);
 
     /**
      * Delete all SessionToken objects that have not been accessed within the duration specified by the argument timeSinceLastUpdatedInMinutes
@@ -108,6 +108,6 @@ public interface UserService {
      * @param timeSinceLastUpdatedInMinutes
      * @return the number of sessions removed
      */
-    public Integer deleteExpiredSessions(int timeSinceLastUpdatedInMinutes);
+    //public Integer deleteExpiredSessions(int timeSinceLastUpdatedInMinutes);
 
 }

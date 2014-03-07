@@ -4,10 +4,9 @@ import org.ddelizia.vcrud.core.config.AppConfig;
 import org.ddelizia.vcrud.core.mail.data.EmailDetail;
 import org.ddelizia.vcrud.core.mail.service.AbstractEmailSenderService;
 import org.ddelizia.vcrud.core.mail.service.EmailService;
-import org.ddelizia.vcrud.core.security.service.AuthenticationEmailSenderService;
+import org.ddelizia.vcrud.core.security.service.VerificationEmailSenderService;
 import org.ddelizia.vcrud.core.security.service.converter.ConverterEmailServiceTokenData2EmailDetail;
 import org.ddelizia.vcrud.core.security.service.data.EmailServiceTokenData;
-import org.hibernate.validator.constraints.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -23,8 +22,8 @@ import java.util.Map;
  * To change this template use File | Settings | File Templates.
  */
 
-@Service(AuthenticationEmailSenderService.DEFAULT_BEAN_NAME)
-public class AuthenticationEmailSenderServiceImpl extends AbstractEmailSenderService implements AuthenticationEmailSenderService{
+@Service(VerificationEmailSenderService.DEFAULT_BEAN_NAME)
+public class VerificationEmailSenderServiceImpl extends AbstractEmailSenderService implements VerificationEmailSenderService {
 
     @Autowired
     @Qualifier(EmailService.DEFAULT_BEAN_NAME)
@@ -47,7 +46,7 @@ public class AuthenticationEmailSenderServiceImpl extends AbstractEmailSenderSer
         emailService.sendEmail(
                 emailDetail,
                 emailServiceTokenModel,
-                "META-INF/email/template/authentication/VerifyEmail.vm",
+                "/META-INF/email/template/authentication/VerifyMail.vm",
                 resources);
         return emailServiceTokenModel;
     }
@@ -62,7 +61,7 @@ public class AuthenticationEmailSenderServiceImpl extends AbstractEmailSenderSer
         emailService.sendEmail(
                 emailDetail,
                 emailServiceTokenModel,
-                "META-INF/email/template/authentication/RegistrationEmail.vm",
+                "/META-INF/email/template/authentication/RegistrationEmail.vm",
                 resources);
         return emailServiceTokenModel;
     }
@@ -77,7 +76,7 @@ public class AuthenticationEmailSenderServiceImpl extends AbstractEmailSenderSer
         emailService.sendEmail(
                 emailDetail,
                 emailServiceTokenModel,
-                "META-INF/email/template/authentication/LostPasswordEmail.vm",
+                "/META-INF/email/template/authentication/LostPasswordEmail.vm",
                 resources);
         return emailServiceTokenModel;
     }

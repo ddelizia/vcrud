@@ -1,5 +1,6 @@
 package org.ddelizia.vcrud.core.usermanagement.service.impl;
 
+import com.google.common.collect.Sets;
 import org.ddelizia.vcrud.commons.AuthenticatedUserToken;
 import org.ddelizia.vcrud.commons.ExternalUser;
 import org.ddelizia.vcrud.commons.client.CreateUserRequest;
@@ -8,7 +9,11 @@ import org.ddelizia.vcrud.core.basic.service.AbstractService;
 import org.ddelizia.vcrud.core.config.AppConfig;
 import org.ddelizia.vcrud.core.security.exception.AuthenticationException;
 import org.ddelizia.vcrud.core.security.exception.AuthorizationException;
+import org.ddelizia.vcrud.core.security.exception.UserNotFoundException;
+import org.ddelizia.vcrud.core.security.model.SessionToken;
 import org.ddelizia.vcrud.core.security.service.CryptoService;
+import org.ddelizia.vcrud.core.security.service.SessionTokenService;
+import org.ddelizia.vcrud.core.security.service.converter.ConverterUser2ExternalUser;
 import org.ddelizia.vcrud.core.usermanagement.exception.DuplicateUserException;
 import org.ddelizia.vcrud.core.usermanagement.model.Customer;
 import org.ddelizia.vcrud.core.usermanagement.model.User;
@@ -17,6 +22,7 @@ import org.ddelizia.vcrud.core.usermanagement.repository.UserGroupRepository;
 import org.ddelizia.vcrud.core.usermanagement.repository.UserRepository;
 import org.ddelizia.vcrud.core.usermanagement.service.UserGroupService;
 import org.ddelizia.vcrud.core.usermanagement.service.UserService;
+import org.ddelizia.vcrud.core.usermanagement.service.converter.ConverterCreateUserRequest2User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -35,18 +41,28 @@ import org.springframework.util.CollectionUtils;
 public class UserServiceImpl extends AbstractService implements UserService {
 
     @Autowired
-    @Qualifier(UserGroupService.DEFAULT_BEAN_NAME)
-    private UserGroupService userGroupService;
-
-    @Autowired
     private UserGroupRepository userGroupRepository;
 
     @Autowired
     private UserRepository userRepository;
 
+	@Autowired
+	@Qualifier(UserGroupService.DEFAULT_BEAN_NAME)
+	private UserGroupService userGroupService;
+
     @Autowired
     @Qualifier(CryptoService.DEFAULT_BEAN_NAME)
     private CryptoService cryptoService;
+
+	@Autowired
+	@Qualifier(SessionTokenService.DEFAULT_BEAN_NAME)
+	private SessionTokenService sessionTokenService;
+
+	@Autowired
+	private ConverterUser2ExternalUser converterUser2ExternalUser;
+
+	@Autowired
+	private ConverterCreateUserRequest2User converterCreateUserRequest2User;
 
     @Override
     public boolean isRestUser(User user) {
@@ -168,15 +184,15 @@ public class UserServiceImpl extends AbstractService implements UserService {
         }
 
         User newUser = createNewUser(request, userGroup);
-        AuthenticatedUserToken token = new AuthenticatedUserToken(newUser.getId().toString(), newUser.addSessionToken().getToken());
-        userRepository.save(newUser);
+	    userRepository.save(newUser);
+        AuthenticatedUserToken token = new AuthenticatedUserToken(newUser.getId().toString(), sessionTokenService.createSessionToken(newUser).getToken());
         return token;
     }
 
     @Override
     public AuthenticatedUserToken createCustomer(UserGroup userGroup) {
         User user = createCustomerInGroup(userGroup);
-        AuthenticatedUserToken token = new AuthenticatedUserToken(user.getId().toString(), user.addSessionToken().getToken());
+        AuthenticatedUserToken token = new AuthenticatedUserToken(user.getId().toString(), sessionTokenService.createSessionToken(user).getToken());
         userRepository.save(user);
         return token;
     }
@@ -198,7 +214,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
             throw new AuthenticationException();
         }
         if (hashedPassword.equals(user.getPassword())) {
-            return new AuthenticatedUserToken(user.getId(), user.addSessionToken().getToken());
+            return new AuthenticatedUserToken(user.getId(), sessionTokenService.createSessionToken(user).getToken());
         } else {
             throw new AuthenticationException();
         }
@@ -209,11 +225,38 @@ public class UserServiceImpl extends AbstractService implements UserService {
         Assert.notNull(requestingUser);
         Assert.notNull(userIdentifier);
         User user = ensureUserIsLoaded(userIdentifier);
-        if(!requestingUser.getId().equals(user.getId()) && !requestingUser.getRole().equalsIgnoreCase(Role.administrator.toString()))  {
+        if(!requestingUser.getId().equals(user.getId()) && !requestingUser.getRoles().isEmpty())  {
             throw new AuthorizationException("User not authorized to load profile");
         }
-        return new ExternalUser(user);
+        return converterUser2ExternalUser.convert(user);
     }
+
+	private User ensureUserIsLoaded(String userId){
+		User user = userRepository.findOne(userId);
+		if (user == null){
+			user = userRepository.findByName(userId);
+			if (user == null){
+				user = userRepository.findByEmail(userId);
+			}else{
+				throw new UserNotFoundException();
+			}
+		}
+		return user;
+	}
+
+	private User createNewUser(CreateUserRequest request, UserGroup userGroup) {
+		User userToSave = converterCreateUserRequest2User.convert(request);
+		try {
+			String hashedPassword = cryptoService.hashPassword(
+					request.getPassword().getPassword(),
+					userToSave);
+			userToSave.setPassword(hashedPassword);
+		}  catch (Exception e) {
+			throw new AuthenticationException();
+		}
+		userToSave.setUserGroups(Sets.newHashSet(userGroup));
+		return userToSave;
+	}
 
     public void setUserGroupRepository(UserGroupRepository userGroupRepository) {
         this.userGroupRepository = userGroupRepository;
@@ -230,4 +273,16 @@ public class UserServiceImpl extends AbstractService implements UserService {
     public void setCryptoService(CryptoService cryptoService) {
         this.cryptoService = cryptoService;
     }
+
+	public void setSessionTokenService(SessionTokenService sessionTokenService) {
+		this.sessionTokenService = sessionTokenService;
+	}
+
+	public void setConverterUser2ExternalUser(ConverterUser2ExternalUser converterUser2ExternalUser) {
+		this.converterUser2ExternalUser = converterUser2ExternalUser;
+	}
+
+	public void setConverterCreateUserRequest2User(ConverterCreateUserRequest2User converterCreateUserRequest2User) {
+		this.converterCreateUserRequest2User = converterCreateUserRequest2User;
+	}
 }

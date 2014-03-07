@@ -11,9 +11,9 @@ import org.ddelizia.vcrud.core.security.model.VerificationToken;
  * Time: 12:16
  * To change this template use File | Settings | File Templates.
  */
-public interface AuthenticationService {
+public interface VerificationService {
 
-    public static final String DEFAULT_BEAN_NAME = "defaultAuthenticationService";
+    public static final String DEFAULT_BEAN_NAME = "defaultVerificationService";
 
     public VerificationToken sendEmailVerificationToken(String userId);
 

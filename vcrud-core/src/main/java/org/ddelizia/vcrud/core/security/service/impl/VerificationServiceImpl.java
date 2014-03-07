@@ -10,7 +10,7 @@ import org.ddelizia.vcrud.core.security.exception.TokenHasExpiredException;
 import org.ddelizia.vcrud.core.security.exception.UserNotFoundException;
 import org.ddelizia.vcrud.core.security.model.VerificationToken;
 import org.ddelizia.vcrud.core.security.repository.VerificationTokenRepository;
-import org.ddelizia.vcrud.core.security.service.AuthenticationService;
+import org.ddelizia.vcrud.core.security.service.VerificationService;
 import org.ddelizia.vcrud.core.security.service.CryptoService;
 import org.ddelizia.vcrud.core.security.service.EmailAuthenticationServiceGateway;
 import org.ddelizia.vcrud.core.security.service.VerificationTokenService;
@@ -18,7 +18,6 @@ import org.ddelizia.vcrud.core.security.service.data.EmailServiceTokenData;
 import org.ddelizia.vcrud.core.usermanagement.model.User;
 import org.ddelizia.vcrud.core.usermanagement.repository.UserRepository;
 import org.ddelizia.vcrud.core.usermanagement.service.UserService;
-import org.hibernate.jpamodelgen.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.codec.Base64;
@@ -33,8 +32,8 @@ import org.springframework.util.Assert;
  * To change this template use File | Settings | File Templates.
  */
 
-@Service(AuthenticationService.DEFAULT_BEAN_NAME)
-public class AuthenticationServiceImpl extends AbstractService implements AuthenticationService{
+@Service(VerificationService.DEFAULT_BEAN_NAME)
+public class VerificationServiceImpl extends AbstractService implements VerificationService {
 
     @Autowired
     private UserRepository userRepository;

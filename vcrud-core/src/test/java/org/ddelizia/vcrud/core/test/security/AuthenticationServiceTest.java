@@ -5,25 +5,20 @@ import org.ddelizia.vcrud.commons.client.LostPasswordRequest;
 import org.ddelizia.vcrud.core.config.AppConfig;
 import org.ddelizia.vcrud.core.security.model.VerificationToken;
 import org.ddelizia.vcrud.core.security.repository.VerificationTokenRepository;
-import org.ddelizia.vcrud.core.security.service.AuthenticationService;
+import org.ddelizia.vcrud.core.security.service.VerificationService;
 import org.ddelizia.vcrud.core.security.service.CryptoService;
 import org.ddelizia.vcrud.core.security.service.EmailAuthenticationServiceGateway;
 import org.ddelizia.vcrud.core.security.service.VerificationTokenService;
 import org.ddelizia.vcrud.core.security.service.data.EmailServiceTokenData;
-import org.ddelizia.vcrud.core.security.service.impl.AuthenticationServiceImpl;
-import org.ddelizia.vcrud.core.security.service.impl.VerificationTokenServiceImpl;
+import org.ddelizia.vcrud.core.security.service.impl.VerificationServiceImpl;
 import org.ddelizia.vcrud.core.usermanagement.model.Customer;
 import org.ddelizia.vcrud.core.usermanagement.model.User;
 import org.ddelizia.vcrud.core.usermanagement.repository.UserRepository;
 import org.ddelizia.vcrud.core.usermanagement.service.UserService;
-import org.hamcrest.core.Is;
-import org.hamcrest.core.IsNot;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.codec.Base64;
 
 import javax.validation.Validation;
@@ -50,7 +45,7 @@ public class AuthenticationServiceTest {
     private VerificationTokenService verificationTokenService;
     private CryptoService cryptoService;
 
-    private AuthenticationService authenticationService;
+    private VerificationService verificationService;
 
     private Validator validator;
     private List<String> tokens;
@@ -74,15 +69,15 @@ public class AuthenticationServiceTest {
         verificationTokenService = Mockito.mock(VerificationTokenService.class);
         cryptoService = Mockito.mock(CryptoService.class);
 
-        authenticationService = new AuthenticationServiceImpl();
-        ((AuthenticationServiceImpl)authenticationService).setUserRepository(userRepository);
-        ((AuthenticationServiceImpl)authenticationService).setVerificationTokenRepository(verificationTokenRepository);
-        ((AuthenticationServiceImpl)authenticationService).setEmailAuthenticationServiceGateway(emailAuthenticationServiceGateway);
-        ((AuthenticationServiceImpl)authenticationService).setAppConfig(appConfig);
-        ((AuthenticationServiceImpl)authenticationService).setUserService(userService);
-        ((AuthenticationServiceImpl)authenticationService).setVerificationTokenService(verificationTokenService);
-        ((AuthenticationServiceImpl)authenticationService).setCryptoService(cryptoService);
-        ((AuthenticationServiceImpl)authenticationService).setValidator(validator);
+        verificationService = new VerificationServiceImpl();
+        ((VerificationServiceImpl) verificationService).setUserRepository(userRepository);
+        ((VerificationServiceImpl) verificationService).setVerificationTokenRepository(verificationTokenRepository);
+        ((VerificationServiceImpl) verificationService).setEmailAuthenticationServiceGateway(emailAuthenticationServiceGateway);
+        ((VerificationServiceImpl) verificationService).setAppConfig(appConfig);
+        ((VerificationServiceImpl) verificationService).setUserService(userService);
+        ((VerificationServiceImpl) verificationService).setVerificationTokenService(verificationTokenService);
+        ((VerificationServiceImpl) verificationService).setCryptoService(cryptoService);
+        ((VerificationServiceImpl) verificationService).setValidator(validator);
 
 
         Mockito.when(appConfig.getProperty(AppConfig.TOKEN_EMAIL_VERIFICATION_DURATION, Integer.class, null)).thenReturn(1);
@@ -96,7 +91,7 @@ public class AuthenticationServiceTest {
     public void sendLostPasswordToken() {
         User user = generateTestCustomer();
         Mockito.when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
-        VerificationToken verificationToken = authenticationService.sendLostPasswordToken(new LostPasswordRequest(user.getEmail()));
+        VerificationToken verificationToken = verificationService.sendLostPasswordToken(new LostPasswordRequest(user.getEmail()));
         Assert.assertEquals(verificationToken.getUser(), user);
         Assert.assertEquals(tokens.size(), 1);
 
@@ -111,7 +106,7 @@ public class AuthenticationServiceTest {
         User user = generateTestCustomer();
         Mockito.when(userRepository.findOne(user.getId())).thenReturn(user);
 
-        VerificationToken verificationToken = authenticationService.sendEmailVerificationToken(user.getId());
+        VerificationToken verificationToken = verificationService.sendEmailVerificationToken(user.getId());
         Assert.assertEquals(verificationToken.getUser(), user);
         Assert.assertEquals(tokens.size(), 1);
 
@@ -126,7 +121,7 @@ public class AuthenticationServiceTest {
         User user = generateTestCustomer();
         Mockito.when(userRepository.findOne(user.getId())).thenReturn(user);
 
-        VerificationToken verificationToken = authenticationService.sendEmailRegistrationToken(user.getId());
+        VerificationToken verificationToken = verificationService.sendEmailRegistrationToken(user.getId());
         Assert.assertEquals(verificationToken.getUser(), user);
         Assert.assertEquals(tokens.size(), 1);
 
@@ -141,11 +136,11 @@ public class AuthenticationServiceTest {
         User user = generateTestCustomer();
         Mockito.when(userRepository.findOne(user.getId())).thenReturn(user);
 
-        VerificationToken verificationToken = authenticationService.sendEmailRegistrationToken(user.getId());
+        VerificationToken verificationToken = verificationService.sendEmailRegistrationToken(user.getId());
         Mockito.when(verificationTokenRepository.findByToken(verificationToken.getToken())).thenReturn(verificationToken);
 
         String encodedToken = new String(Base64.encode(verificationToken.getToken().getBytes()));
-        VerificationToken verifiedToken = authenticationService.verify(encodedToken);
+        VerificationToken verifiedToken = verificationService.verify(encodedToken);
 
         Assert.assertEquals(verifiedToken.isVerified(), true);
     }
@@ -155,7 +150,7 @@ public class AuthenticationServiceTest {
         User user = generateTestCustomer();
         Mockito.when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
         Mockito.when(userRepository.save(user)).thenReturn(user);
-        VerificationToken verificationToken = authenticationService.generateEmailVerificationToken(user.getEmail());
+        VerificationToken verificationToken = verificationService.generateEmailVerificationToken(user.getEmail());
         Assert.assertEquals(verificationToken.getUser(), user);
         Assert.assertEquals(tokens.size(), 1);
 
@@ -172,14 +167,14 @@ public class AuthenticationServiceTest {
         User user = generateTestCustomer();
         Mockito.when(userRepository.save(user)).thenReturn(user);
         Mockito.when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
-        VerificationToken verificationToken = authenticationService.sendLostPasswordToken(new LostPasswordRequest(user.getEmail()));
+        VerificationToken verificationToken = verificationService.sendLostPasswordToken(new LostPasswordRequest(user.getEmail()));
 
         PasswordRequest passwordRequest = new PasswordRequest("newpassword");
         String encodedPassword = "encodedPassword";
         Mockito.when(verificationTokenRepository.findByToken(verificationToken.getToken())).thenReturn(verificationToken);
         Mockito.when(cryptoService.hashPassword(passwordRequest.getPassword(), user)).thenReturn(encodedPassword);
         String encodedToken = new String(Base64.encode(verificationToken.getToken().getBytes()));
-        VerificationToken verifiedToken = authenticationService.resetPassword(encodedToken, passwordRequest);
+        VerificationToken verifiedToken = verificationService.resetPassword(encodedToken, passwordRequest);
 
         Assert.assertEquals(verifiedToken.isVerified(), true);
         Assert.assertEquals(user.getPassword(),encodedPassword);
