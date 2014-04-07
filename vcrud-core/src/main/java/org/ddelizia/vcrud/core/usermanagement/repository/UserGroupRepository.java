@@ -1,7 +1,9 @@
 package org.ddelizia.vcrud.core.usermanagement.repository;
 
+import org.ddelizia.vcrud.core.transaction.Retry;
 import org.ddelizia.vcrud.core.usermanagement.model.UserGroup;
 import org.ddelizia.vcrud.core.usermanagement.repository.custom.UserGroupRepositoryCustom;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
@@ -19,6 +21,7 @@ public interface UserGroupRepository extends MongoRepository<UserGroup, String>,
 
     public UserGroup findByGroupName(String groupName);
 
+	@Retry(on = OptimisticLockingFailureException.class, times = 10)
     public List<UserGroup> findByFather(UserGroup father);
 
 }

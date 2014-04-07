@@ -1,6 +1,7 @@
 package org.ddelizia.vcrud.core.social.repository.custom;
 
 import org.ddelizia.vcrud.core.social.model.SocialUserConnection;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.util.MultiValueMap;
 
 import java.util.List;
@@ -17,8 +18,14 @@ public interface SocialUserConnectionRepositoryCustom {
 
     public SocialUserConnection findByUserNameAndProviderIdMaxRank(String providerId, String providerUserId);
 
-    public List<SocialUserConnection> findByUserNameInProviderUsers(String userId, MultiValueMap<String, String> providerUsers);
+    public List<SocialUserConnection> findByUserIdInProviderUsers(String userId, MultiValueMap<String, String> providerUsers);
 
     public Set<String> findUsersConnectedTo(String providerId, Set<String> providerUserIds);
+
+	public List<SocialUserConnection> findByUserId(String userName);
+
+	public List<SocialUserConnection> findByUserIdAndProviderId(String username, String providerId);
+
+	public SocialUserConnection findByUserIdAndProviderIdAndProviderUserId(String username, String providerId, String providerUserId);
 
 }

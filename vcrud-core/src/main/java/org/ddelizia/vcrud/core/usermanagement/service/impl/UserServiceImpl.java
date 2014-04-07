@@ -10,10 +10,11 @@ import org.ddelizia.vcrud.core.config.AppConfig;
 import org.ddelizia.vcrud.core.security.exception.AuthenticationException;
 import org.ddelizia.vcrud.core.security.exception.AuthorizationException;
 import org.ddelizia.vcrud.core.security.exception.UserNotFoundException;
-import org.ddelizia.vcrud.core.security.model.SessionToken;
 import org.ddelizia.vcrud.core.security.service.CryptoService;
 import org.ddelizia.vcrud.core.security.service.SessionTokenService;
 import org.ddelizia.vcrud.core.security.service.converter.ConverterUser2ExternalUser;
+import org.ddelizia.vcrud.core.social.repository.MongoSocialUsersConnectionRepository;
+import org.ddelizia.vcrud.core.transaction.Retry;
 import org.ddelizia.vcrud.core.usermanagement.exception.DuplicateUserException;
 import org.ddelizia.vcrud.core.usermanagement.model.Customer;
 import org.ddelizia.vcrud.core.usermanagement.model.User;
@@ -23,11 +24,15 @@ import org.ddelizia.vcrud.core.usermanagement.repository.UserRepository;
 import org.ddelizia.vcrud.core.usermanagement.service.UserGroupService;
 import org.ddelizia.vcrud.core.usermanagement.service.UserService;
 import org.ddelizia.vcrud.core.usermanagement.service.converter.ConverterCreateUserRequest2User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.social.connect.Connection;
+import org.springframework.social.connect.UserProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -36,33 +41,35 @@ import org.springframework.util.CollectionUtils;
  * Time: 12:09
  * To change this template use File | Settings | File Templates.
  */
-
 @Service(UserService.DEFAULT_BEAN_NAME)
 public class UserServiceImpl extends AbstractService implements UserService {
 
-    @Autowired
+    @Resource
     private UserGroupRepository userGroupRepository;
 
-    @Autowired
+    @Resource
     private UserRepository userRepository;
 
-	@Autowired
-	@Qualifier(UserGroupService.DEFAULT_BEAN_NAME)
+	@Resource(name = UserGroupService.DEFAULT_BEAN_NAME)
 	private UserGroupService userGroupService;
 
-    @Autowired
-    @Qualifier(CryptoService.DEFAULT_BEAN_NAME)
+    @Resource(name = CryptoService.DEFAULT_BEAN_NAME)
     private CryptoService cryptoService;
 
-	@Autowired
-	@Qualifier(SessionTokenService.DEFAULT_BEAN_NAME)
+	@Resource(name = SessionTokenService.DEFAULT_BEAN_NAME)
 	private SessionTokenService sessionTokenService;
 
-	@Autowired
+	@Resource
 	private ConverterUser2ExternalUser converterUser2ExternalUser;
 
-	@Autowired
+	@Resource
 	private ConverterCreateUserRequest2User converterCreateUserRequest2User;
+
+	@Resource
+	private MongoSocialUsersConnectionRepository mongoSocialUsersConnectionRepository;
+
+	@Resource
+	private AppConfig appConfig;
 
     @Override
     public boolean isRestUser(User user) {
@@ -231,6 +238,20 @@ public class UserServiceImpl extends AbstractService implements UserService {
         return converterUser2ExternalUser.convert(user);
     }
 
+	@Override
+	public AuthenticatedUserToken socialLogin(Connection<?> connection) {
+		List<String> userUuids = mongoSocialUsersConnectionRepository.findUserIdsWithConnection(connection);
+		if(userUuids.size() == 0) {
+			throw new AuthenticationException();
+		}
+		User user = userRepository.findOne(userUuids.get(0)); //take the first one if there are multiple userIds for this provider Connection
+		if (user == null) {
+			throw new AuthenticationException();
+		}
+		updateUserFromProfile(connection, user);
+		return new AuthenticatedUserToken(user.getId(), sessionTokenService.createSessionToken(user).getToken());
+	}
+
 	private User ensureUserIsLoaded(String userId){
 		User user = userRepository.findOne(userId);
 		if (user == null){
@@ -258,7 +279,29 @@ public class UserServiceImpl extends AbstractService implements UserService {
 		return userToSave;
 	}
 
-    public void setUserGroupRepository(UserGroupRepository userGroupRepository) {
+	private void updateUserFromProfile(Connection<?> connection, User user) {
+		UserProfile profile = connection.fetchUserProfile();
+		user.setEmail(profile.getEmail());
+		user.setFirstName(profile.getFirstName());
+		user.setLastName(profile.getLastName());
+		verifyUser(user);
+
+		if(isAnonymousUser(user)) {
+			    assignGroupToUser(appConfig.getProperty(
+					    AppConfig.USER_USERGROUP_AUTHENTICATED,
+					    String.class,
+					    null
+			    ),
+				user.getId());
+
+		}
+	}
+
+	public void setAppConfig(AppConfig appConfig) {
+		this.appConfig = appConfig;
+	}
+
+	public void setUserGroupRepository(UserGroupRepository userGroupRepository) {
         this.userGroupRepository = userGroupRepository;
     }
 
@@ -284,5 +327,9 @@ public class UserServiceImpl extends AbstractService implements UserService {
 
 	public void setConverterCreateUserRequest2User(ConverterCreateUserRequest2User converterCreateUserRequest2User) {
 		this.converterCreateUserRequest2User = converterCreateUserRequest2User;
+	}
+
+	public void setMongoSocialUsersConnectionRepository(MongoSocialUsersConnectionRepository mongoSocialUsersConnectionRepository) {
+		this.mongoSocialUsersConnectionRepository = mongoSocialUsersConnectionRepository;
 	}
 }

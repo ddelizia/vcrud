@@ -17,15 +17,6 @@ import java.util.List;
  */
 public interface SocialUserConnectionRepository extends MongoRepository<SocialUserConnection,String>, SocialUserConnectionRepositoryCustom{
 
-    @Query(value="{ 'user.name' : ?0 }")
-    public List<SocialUserConnection> findByUserName (String userName);
-
-    @Query(value="{ 'user.name' : ?0 , 'providerId' : ?1 }")
-    public List<SocialUserConnection> findByUserNameAndProviderId (String username, String providerId);
-
-    @Query(value="{ 'user.name' : ?0 , 'providerId' : ?1 , 'providerUserId' : ?2 }")
-    public SocialUserConnection findByUserNameAndProviderIdAndProviderUserId (String username, String providerId, String providerUserId);
-
     public List<SocialUserConnection> findByProviderIdAndProviderUserId(String providerId, String providerUserId);
 
     public List<SocialUserConnection> findByUser (User user);

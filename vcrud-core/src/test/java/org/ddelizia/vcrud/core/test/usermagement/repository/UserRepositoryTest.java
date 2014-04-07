@@ -1,6 +1,7 @@
 package org.ddelizia.vcrud.core.test.usermagement.repository;
 
 import org.apache.log4j.Logger;
+import org.ddelizia.vcrud.core.test.VcrudCoreIntegrationTest;
 import org.ddelizia.vcrud.core.test.util.UserManagmentDataFactory;
 import org.ddelizia.vcrud.core.usermanagement.model.User;
 import org.ddelizia.vcrud.core.usermanagement.repository.UserRepository;
@@ -13,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author ddelizia
  * @since 18/02/14 12:33
  */
-public class UserRepositoryTest extends AbstractJunit4Vcrud{
+public class UserRepositoryTest extends VcrudCoreIntegrationTest{
 
     private static final Logger LOGGER = Logger.getLogger(UserRepositoryTest.class);
 
@@ -42,7 +43,7 @@ public class UserRepositoryTest extends AbstractJunit4Vcrud{
      */
     @Override
     public void vcrudAfter() {
-        userManagmentDataFactory.removeData();
+	    getUserManagmentDataFactory().removeData();
     }
 
     /**
@@ -50,6 +51,6 @@ public class UserRepositoryTest extends AbstractJunit4Vcrud{
      */
     @Override
     public void vcrudBefore() {
-        userManagmentDataFactory.createData();
+	    getUserManagmentDataFactory().createData();
     }
 }

@@ -7,20 +7,18 @@ import org.ddelizia.vcrud.commons.PasswordRequest;
 import org.ddelizia.vcrud.commons.client.CreateUserRequest;
 import org.ddelizia.vcrud.core.config.AppConfig;
 import org.ddelizia.vcrud.core.mail.mock.MockJavaMailSender;
+import org.ddelizia.vcrud.core.security.model.SessionToken;
 import org.ddelizia.vcrud.core.security.model.VerificationToken;
 import org.ddelizia.vcrud.core.security.service.VerificationEmailSenderService;
 import org.ddelizia.vcrud.core.security.service.data.EmailServiceTokenData;
-import org.ddelizia.vcrud.core.test.util.UserManagmentDataFactory;
 import org.ddelizia.vcrud.core.usermanagement.model.User;
 import org.ddelizia.vcrud.core.usermanagement.model.UserGroup;
 import org.ddelizia.vcrud.core.usermanagement.repository.UserRepository;
 import org.ddelizia.vcrud.core.usermanagement.service.UserService;
-import org.ddelizia.vcrud.test.AbstractJunit4Vcrud;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.core.Is;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.matchers.JUnitMatchers;
 import org.springframework.security.crypto.codec.Base64;
 import org.springframework.test.util.MatcherAssertionErrors;
 
@@ -38,13 +36,10 @@ import java.util.List;
  * Time: 20:33
  * To change this template use File | Settings | File Templates.
  */
-public class VerificationEmailSenderServiceTest extends AbstractJunit4Vcrud {
+public class VerificationEmailSenderServiceTest extends VcrudCoreIntegrationTest {
 
 	@Resource
 	private MockJavaMailSender mailSender;
-
-    @Resource
-    private UserManagmentDataFactory userManagmentDataFactory;
 
     @Resource(name = VerificationEmailSenderService.DEFAULT_BEAN_NAME)
     private VerificationEmailSenderService verificationEmailSenderService;
@@ -64,7 +59,7 @@ public class VerificationEmailSenderServiceTest extends AbstractJunit4Vcrud {
 	@Test
 	public void sendVerificationEmail() throws Exception {
 		AuthenticatedUserToken userToken = createUserWithRandomUserName(
-				userManagmentDataFactory.getUserGroupAuthenticated()
+				getUserManagmentDataFactory().getUserGroupAuthenticated()
 		);
 		User user = userRepository.findOne(userToken.getUserId());
 		VerificationToken token = new VerificationToken(
@@ -82,22 +77,56 @@ public class VerificationEmailSenderServiceTest extends AbstractJunit4Vcrud {
 
     }
 
+	@Test
     public void sendRegistrationEmail() throws Exception {
+	    AuthenticatedUserToken userToken = createUserWithRandomUserName(
+			    getUserManagmentDataFactory().getUserGroupAuthenticated()
+	    );
+	    User user = userRepository.findOne(userToken.getUserId());
+	    VerificationToken token = new VerificationToken(
+			    user,
+			    VerificationToken.VerificationTokenType.emailRegistration,
+			    120);
 
+	    verificationEmailSenderService.sendRegistrationEmail(new EmailServiceTokenData(
+			    user,
+			    token,
+			    appConfig.getProperty(AppConfig.HOSTNAME_PROPERTY, String.class, null)
+	    ));
+
+	    assertOnMailResult(user, token);
     }
 
+	@Test
     public void sendLostPasswordEmail() throws Exception {
+	    AuthenticatedUserToken userToken = createUserWithRandomUserName(
+			    getUserManagmentDataFactory().getUserGroupAuthenticated()
+	    );
+	    User user = userRepository.findOne(userToken.getUserId());
+	    VerificationToken token = new VerificationToken(
+			    user,
+			    VerificationToken.VerificationTokenType.lostPassword,
+			    120);
 
+	    verificationEmailSenderService.sendLostPasswordEmail(new EmailServiceTokenData(
+			    user,
+			    token,
+			    appConfig.getProperty(AppConfig.HOSTNAME_PROPERTY, String.class, null)
+	    ));
+
+	    assertOnMailResult(user, token);
     }
 
     @Override
     public void vcrudAfter() {
-        userManagmentDataFactory.removeData();
+        getUserManagmentDataFactory().removeData();
+	    getMongoHelper().removeAllDataFromCollection(SessionToken.class);
     }
 
     @Override
     public void vcrudBefore() {
-        userManagmentDataFactory.createData();
+	    getUserManagmentDataFactory().createData();
+	    mailSender.resetMessages();
     }
 
     private AuthenticatedUserToken createUserWithRandomUserName(UserGroup userGroup) {

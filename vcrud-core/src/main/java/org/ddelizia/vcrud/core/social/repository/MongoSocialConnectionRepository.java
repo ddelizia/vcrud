@@ -1,15 +1,9 @@
 package org.ddelizia.vcrud.core.social.repository;
 
-import org.ddelizia.vcrud.core.config.AppConfig;
 import org.ddelizia.vcrud.core.social.model.SocialUserConnection;
-import org.ddelizia.vcrud.core.usermanagement.model.User;
-import org.ddelizia.vcrud.core.usermanagement.model.UserGroup;
-import org.ddelizia.vcrud.core.usermanagement.repository.UserGroupRepository;
 import org.ddelizia.vcrud.core.usermanagement.repository.UserRepository;
 import org.ddelizia.vcrud.core.usermanagement.service.UserService;
 import org.joda.time.DateTime;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
@@ -22,12 +16,10 @@ import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.DuplicateConnectionException;
 import org.springframework.social.connect.NoSuchConnectionException;
 import org.springframework.social.connect.NotConnectedException;
-import org.springframework.social.connect.UserProfile;
-import org.springframework.stereotype.Repository;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.util.StringUtils;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -41,23 +33,11 @@ import java.util.Set;
  * Time: 11:42
  * To change this template use File | Settings | File Templates.
  */
-public class SocialConnectionRepository implements ConnectionRepository{
+public class MongoSocialConnectionRepository implements ConnectionRepository{
 
-    @Autowired
     private SocialUserConnectionRepository socialUserConnectionRepository;
 
-    @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private UserGroupRepository userGroupRepository;
-
-    @Autowired
-    private AppConfig appConfig;
-
-    @Autowired
-    @Qualifier(UserService.DEFAULT_BEAN_NAME)
-    private UserService userService;
 
 
     private final String userId;
@@ -65,7 +45,14 @@ public class SocialConnectionRepository implements ConnectionRepository{
     private final ConnectionFactoryLocator connectionFactoryLocator;
     private final ServiceProviderConnectionMapper connectionMapper = new ServiceProviderConnectionMapper();
 
-    public SocialConnectionRepository(String userId, ConnectionFactoryLocator connectionFactoryLocator, TextEncryptor textEncryptor) {
+    public MongoSocialConnectionRepository(
+		    SocialUserConnectionRepository socialUserConnectionRepository,
+		    UserRepository userRepository,
+		    String userId,
+		    ConnectionFactoryLocator connectionFactoryLocator,
+		    TextEncryptor textEncryptor) {
+	    this.socialUserConnectionRepository=socialUserConnectionRepository;
+	    this.userRepository = userRepository;
         this.userId=userId;
         this.connectionFactoryLocator = connectionFactoryLocator;
         this.textEncryptor=textEncryptor;
@@ -74,7 +61,7 @@ public class SocialConnectionRepository implements ConnectionRepository{
     @Override
     public MultiValueMap<String, Connection<?>> findAllConnections() {
         List<Connection<?>> resultList = connectionMapper.mapEntities(
-                socialUserConnectionRepository.findByUserName(userId)
+                socialUserConnectionRepository.findByUserId(userId)
         );
         MultiValueMap<String,Connection<?>> connections = new LinkedMultiValueMap<>();
         Set<String> registeredProviderIds = connectionFactoryLocator.registeredProviderIds();
@@ -93,7 +80,7 @@ public class SocialConnectionRepository implements ConnectionRepository{
 
     @Override
     public List<Connection<?>> findConnections(String providerId) {
-        return connectionMapper.mapEntities(socialUserConnectionRepository.findByUserNameAndProviderId(userId, providerId));
+        return connectionMapper.mapEntities(socialUserConnectionRepository.findByUserIdAndProviderId(userId, providerId));
     }
 
     @Override
@@ -109,7 +96,7 @@ public class SocialConnectionRepository implements ConnectionRepository{
         }
 
         List<Connection<?>> resultList = connectionMapper.mapEntities(
-                socialUserConnectionRepository.findByUserNameInProviderUsers(userId,providerUsers));
+                socialUserConnectionRepository.findByUserIdInProviderUsers(userId, providerUsers));
 
         MultiValueMap<String, Connection<?>> connectionsForUsers = new LinkedMultiValueMap<>();
         for (Connection<?> connection : resultList) {
@@ -135,10 +122,10 @@ public class SocialConnectionRepository implements ConnectionRepository{
     public Connection<?> getConnection(ConnectionKey connectionKey) {
         try {
             return connectionMapper.mapEntity(
-                    socialUserConnectionRepository.findByUserNameAndProviderIdAndProviderUserId(
-                            userId,
-                            connectionKey.getProviderId(),
-                            connectionKey.getProviderUserId()
+                    socialUserConnectionRepository.findByUserIdAndProviderIdAndProviderUserId(
+		                    userId,
+		                    connectionKey.getProviderId(),
+		                    connectionKey.getProviderUserId()
                     )
             );
         } catch (EmptyResultDataAccessException e) {
@@ -179,10 +166,14 @@ public class SocialConnectionRepository implements ConnectionRepository{
             );
 
             SocialUserConnection socialUserConnection = new SocialUserConnection();
-            socialUserConnection.setUser(userRepository.findByName(userId));
+            socialUserConnection.setUser(userRepository.findOne(userId));
             socialUserConnection.setProviderId(data.getProviderId());
             socialUserConnection.setProviderUserId(data.getProviderUserId());
-            socialUserConnection.setRank(socialUserConnectionMax.getRank());
+	        if(socialUserConnectionMax==null){
+		        socialUserConnection.setRank(0);
+	        }else {
+                socialUserConnection.setRank(socialUserConnectionMax.getRank());
+	        }
             socialUserConnection.setDisplayName(data.getDisplayName());
             socialUserConnection.setImageUrl(data.getImageUrl());
             socialUserConnection.setProfileUrl(data.getProfileUrl());
@@ -200,10 +191,10 @@ public class SocialConnectionRepository implements ConnectionRepository{
     public void updateConnection(Connection<?> connection) {
         ConnectionData data = connection.createData();
 
-        SocialUserConnection socialUserConnection = socialUserConnectionRepository.findByUserNameAndProviderIdAndProviderUserId(
-                userId,
-                data.getProviderId(),
-                data.getProviderUserId()
+        SocialUserConnection socialUserConnection = socialUserConnectionRepository.findByUserIdAndProviderIdAndProviderUserId(
+		        userId,
+		        data.getProviderId(),
+		        data.getProviderUserId()
         );
 
         if(socialUserConnection != null){
@@ -222,17 +213,17 @@ public class SocialConnectionRepository implements ConnectionRepository{
     @Override
     public void removeConnections(String s) {
         socialUserConnectionRepository.delete(
-                socialUserConnectionRepository.findByUserNameAndProviderId(userId, s)
+                socialUserConnectionRepository.findByUserIdAndProviderId(userId, s)
         );
     }
 
     @Override
     public void removeConnection(ConnectionKey connectionKey) {
         socialUserConnectionRepository.delete(
-                socialUserConnectionRepository.findByUserNameAndProviderIdAndProviderUserId(
-                        userId,
-                        connectionKey.getProviderId(),
-                        connectionKey.getProviderUserId())
+                socialUserConnectionRepository.findByUserIdAndProviderIdAndProviderUserId(
+		                userId,
+		                connectionKey.getProviderId(),
+		                connectionKey.getProviderUserId())
         );
     }
 
@@ -277,9 +268,9 @@ public class SocialConnectionRepository implements ConnectionRepository{
     }
 
     private Connection<?> findPrimaryConnection(String providerId) {
-        List<SocialUserConnection> socialUsers = socialUserConnectionRepository.findByUserNameAndProviderId(
-                userId,
-                providerId
+        List<SocialUserConnection> socialUsers = socialUserConnectionRepository.findByUserIdAndProviderId(
+		        userId,
+		        providerId
         );
 
         List<Connection<?>> connections = connectionMapper.mapEntities(socialUsers);
@@ -288,25 +279,5 @@ public class SocialConnectionRepository implements ConnectionRepository{
         } else {
             return null;
         }
-    }
-
-    public void setSocialUserConnectionRepository(SocialUserConnectionRepository socialUserConnectionRepository) {
-        this.socialUserConnectionRepository = socialUserConnectionRepository;
-    }
-
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    public void setUserGroupRepository(UserGroupRepository userGroupRepository) {
-        this.userGroupRepository = userGroupRepository;
-    }
-
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
-
-    public void setAppConfig(AppConfig appConfig) {
-        this.appConfig = appConfig;
     }
 }

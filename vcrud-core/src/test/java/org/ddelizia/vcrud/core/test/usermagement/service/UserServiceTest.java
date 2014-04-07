@@ -1,6 +1,5 @@
 package org.ddelizia.vcrud.core.test.usermagement.service;
 
-import org.ddelizia.vcrud.core.test.util.UserManagmentDataFactory;
 import org.ddelizia.vcrud.core.usermanagement.model.Customer;
 import org.ddelizia.vcrud.core.usermanagement.model.User;
 import org.ddelizia.vcrud.core.usermanagement.model.UserGroup;
@@ -17,7 +16,6 @@ import org.mockito.Mockito;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -45,8 +43,6 @@ public class UserServiceTest {
 		((UserServiceImpl) userService).setUserGroupRepository(userGroupRepository);
 		((UserServiceImpl) userService).setUserGroupService(userGroupService);
 		((UserServiceImpl) userService).setUserRepository(userRepository);
-
-		//Mockito.when()
 	}
 
 	@Test
@@ -112,16 +108,39 @@ public class UserServiceTest {
 		return user;
 	}
 
+	@Test
 	public void createCustomerInGroup() {
+		String groupName = "groupName";
 		UserGroup userGroup = new UserGroup();
+		userGroup.setName(groupName);
+		User customer = userService.createCustomerInGroup(userGroup);
+		Assert.assertTrue(customer.getUserGroups().size() == 1);
+		Assert.assertTrue(customer.getUserGroups().iterator().next().getName().equals(groupName));
+	}
+
+	@Test
+	public void assignGroupToUser() {
+		UserGroup userGroup = new UserGroup();
+		userGroup.setGroupName("GroupName");
+		Customer customer = new Customer();
+		customer.setId("UserId");
+		Mockito.when(userGroupRepository.findByGroupName(userGroup.getGroupName())).thenReturn(userGroup);
+		Mockito.when(userRepository.findOne(customer.getId())).thenReturn(customer);
+		User returnUser = userService.assignGroupToUser(userGroup.getGroupName(), customer.getId());
+		Assert.assertTrue(returnUser.getUserGroups().size() == 1);
+		Assert.assertTrue(returnUser.getUserGroups().iterator().next().getGroupName().equals(userGroup.getGroupName()));
+	}
+
+	@Test
+	public void verifyUser() {
+		String groupName = "groupName";
+		UserGroup userGroup = new UserGroup();
+		userGroup.setName(groupName);
 		User customer = userService.createCustomerInGroup(userGroup);
 
-	}
+		userService.verifyUser(customer);
 
-	public void assignGroupToUser() {
-	}
-
-	public void verifyUser() {
+		Assert.assertTrue(userService.isVerified(customer));
 	}
 
 }

@@ -1,16 +1,14 @@
 package org.ddelizia.vcrud.core.test.util;
 
 import com.google.common.collect.Sets;
-import org.ddelizia.vcrud.core.basic.helper.MongoHelper;
 import org.ddelizia.vcrud.core.config.AppConfig;
 import org.ddelizia.vcrud.core.usermanagement.model.Customer;
 import org.ddelizia.vcrud.core.usermanagement.model.User;
 import org.ddelizia.vcrud.core.usermanagement.model.UserGroup;
 import org.ddelizia.vcrud.core.usermanagement.repository.UserGroupRepository;
 import org.ddelizia.vcrud.core.usermanagement.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 
+import javax.annotation.Resource;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,19 +19,13 @@ import java.util.Set;
  * Time: 21:29
  * To change this template use File | Settings | File Templates.
  */
-public class UserManagmentDataFactory {
+public class UserManagmentDataFactory extends DataFactory{
 
-    @Autowired
+    @Resource
     private UserRepository userRepository;
 
-    @Autowired
+    @Resource
     private UserGroupRepository userGroupRepository;
-
-    @Autowired
-    private AppConfig appConfig;
-
-    @Autowired
-    private MongoHelper mongoHelper;
 
     public static final String CUSTOMER_VERIFIED_RESTGROUP_NAME = "customer_verified_restgroup_name";
     public static final String CUSTOMER_VERIFIED_RESTGROUP_EMAIL = "customer_verified_restgroup@example.com";
@@ -52,13 +44,13 @@ public class UserManagmentDataFactory {
 
     public void createData(){
 	    userGroupAuthenticated = new UserGroup();
-        userGroupAuthenticated.setGroupName(appConfig.getProperty(AppConfig.USER_USERGROUP_AUTHENTICATED, String.class, null));
-        userGroupAuthenticated.setName(appConfig.getProperty(AppConfig.USER_USERGROUP_AUTHENTICATED, String.class, null));
+        userGroupAuthenticated.setGroupName(getAppConfig().getProperty(AppConfig.USER_USERGROUP_AUTHENTICATED, String.class, null));
+        userGroupAuthenticated.setName(getAppConfig().getProperty(AppConfig.USER_USERGROUP_AUTHENTICATED, String.class, null));
         userGroupRepository.save(userGroupAuthenticated);
 
         userGroupRest = new UserGroup();
-        userGroupRest.setGroupName(appConfig.getProperty(AppConfig.USER_USERGROUP_REST, String.class, null));
-        userGroupRest.setName(appConfig.getProperty(AppConfig.USER_USERGROUP_REST, String.class, null));
+        userGroupRest.setGroupName(getAppConfig().getProperty(AppConfig.USER_USERGROUP_REST, String.class, null));
+        userGroupRest.setName(getAppConfig().getProperty(AppConfig.USER_USERGROUP_REST, String.class, null));
         userGroupRest.setFather(userGroupAuthenticated);
         userGroupRepository.save(userGroupRest);
 
@@ -102,16 +94,8 @@ public class UserManagmentDataFactory {
 	}
 
     public void removeData(){
-        mongoHelper.removeAllDataFromCollection(User.class);
-        mongoHelper.removeAllDataFromCollection(UserGroup.class);
-    }
-
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    public void setAppConfig(AppConfig appConfig) {
-        this.appConfig = appConfig;
+        getMongoHelper().removeAllDataFromCollection(User.class);
+        getMongoHelper().removeAllDataFromCollection(UserGroup.class);
     }
 
 	public UserGroup getUserGroupAuthenticated() {

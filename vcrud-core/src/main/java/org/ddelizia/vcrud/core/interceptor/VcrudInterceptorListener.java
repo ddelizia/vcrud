@@ -38,7 +38,7 @@ public class VcrudInterceptorListener<T extends VcrudItem> extends AbstractMongo
 
     private Map<InterceptorCacheKey, List<? extends VcrudInterceptor>> interceptorCache = new HashMap<>();
 
-    private static final Logger logger = Logger.getLogger(VcrudInterceptorListener.class);
+    private static final Logger LOGGER = Logger.getLogger(VcrudInterceptorListener.class);
 
     @Override
     public void onAfterConvert(DBObject dbo, T source) {

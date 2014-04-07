@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Entity;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -30,7 +31,7 @@ public abstract class User extends VcrudPrincipal {
     private String lastName;
 
     @DBRef
-    private Set<UserGroup> userGroups;
+    private Set<UserGroup> userGroups = new HashSet<>();
 
     private DateTime expireDate;
 

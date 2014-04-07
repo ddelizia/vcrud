@@ -18,4 +18,6 @@ public interface UserGroupService {
     public UserGroup addUserGroupAsChildOf(String userGroupName, UserGroup father);
 
     public UserGroup addUserGroupAsRoot(String userGroup);
+
+	public UserGroup getAuthenticatedGroup();
 }

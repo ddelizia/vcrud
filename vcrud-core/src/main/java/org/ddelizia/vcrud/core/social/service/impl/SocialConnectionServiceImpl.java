@@ -4,10 +4,9 @@ import org.ddelizia.vcrud.commons.AuthenticatedUserToken;
 import org.ddelizia.vcrud.core.config.AppConfig;
 import org.ddelizia.vcrud.core.security.model.SessionToken;
 import org.ddelizia.vcrud.core.security.repository.SessionTokenRepository;
-import org.ddelizia.vcrud.core.social.repository.SocialUsersConnectionRepository;
+import org.ddelizia.vcrud.core.social.repository.MongoSocialUsersConnectionRepository;
 import org.ddelizia.vcrud.core.usermanagement.repository.UserRepository;
 import org.ddelizia.vcrud.core.security.exception.AuthenticationException;
-import org.ddelizia.vcrud.core.social.repository.SocialConnectionRepository;
 import org.ddelizia.vcrud.core.social.service.SocialConnectionService;
 import org.ddelizia.vcrud.core.usermanagement.model.User;
 import org.ddelizia.vcrud.core.usermanagement.service.UserService;
@@ -31,7 +30,7 @@ import java.util.List;
 public class SocialConnectionServiceImpl implements SocialConnectionService{
 
     @Autowired
-    private SocialUsersConnectionRepository socialUsersConnectionRepository;
+    private MongoSocialUsersConnectionRepository mongoSocialUsersConnectionRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -48,7 +47,7 @@ public class SocialConnectionServiceImpl implements SocialConnectionService{
     @Override
     public AuthenticatedUserToken socialLogin(Connection<?> connection) {
         List<String> userUuids =
-                socialUsersConnectionRepository.findUserIdsWithConnection(connection);
+                mongoSocialUsersConnectionRepository.findUserIdsWithConnection(connection);
         if(userUuids.size() == 0) {
             throw new AuthenticationException();
         }
@@ -78,7 +77,7 @@ public class SocialConnectionServiceImpl implements SocialConnectionService{
         userRepository.save(user);
     }
 
-    public void setSocialUsersConnectionRepository(SocialUsersConnectionRepository socialUsersConnectionRepository) {
-        this.socialUsersConnectionRepository = socialUsersConnectionRepository;
+    public void setMongoSocialUsersConnectionRepository(MongoSocialUsersConnectionRepository mongoSocialUsersConnectionRepository) {
+        this.mongoSocialUsersConnectionRepository = mongoSocialUsersConnectionRepository;
     }
 }

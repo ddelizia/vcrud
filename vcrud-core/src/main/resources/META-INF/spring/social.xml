@@ -32,7 +32,7 @@
         <constructor-arg value="${facebook.clientSecret}" />
     </bean>
 
-    <bean id="usersConnectionRepository" class="org.ddelizia.vcrud.core.social.repository.SocialUsersConnectionRepository">
+    <bean id="usersConnectionRepository" class="org.ddelizia.vcrud.core.social.repository.MongoSocialUsersConnectionRepository">
         <constructor-arg ref="connectionFactoryLocator" />
         <constructor-arg ref="textEncryptor" />
     </bean>

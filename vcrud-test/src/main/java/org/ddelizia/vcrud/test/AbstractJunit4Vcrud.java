@@ -3,9 +3,12 @@ package org.ddelizia.vcrud.test;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import javax.annotation.Resource;
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,6 +24,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
         "classpath*:/META-INF/vcrudApplicationContextTest-*.xml"})
 @ActiveProfiles(value = "test")
 public abstract class AbstractJunit4Vcrud {
+
+	@Resource
+	private MongoTemplate mongoTemplate;
 
     @Before
     public void before(){

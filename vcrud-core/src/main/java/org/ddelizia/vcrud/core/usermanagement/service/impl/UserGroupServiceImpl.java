@@ -1,13 +1,14 @@
 package org.ddelizia.vcrud.core.usermanagement.service.impl;
 
 import org.ddelizia.vcrud.core.config.AppConfig;
-import org.ddelizia.vcrud.core.exception.ModelExistsExceprion;
+import org.ddelizia.vcrud.core.exception.ModelExistsException;
 import org.ddelizia.vcrud.core.usermanagement.model.UserGroup;
 import org.ddelizia.vcrud.core.usermanagement.repository.UserGroupRepository;
 import org.ddelizia.vcrud.core.usermanagement.service.UserGroupService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+
+import javax.annotation.Resource;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,10 +20,10 @@ import org.springframework.util.Assert;
 @Service(UserGroupService.DEFAULT_BEAN_NAME)
 public class UserGroupServiceImpl implements UserGroupService{
 
-    @Autowired
+    @Resource
     private UserGroupRepository userGroupRepository;
 
-    @Autowired
+    @Resource
     private AppConfig appConfig;
 
     @Override
@@ -44,11 +45,15 @@ public class UserGroupServiceImpl implements UserGroupService{
         Assert.notNull(father);
 
         if (userGroupRepository.findByGroupName(userGroupName)!=null){
-            throw new ModelExistsExceprion(UserGroup.class, userGroupName + "already Exists");
+            throw new ModelExistsException(UserGroup.class, userGroupName + "already Exists");
         }
 
         UserGroup group = new UserGroup();
         group.setFather(father);
+	    if (father.getFather()!=null){
+		    group.getAnchestors().add(father.getFather());
+		    group.getAnchestors().addAll(father.getAnchestors());
+	    }
         userGroupRepository.save(group);
 
         return group;
@@ -58,7 +63,7 @@ public class UserGroupServiceImpl implements UserGroupService{
     public UserGroup addUserGroupAsRoot(String userGroup) {
         Assert.notNull(userGroup);
         if (userGroupRepository.findByGroupName(userGroup)!=null){
-            throw new ModelExistsExceprion(UserGroup.class, userGroup + "already Exists");
+            throw new ModelExistsException(UserGroup.class, userGroup + "already Exists");
         }
         UserGroup group = new UserGroup();
         group.setFather(null);
@@ -66,13 +71,9 @@ public class UserGroupServiceImpl implements UserGroupService{
         return group;
     }
 
-
-    public void setUserGroupRepository(UserGroupRepository userGroupRepository) {
-        this.userGroupRepository = userGroupRepository;
-    }
-
-    public void setAppConfig(AppConfig appConfig) {
-        this.appConfig = appConfig;
-    }
+	@Override
+	public UserGroup getAuthenticatedGroup() {
+		return getUserGroupFromProperty(AppConfig.USER_USERGROUP_AUTHENTICATED);
+	}
 }
 

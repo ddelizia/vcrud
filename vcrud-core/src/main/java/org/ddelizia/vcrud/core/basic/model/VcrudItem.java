@@ -9,6 +9,7 @@ import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Entity;
+import java.io.Serializable;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,7 +21,7 @@ import javax.persistence.Entity;
 
 @Entity
 @Document(collection = "VcrudItem")
-public abstract class VcrudItem {
+public abstract class VcrudItem implements Serializable{
 
     @Id
     private String id;

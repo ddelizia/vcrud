@@ -49,8 +49,6 @@ public class MockJavaMailSender implements JavaMailSender {
             System.out.println("Exception while preparing Mail Message" + e);
             throw new RuntimeException(e);
         }
-
-
     }
 
     public void send(MimeMessagePreparator[] mimeMessagePreparators) throws MailException {
@@ -69,5 +67,7 @@ public class MockJavaMailSender implements JavaMailSender {
         return messages;
     }
 
-
+	public void resetMessages(){
+		messages = new ArrayList<>();
+	}
 }

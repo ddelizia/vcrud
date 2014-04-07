@@ -2,6 +2,7 @@ package org.ddelizia.vcrud.core.test.usermagement.repository;
 
 import org.apache.log4j.Logger;
 import org.ddelizia.vcrud.core.config.AppConfig;
+import org.ddelizia.vcrud.core.test.VcrudCoreIntegrationTest;
 import org.ddelizia.vcrud.core.test.util.UserManagmentDataFactory;
 import org.ddelizia.vcrud.core.usermanagement.model.User;
 import org.ddelizia.vcrud.core.usermanagement.model.UserGroup;
@@ -21,7 +22,7 @@ import java.util.List;
  * Time: 22:02
  * To change this template use File | Settings | File Templates.
  */
-public class UserGroupRepositoryTest extends AbstractJunit4Vcrud {
+public class UserGroupRepositoryTest extends VcrudCoreIntegrationTest {
 
     private static final Logger LOGGER = Logger.getLogger(UserRepositoryTest.class);
 
@@ -30,9 +31,6 @@ public class UserGroupRepositoryTest extends AbstractJunit4Vcrud {
 
     @Autowired
     private UserGroupRepository userGroupRepository;
-
-    @Autowired
-    private UserManagmentDataFactory userManagmentDataFactory;
 
     @Autowired
     private AppConfig appConfig;
@@ -47,7 +45,7 @@ public class UserGroupRepositoryTest extends AbstractJunit4Vcrud {
         Assert.assertEquals(userGroup.getGroupName(), roleAuth);
     }
 
-    //@Test
+    @Test
     public void findUserBelongsToGroup(){
         User user = userRepository.findByName(UserManagmentDataFactory.CUSTOMER_VERIFIED_RESTGROUP_NAME);
         Assert.assertNotNull(user);
@@ -86,7 +84,7 @@ public class UserGroupRepositoryTest extends AbstractJunit4Vcrud {
      */
     @Override
     public void vcrudAfter() {
-        userManagmentDataFactory.removeData();
+        getUserManagmentDataFactory().removeData();
     }
 
     /**
@@ -94,6 +92,6 @@ public class UserGroupRepositoryTest extends AbstractJunit4Vcrud {
      */
     @Override
     public void vcrudBefore() {
-        userManagmentDataFactory.createData();
+	    getUserManagmentDataFactory().createData();
     }
 }

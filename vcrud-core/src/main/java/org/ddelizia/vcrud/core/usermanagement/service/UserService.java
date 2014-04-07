@@ -8,6 +8,7 @@ import org.ddelizia.vcrud.commons.client.UpdateUserRequest;
 import org.ddelizia.vcrud.core.usermanagement.model.Customer;
 import org.ddelizia.vcrud.core.usermanagement.model.User;
 import org.ddelizia.vcrud.core.usermanagement.model.UserGroup;
+import org.springframework.social.connect.Connection;
 
 /**
  * Created with IntelliJ IDEA.
@@ -85,6 +86,15 @@ public interface UserService {
      * @return  User
      */
     public ExternalUser getUser(ExternalUser requestingUser, String userIdentifier);
+
+	/**
+	 * Log in a User using Connection details from an authorized request from the User's supported Social provider
+	 * encapsulated in the {@link org.springframework.social.connect.Connection} parameter
+	 *
+	 * @param connection containing the details of the authorized user account form the Social provider
+	 * @return the User account linked to the {@link org.ddelizia.vcrud.core.social.model.SocialUserConnection} account
+	 */
+	public AuthenticatedUserToken socialLogin(Connection<?> connection);
 
     /**
      * Delete user, only authenticated user accounts can be deleted
